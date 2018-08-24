@@ -11,23 +11,33 @@ import {
   Text,
   View
 } from 'react-native';
-import MapView from 'react-native-maps';
 import config from './config';
-
-import firebase from 'firebase';
-import AppText from './src/components/AppText';
-firebase.initializeApp(config.firebaseConfig);
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 type Props = {};
 export default class App extends Component<Props> {
   render() {
-    console.log(firebase);
     return (
       <View style={styles.container}>
-        <MapView style={{ width: 100, height: 100 }}
-          provider='google'
-        />
-        <AppText>Yasuo</AppText>
+        <LoginButton
+          publishPermissions={["publish_actions"]}
+          loginBehaviorIOS="browser"
+          onLoginFinished={
+            (error, result) => {
+              if (error) {
+                console.log("login has error: " + result.error);
+              } else if (result.isCancelled) {
+                console.log("login is cancelled.");
+              } else {
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    console.log(data.accessToken.toString())
+                  }
+                )
+              }
+            }
+          }
+          onLogoutFinished={() => console.log("logout.")} />
       </View>
     );
   }
