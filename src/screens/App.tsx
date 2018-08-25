@@ -1,11 +1,11 @@
 
 import React, { Component } from 'react';
-import { StackNavigator, createSwitchNavigator } from 'react-navigation';
+import { StackNavigator, createSwitchNavigator, NavigationScreenProps } from 'react-navigation';
 import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
-import IntroScreen from './IntroScreen';
-
+import RestScreen from './RestScreen';
+import ThinkScreen from './ThinkScreen';
 export default class App extends Component {
   render() {
     return (
@@ -20,10 +20,16 @@ const AuthStack = FluidNavigator({
 });
 
 const MainStack = FluidNavigator({
-  Intro: IntroScreen
-});
+  Rest: {
+    screen: RestScreen,
+  },
+  Think: ThinkScreen
+}, {
+    headerMode: 'none',
+  });
 
-const SwitchNavigation = createSwitchNavigator({
-  Auth: AuthStack,
-  Main: MainStack
-});
+const SwitchNavigation = createSwitchNavigator(
+  {
+    Main: MainStack,
+    Auth: AuthStack,
+  });
