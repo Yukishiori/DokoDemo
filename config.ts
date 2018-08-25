@@ -269,7 +269,10 @@ const mapStyle =
         }
     ];
 
+const apiKey = 'AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ';
+
 export default {
     firebaseConfig,
-    mapStyle
+    mapStyle,
+    apiKey
 }

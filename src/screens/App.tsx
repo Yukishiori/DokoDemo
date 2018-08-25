@@ -6,6 +6,7 @@ import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import RestScreen from './RestScreen';
 import ThinkScreen from './ThinkScreen';
+import MainMapWithCardScreen from './MainMapWithCardScreen';
 export default class App extends Component {
   render() {
     return (
@@ -23,7 +24,8 @@ const MainStack = FluidNavigator({
   Rest: {
     screen: RestScreen,
   },
-  Think: ThinkScreen
+  Think: ThinkScreen,
+  MainMap: MainMapWithCardScreen
 }, {
     headerMode: 'none',
   });

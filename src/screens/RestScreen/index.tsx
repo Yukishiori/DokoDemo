@@ -47,11 +47,12 @@ class RestScreen extends Component<IProps> {
                                 <View style={{ flex: 3, alignItems: 'center' }}>
                                     <AppText style={styles.Text2}>REST</AppText>
                                 </View>
-                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }} onPress={() => { this.props.navigation.navigate('Think') }}>
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }}
+                                    onPress={() => { this.props.navigation.navigate('Think') }}>
                                     <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.Button} >
+                            <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate('MainMap')}>
                                 <AppText >MAKE A PLAN FOR ME</AppText>
                             </TouchableOpacity>
                         </LinearGradient>
