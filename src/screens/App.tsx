@@ -7,10 +7,16 @@ import SignUpScreen from './SignUpScreen';
 import RestScreen from './RestScreen';
 import ThinkScreen from './ThinkScreen';
 import MainMapWithCardScreen from './MainMapWithCardScreen';
+import { Provider } from 'react-redux';
+import store from '../rematch/store';
+
+
 export default class App extends Component {
   render() {
     return (
-      <SwitchNavigation />
+      <Provider store={store}>
+        <SwitchNavigation />
+      </Provider>
     );
   }
 }
