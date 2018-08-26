@@ -38,6 +38,6 @@ const MainStack = FluidNavigator({
 
 const SwitchNavigation = createSwitchNavigator(
   {
-    Main: MainStack,
     Auth: AuthStack,
+    Main: MainStack,
   });
