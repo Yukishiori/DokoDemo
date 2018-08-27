@@ -1,5 +1,5 @@
 
-const theDarkNightSpecial = ['coffee', 'hotel'];
+const theDarkNightSpecial = ['tea', 'coffee', 'lake'];
 const theClassicMilkTea = ['restaurant', 'tea', 'book', 'lake']
 const placeCombo = [
     theDarkNightSpecial,

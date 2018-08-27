@@ -9,7 +9,7 @@ import ThinkScreen from './ThinkScreen';
 import MainMapWithCardScreen from './MainMapWithCardScreen';
 import { Provider } from 'react-redux';
 import store from '../rematch/store';
-
+import LikeDisLikeScreen from './LikeDislikeScreen';
 
 export default class App extends Component {
   render() {
@@ -31,7 +31,8 @@ const MainStack = FluidNavigator({
     screen: RestScreen,
   },
   Think: ThinkScreen,
-  MainMap: MainMapWithCardScreen
+  MainMap: MainMapWithCardScreen,
+  LikeDisLikeScreen: LikeDisLikeScreen,
 }, {
     headerMode: 'none',
   });

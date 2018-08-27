@@ -1,5 +1,5 @@
 import { ViewStyle, Platform, Dimensions } from 'react-native';
-import { backgroundColor } from '../../styles';
+import { backgroundColor } from '../../commonStyle';
 
 const Container: ViewStyle = {
     backgroundColor,

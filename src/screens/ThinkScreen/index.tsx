@@ -5,7 +5,7 @@ import AppText from '../../components/AppText';
 import { Transition } from 'react-navigation-fluid-transitions';
 import Layout from '../../components/Layout';
 import { Header, Left, Right, Icon, Content } from 'native-base';
-import { gradient } from '../../styles';
+import { gradient } from '../../commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import MapView from 'react-native-maps';

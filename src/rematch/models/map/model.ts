@@ -52,7 +52,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         async getAnotherPlaceFromThisPlace({ placeCombo, location, index }): Promise<void> {
             try {
                 if (placeCombo[index]) {
-                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${placeCombo[index]}`)).results;
+                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${placeCombo[index]}&language=vi`)).results;
                     const bestPlace = getNumberOfBestPlace(
                         resultPlaces,
                         location, 1);
@@ -89,10 +89,10 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
 
 
 const parsePolyline = (response: any): ICoord[] => {
+    console.log(response);
     return _.flatten(response.routes[0].legs.map(leg => {
         const route: ICoord[] = [];
         leg.steps.forEach((step, index) => {
-            console.log('step', step);
             route.push({
                 latitude: step.start_location.lat,
                 longitude: step.start_location.lng
