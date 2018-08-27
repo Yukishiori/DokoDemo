@@ -1,6 +1,8 @@
 
-const theDarkNightSpecial = [ 'coffee', 'lake' ]
-
-export default {
-    theDarkNightSpecial
-}
+const theDarkNightSpecial = ['coffee', 'hotel'];
+const theClassicMilkTea = ['restaurant', 'tea', 'book', 'lake']
+const placeCombo = [
+    theDarkNightSpecial,
+    theClassicMilkTea
+]
+export default placeCombo;
