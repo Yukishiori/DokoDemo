@@ -5,11 +5,12 @@ import AppText from '../../components/AppText';
 import { Transition } from 'react-navigation-fluid-transitions';
 import Layout from '../../components/Layout';
 import { Header, Left, Right, Icon, Content } from 'native-base';
-import { gradient } from '../../styles';
+import { gradient } from '../../commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import MapView from 'react-native-maps';
 import config from '../../../config';
+import ScreenNames from '../ScreenNames';
 
 interface IProps extends NavigationScreenProps {
 
@@ -41,7 +42,7 @@ class RestScreen extends Component<IProps> {
                     />
                     <Transition appear="horizontal">
                         <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
-                            <AppText style={styles.FirstText}>I want to</AppText>
+                            <AppText style={styles.FirstText}>I WANT TO</AppText>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <View style={{ flex: 1 }} />
                                 <View style={{ flex: 3, alignItems: 'center' }}>
@@ -52,7 +53,7 @@ class RestScreen extends Component<IProps> {
                                     <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate('MainMap')}>
+                            <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate(ScreenNames.MainMap)}>
                                 <AppText >MAKE A PLAN FOR ME</AppText>
                             </TouchableOpacity>
                         </LinearGradient>

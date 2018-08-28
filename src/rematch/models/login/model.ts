@@ -54,10 +54,10 @@ const loginPageModel: ModelConfig<ILoginPageState> = createModel({
     async login(): Promise<void> {
       try {
         // const result = await loginService().login()
-        const result = 'Hello'; 
+        const result = 'Hello';
         this.loginSuccess({ classes: result });
       } catch (err) {
-        this.loginError({error: err.message});
+        this.loginError({ error: err.message });
       }
     },
   }
