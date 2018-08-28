@@ -1,24 +1,35 @@
 import { createModel, ModelConfig } from '@rematch/core';
 import {
   ILoginPageState,
-  IChangUsernameInputPayload,
+  IChangeEmailPayload,
+  IChangePasswordPayload
 } from './interface';
 
 const loginPageModel: ModelConfig<ILoginPageState> = createModel({
   state: {
-    username: 'helu',
+    email: '',
+    password: '',
     token: '',
     error: ''
   },
   reducers: {
-    changeUsernameInput: (
+    changeEmail: (
       state: ILoginPageState,
-      payload: IChangUsernameInputPayload
+      payload: IChangeEmailPayload
     ): ILoginPageState => {
       return {
         ...state,
-        username: payload.username
+        email: payload.email
       };
+    },
+    changePassword: (
+      state: ILoginPageState,
+      payload: IChangePasswordPayload
+    ): ILoginPageState => {
+      return {
+        ...state,
+        password: payload.password
+      }
     },
     loginSuccess: (
       state: ILoginPageState,

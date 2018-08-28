@@ -7,6 +7,7 @@ import styles from './styles';
 import { gradient } from '../../styles';
 import AppText from '../../components/AppText';
 import { Header, Left, Right, Icon, Content, Button } from 'native-base';
+import { connect } from 'react-redux';
 interface IProps extends NavigationScreenProps {
 
 }
@@ -62,4 +63,16 @@ class LoginScreen extends Component<IProps> {
     }
 }
 
-export default LoginScreen;
+const mapState = (rootState: any) => {
+  return {
+    ...rootState.loginPageModel
+  };
+};
+
+const mapDispatch = (rootReducer: any) => {
+  return {
+    ...rootReducer.loginPageModel,
+  };
+};
+
+export default connect(mapState, mapDispatch)(LoginScreen);

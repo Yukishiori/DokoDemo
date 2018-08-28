@@ -9,8 +9,6 @@ import ThinkScreen from './ThinkScreen';
 import MainMapWithCardScreen from './MainMapWithCardScreen';
 import { Provider } from 'react-redux';
 import store from '../rematch/store';
-
-
 export default class App extends Component {
   render() {
     return (
@@ -22,8 +20,8 @@ export default class App extends Component {
 }
 
 const AuthStack = FluidNavigator({
+  SignUp: SignUpScreen,
   Login: LoginScreen,
-  SignUp: SignUpScreen
 });
 
 const MainStack = FluidNavigator({

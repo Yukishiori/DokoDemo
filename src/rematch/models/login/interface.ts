@@ -1,9 +1,14 @@
 export interface ILoginPageState {
-  username: string,
+  email: string,
+  password: string,
   token: string,
   error: string
 }
 
-export interface IChangUsernameInputPayload {
-  username: string;
+export interface IChangeEmailPayload {
+  email: string;
+}
+
+export interface IChangePasswordPayload {
+  password: string;
 }

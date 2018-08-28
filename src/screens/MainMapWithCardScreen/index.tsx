@@ -7,8 +7,6 @@ import styles from './styles';
 import config from '../../../config';
 import placeService from '../../service/place.service';
 import { ICoord } from '../../service/interface.service';
-
-import { connect } from 'react-redux';
 interface IProps extends NavigationScreenProps {
   login : any;
   username: string;
@@ -100,17 +98,4 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 }
 
-// Rematch for testing, will move to login screen later
-const mapState = (rootState: any) => {
-  return {
-    ...rootState.loginPageModel
-  };
-};
-
-const mapDispatch = (rootReducer: any) => {
-  return {
-    ...rootReducer.loginPageModel,
-  };
-};
-
-export default connect(mapState, mapDispatch)(MainMapWithCardScreen);
+export default MainMapWithCardScreen;

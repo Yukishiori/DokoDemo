@@ -13,7 +13,7 @@ const LoginText: TextStyle = {
 }
 
 const LogoContainer: ViewStyle = {
-  flex: 1/3
+  flex: 1
 }
 
 const ContentContainer: ViewStyle = {
@@ -25,7 +25,7 @@ const ContentContainer: ViewStyle = {
 }
 
 const Icon: TextStyle = {
-  fontSize: 21,
+  fontSize: 18,
   color: '#565656'
 }
 
@@ -35,7 +35,6 @@ const LoginTextContainer: ViewStyle = {
 }
 
 const TextInput = { 
-  fontSize: 18, 
   paddingLeft: 30, 
   color: '#565656', 
   fontFamily: 'Comfortaa-Regular'
@@ -43,7 +42,7 @@ const TextInput = {
 
 const IconContainer: ViewStyle = {
   position: 'absolute', 
-  top: 6, 
+  top: 7, 
   left: 15
 }
 
