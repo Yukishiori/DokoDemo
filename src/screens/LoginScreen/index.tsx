@@ -1,17 +1,33 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Transition } from 'react-navigation-fluid-transitions';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
-import { gradient } from '../../styles';
+import { gradient } from '../../commonStyle';
 import AppText from '../../components/AppText';
 import { Header, Left, Right, Icon, Content, Button } from 'native-base';
 import { connect } from 'react-redux';
 interface IProps extends NavigationScreenProps {
-
+  changeEmail: any;
+  login: any;
+  changePassword: any;
+  email: string;
+  password: string;
+  error: string;
+  isLoading: boolean;
 }
 class LoginScreen extends Component<IProps> {
+    login = async () => {
+      const result = await this.props.login({
+        email : this.props.email,
+        password: this.props.password
+      })
+      console.log('result', result);
+      if (result) {
+        this.props.navigation.navigate('Main');
+      }
+    }
 
     render() {
         return (
@@ -29,6 +45,7 @@ class LoginScreen extends Component<IProps> {
                       placeholder="Email" 
                       autoCapitalize="none" 
                       style={styles.TextInput} 
+                      onChangeText={(value) => this.props.changeEmail({email : value})}
                     />
                   </View>
                   <View style={styles.LoginInputContainer}>
@@ -40,10 +57,15 @@ class LoginScreen extends Component<IProps> {
                       autoCapitalize="none" 
                       secureTextEntry={true}
                       style={styles.TextInput} 
+                      onChangeText={(value) => this.props.changePassword({password: value})}
                     />
                   </View>
-                  <TouchableOpacity style={styles.LoginTextContainer}>
+                  <View>
+                    <AppText style={{color : "red"}}>{this.props.error}</AppText>
+                  </View>
+                  <TouchableOpacity style={styles.LoginTextContainer} onPress={this.login}>
                     <AppText style={styles.LoginText}>Login</AppText>
+                    {this.props.isLoading ? <ActivityIndicator size="small" style={{marginLeft: 10}}></ActivityIndicator> : ""}
                   </TouchableOpacity>
 
                   <AppText>or</AppText>

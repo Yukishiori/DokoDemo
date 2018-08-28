@@ -2,24 +2,34 @@ import { createModel, ModelConfig } from '@rematch/core';
 import {
   ILoginPageState,
   IChangeEmailPayload,
-  IChangePasswordPayload
+  IChangePasswordPayload,
+  ILoginPayload
 } from './interface';
+import authService from '../../../service/auth.service';
 
 const loginPageModel: ModelConfig<ILoginPageState> = createModel({
   state: {
     email: '',
     password: '',
     token: '',
-    error: ''
+    error: '',
+    isLoading: false
   },
   reducers: {
+    starting: (state: ILoginPageState): ILoginPageState => {
+      return {
+        ...state,
+        isLoading: true
+      };
+    },
     changeEmail: (
       state: ILoginPageState,
       payload: IChangeEmailPayload
     ): ILoginPageState => {
       return {
         ...state,
-        email: payload.email
+        email: payload.email,
+        error: ""
       };
     },
     changePassword: (
@@ -28,16 +38,17 @@ const loginPageModel: ModelConfig<ILoginPageState> = createModel({
     ): ILoginPageState => {
       return {
         ...state,
-        password: payload.password
+        password: payload.password,
+        error: ""
       }
     },
     loginSuccess: (
-      state: ILoginPageState,
-      payload: string
+      state: ILoginPageState
     ): ILoginPageState => {
       return {
         ...state,
-        token: payload
+        error: "",
+        isLoading: false
       }
     },
     loginError: (
@@ -46,18 +57,30 @@ const loginPageModel: ModelConfig<ILoginPageState> = createModel({
     ): ILoginPageState => {
       return {
         ...state,
-        error: payload
+        error: payload,
+        isLoading: false
       }
     }
   },
   effects: {
-    async login(): Promise<void> {
+    async login(payload: ILoginPayload, _rootState: any): Promise<boolean> {
       try {
-        // const result = await loginService().login()
-        const result = 'Hello';
-        this.loginSuccess({ classes: result });
+        this.starting();
+        const validate = authService.validateLoginInput(payload);
+        if(validate.status){
+          await authService.signInWithEmail({
+            email : payload.email , 
+            password : payload.password
+          });
+          this.loginSuccess();
+          return true;
+        } else {
+          this.loginError(validate.message);
+          return false;
+        }
       } catch (err) {
-        this.loginError({ error: err.message });
+        this.loginError(err.message);
+        return false;
       }
     },
   }

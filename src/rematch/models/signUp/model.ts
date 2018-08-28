@@ -33,7 +33,8 @@ const loginPageModel: ModelConfig<ISignUpPageState> = createModel({
     ): ISignUpPageState => {
       return {
         ...state,
-        email: payload.email
+        email: payload.email,
+        error: ""
       };
     },
     changePassword: (
@@ -42,7 +43,8 @@ const loginPageModel: ModelConfig<ISignUpPageState> = createModel({
     ): ISignUpPageState => {
       return {
         ...state,
-        password: payload.password
+        password: payload.password,
+        error: ""
       }
     },
     changeFullName: (
@@ -51,7 +53,8 @@ const loginPageModel: ModelConfig<ISignUpPageState> = createModel({
     ): ISignUpPageState => {
       return {
         ...state,
-        fullName: payload.fullName
+        fullName: payload.fullName,
+        error: ""
       }
     },
     changeConfirmPassword: (
@@ -60,16 +63,8 @@ const loginPageModel: ModelConfig<ISignUpPageState> = createModel({
     ): ISignUpPageState => {
       return {
         ...state,
-        confirmPassword: payload.confirmPassword
-      }
-    },
-    toggleLoading : (
-      state: ISignUpPageState,
-      payload: IToggleLoadingPayload
-    ): ISignUpPageState => {
-      return {
-        ...state,
-        isLoading: payload.isLoading
+        confirmPassword: payload.confirmPassword,
+        error: ""
       }
     },
     signUpSuccess: (
@@ -79,6 +74,7 @@ const loginPageModel: ModelConfig<ISignUpPageState> = createModel({
       return {
         ...state,
         message: payload,
+        error: "",
         isLoading: false
       }
     },
@@ -88,28 +84,33 @@ const loginPageModel: ModelConfig<ISignUpPageState> = createModel({
     ): ISignUpPageState => {
       return {
         ...state,
-        error: payload
+        error: payload,
+        isLoading: false
       }
     }
   },
   effects: {
-    async signUp(payload: ISignUpPayload, _rootState: any): Promise<void> {
+    async signUp(payload: ISignUpPayload, _rootState: any): Promise<boolean> {
       try {
-        // console.log('rootState', _rootState);
         this.starting();
         const validate = authService.validateSignUpInput(payload);
-        if(validate){
-          await authService.signUpWithEmail({
+        if(validate.status){
+          const result = await authService.signUpWithEmail({
             email : payload.email , 
             password : payload.password, 
             fullName : payload.fullName
           });
-          
+          if (result) {
+            this.signUpSuccess("Sign up successfully!");
+            return true;
+          }
         } else {
-          this.signUpError(validate);
+          this.signUpError(validate.message);
+          return false;
         }
       } catch (err) {
         this.signUpError(err.message);
+        return false;
       }
     },
   }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
-import { gradient } from '../../styles';
+import { gradient } from '../../commonStyle';
 import AppText from '../../components/AppText';
 import { Header, Left, Right, Icon, Content, Button } from 'native-base';
 import { connect } from 'react-redux';
@@ -17,16 +17,21 @@ interface IProps extends NavigationScreenProps {
   changePassword: any;
   changeConfirmPassword: any;
   signUp : any;
+  error: string;
+  message: string;
+  isLoading: boolean;
 }
 class SignUpScreen extends Component<IProps> {
-
-    signUp = () => {
-      this.props.signUp({
+    signUp = async () => {
+      const result = await this.props.signUp({
         email : this.props.email,
         fullName: this.props.fullName,
         password: this.props.password,
         confirmPassword: this.props.confirmPassword
       })
+      if (result) {
+        setTimeout(() => this.props.navigation.navigate('Main'), 1000);
+      }
     }
     render() {
         return (
@@ -75,8 +80,13 @@ class SignUpScreen extends Component<IProps> {
                   onChangeText={(value) => this.props.changeConfirmPassword({confirmPassword : value})}
                 />
               </View>
+              <View>
+                <AppText style={{color: 'red'}}>{this.props.error}</AppText>
+                <AppText style={{color: 'green'}}>{this.props.message}</AppText>
+              </View>
               <TouchableOpacity style={styles.LoginTextContainer} onPress={this.signUp}>
                 <AppText style={styles.SignUpText}>Sign Up</AppText>
+                {this.props.isLoading ? <ActivityIndicator size="small" style={{marginLeft: 10}}></ActivityIndicator> : ""}
               </TouchableOpacity>
             </View>
             <View style={styles.SignUpContainer}>

@@ -32,7 +32,8 @@ const Icon: TextStyle = {
 
 const LoginTextContainer: ViewStyle = {
   marginTop: 5,
-  marginBottom: 10
+  marginBottom: 10,
+  flexDirection: 'row'
 }
 
 const TextInput = { 

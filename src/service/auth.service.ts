@@ -1,5 +1,4 @@
 import firebase from 'firebase';
-// import * as Joi from 'joi';
 
 interface ISignUpParams {
   email : string;
@@ -19,40 +18,81 @@ interface ISignInParams {
   password : string;
 }
 
+const validateLoginInput = (input: ISignInParams) => {
+  if (!input.email) {
+    return {
+      status: false,
+      message: "Email is required"
+    }
+  }
+  if (!input.password) {
+    return {
+      status: false,
+      message : "Password is required"
+    }
+  }
+  return {
+    status : true,
+    message: "Validate successfully"
+  }
+}
+
 const validateSignUpInput = (input: ISignUpInputs) => {
   if (input.password != input.confirmPassword) {
-    return "Password does not match!"
+    return {
+      status: false,
+      message: "Password does not match!"
+    }
   };
-  // const validationRules = {
-  //   email: Joi.string().email().required(),
-  //   password: Joi.string().required(),
-  //   fullName: Joi.string().required(),
-  // }
-  // const { error } = Joi.validate(input, validationRules, {
-  //   allowUnknown: true,
-  // });
-
-  // if (error) {
-  //   return error.details[0].message;
-  // } else {
-  //   return true;
-  // }
-  return true;
+  if (!input.email) {
+    return {
+      status: false,
+      message : "Email is required"
+    }
+  }
+  var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!regex.test(String(input.email).toLowerCase())) {
+    return {
+      status: false,
+      message: 'Email is not valud'
+    }
+  }
+  if (!input.fullName) {
+    return {
+      status: false,
+      message: 'Full name is required'
+    }
+  }
+  if (!input.password) {
+    return {
+      status: false,
+      message: 'Password is required!'
+    }
+  }
+  if (input.password.length < 6) {
+    return {
+      status: false,
+      message : "Password must be at least 6 characters"
+    }
+  }
+  return {
+    status: true,
+    message: "Validate successfully"
+  }
 }
   
 const signUpWithEmail = async ({ email, password, fullName }: ISignUpParams) => {
-  await firebase.auth().createUserWithEmailAndPassword(email, password);
-  const user = firebase.auth().currentUser;
-  user.updateProfile({
-      displayName: fullName,
-      photoURL: user.photoURL,
-  });
-  const uid = user.uid;
-  firebase.firestore().collection('users').doc(uid).set(
-      {
-        fullName
-      },
-      { merge: true });
+  return firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+    const user = firebase.auth().currentUser;
+    const uid = user.uid;
+    firebase.firestore().collection('users').doc(uid).set(
+        {
+          fullName
+        },
+        { merge: true }).then(() => {
+          return user;
+        });
+  }).catch((err) => {throw new Error(err.message)});
 }
 
 const signInWithEmail = async ({ email, password }: ISignInParams) => {
@@ -62,6 +102,7 @@ const signInWithEmail = async ({ email, password }: ISignInParams) => {
 
 export default {
   validateSignUpInput,
+  validateLoginInput,
   signUpWithEmail,
   signInWithEmail
 }
