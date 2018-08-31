@@ -53,6 +53,8 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             try {
                 if (placeCombo[index]) {
                     const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${placeCombo[index]}&language=vi`)).results;
+                    console.log(resultPlaces);
+                    
                     const bestPlace = getNumberOfBestPlace(
                         resultPlaces,
                         location, 1);
@@ -112,9 +114,9 @@ const getCombo = (): string[] => {
     let combo = [];
     const currentHour = moment().get('hour');
     if (currentHour >= 20) {
-        combo = placeCombo[0];
+        combo = placeCombo[2];
     } else {
-        combo = placeCombo[1];
+        combo = placeCombo[2];
     }
     return combo;
 }

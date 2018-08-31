@@ -87,22 +87,25 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             photoReference={item.photos ? item.photos[0].photo_reference : null}
         />
     }
-    // onViewableItemsChanged = ({ viewableItems }) => {
-    //     try {
-    //         if (viewableItems[0].index > -1) {
-    //             const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
-    //             this.map.animateToCoordinate({ latitude: lat, longitude: lng });
-    //         }
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
+    onViewableItemsChanged = ({ viewableItems }) => {
+        try {
+            if (viewableItems[0].index > -1) {
+                const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
+                this.map.animateToCoordinate({ latitude: lat, longitude: lng });
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
     }
+    viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 }
+
 
     render() {
+
         return (
             <View>
                 <MapView
@@ -123,9 +126,12 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     style={{ position: 'absolute', top: '65%' }}
                     showsHorizontalScrollIndicator={false}
                     onViewableItemsChanged={this.onViewableItemsChanged}
+                    viewabilityConfig={this.viewabilityConfig}
+                    pagingEnabled
                 />
             </View >
         );
+
     }
 }
 

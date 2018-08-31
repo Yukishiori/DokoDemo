@@ -29,7 +29,7 @@ const Title: ViewStyle = {
 }
 
 const Text: TextStyle = {
-    fontSize: 16,
+    fontSize: 14,
     color: 'white'
 }
 

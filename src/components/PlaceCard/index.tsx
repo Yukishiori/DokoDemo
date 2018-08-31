@@ -35,7 +35,7 @@ class PlaceCard extends Component<IProps, IState> {
             <TouchableOpacity onPress={this.props.onPress} style={styles.Card}>
                 <Image source={{ uri: this.state.uri }} style={styles.CardImage} />
                 <LinearGradient style={styles.Title} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
-                    <AppText style={styles.Text}>{this.props.name}</AppText>
+                    <AppText style={styles.Text}>{this.props.name.toUpperCase()}</AppText>
                     <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                         {/* <View style={{ borderRadius: 20, width: width * 0.4 / 5 * this.props.rating, backgroundColor: 'white', height: 3 }}></View> */}
                         <AppText style={{ color: 'white', fontSize: 12 }}>recommended by {this.props.rating * 20} % users</AppText>

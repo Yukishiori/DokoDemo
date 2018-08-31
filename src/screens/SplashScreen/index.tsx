@@ -23,8 +23,8 @@ class SplashScreen extends Component<IProps> {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(res => {
       res !== null
-      ? setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
-      : setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+        ? setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+        : setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
     })
   };
 
@@ -32,7 +32,7 @@ class SplashScreen extends Component<IProps> {
     return (
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.BackgroundGradient}>
-          <AppText style={{fontSize: 30}}>Dokodemo</AppText>
+          <AppText style={{ fontSize: 30, color: 'white' }}>Dokodemo</AppText>
         </LinearGradient>
       </View>
     );

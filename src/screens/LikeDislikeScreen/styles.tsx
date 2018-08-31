@@ -13,7 +13,6 @@ const Image: ImageStyle = {
     borderRadius: 20,
     top: - height * 0.175,
     shadowColor: '#000',
-
 }
 
 const Solid: ViewStyle = {
@@ -42,11 +41,20 @@ const Title: TextStyle = {
     fontSize: 20
 }
 
+const Panel: ViewStyle = {
+    height: width * 0.8 / 16 * 10,
+    width: width * 0.8,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    marginTop: height * 0.05,
+}
+
 export default {
     Container,
     Solid,
     Image,
     Map,
     Cover,
-    Title
+    Title,
+    Panel
 }

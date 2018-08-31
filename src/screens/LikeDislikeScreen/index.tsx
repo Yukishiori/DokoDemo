@@ -32,7 +32,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
             }))
     }
     render() {
-        const { chosenPlace } = this.props.navigation.state.params;
+        const { chosenPlace }: { chosenPlace: IPlaceFromGoogle } = this.props.navigation.state.params as any;
         return (
             <Transition appear="vertical">
                 <View style={styles.Container}>
@@ -57,6 +57,12 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                     <LinearGradient style={styles.Solid} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
                         <Image source={{ uri: this.state.uri }} style={styles.Image} />
                         <AppText style={styles.Title}>{chosenPlace.name}</AppText>
+                        <View style={styles.Panel}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <AppText style={{ fontSize: 22 }}>Recommended by</AppText>
+                                <AppText style={{ fontSize: 26, color: gradient[0], fontWeight: 'bold' }}>{chosenPlace.rating * 20} %</AppText>
+                            </View>
+                        </View>
                     </LinearGradient>
                 </View>
             </Transition>
