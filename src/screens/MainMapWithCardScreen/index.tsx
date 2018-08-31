@@ -79,19 +79,24 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
+        console.log(item);
         return <PlaceCard
             name={item.name}
             rating={item.rating}
-            photo_reference={item.photos[0].photo_reference}
             onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
+            photoReference={item.photos ? item.photos[0].photo_reference : null}
         />
     }
-    onViewableItemsChanged = ({ viewableItems }) => {
-        if (viewableItems[0].index) {
-            const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
-            this.map.animateToCoordinate({ latitude: lat, longitude: lng });
-        }
-    }
+    // onViewableItemsChanged = ({ viewableItems }) => {
+    //     try {
+    //         if (viewableItems[0].index > -1) {
+    //             const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
+    //             this.map.animateToCoordinate({ latitude: lat, longitude: lng });
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });

@@ -8,7 +8,7 @@ import LinearGradient from 'react-native-linear-gradient';
 interface IProps {
     name: string;
     rating: number;
-    photo_reference: string;
+    photoReference: string;
     onPress: () => void;
 }
 
@@ -22,11 +22,13 @@ class PlaceCard extends Component<IProps, IState> {
         this.state = {
             uri: ''
         };
-        placeService.getImageUris([this.props.photo_reference]).then(res => {
-            this.setState({
-                uri: res[0]
+        if (this.props.photoReference) {
+            placeService.getImageUris([this.props.photoReference]).then(res => {
+                this.setState({
+                    uri: res[0]
+                })
             })
-        })
+        }
     }
     render() {
         return (

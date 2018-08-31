@@ -27,8 +27,8 @@ export default class App extends Component {
 
 const AuthStack = FluidNavigator({
   Splash: SplashScreen,
-  SignUp: SignUpScreen,
-  Login: LoginScreen,
+  // SignUp: SignUpScreen,
+  // Login: LoginScreen,
 });
 
 const MainStack = FluidNavigator({
