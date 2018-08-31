@@ -16,6 +16,7 @@ interface IProps extends NavigationScreenProps {
   password: string;
   error: string;
   isLoading: boolean;
+  loginWithFacebook: any;
 }
 class LoginScreen extends Component<IProps> {
     login = async () => {
@@ -23,7 +24,6 @@ class LoginScreen extends Component<IProps> {
         email : this.props.email,
         password: this.props.password
       })
-      console.log('result', result);
       if (result) {
         this.props.navigation.navigate('Main');
       }
@@ -34,7 +34,7 @@ class LoginScreen extends Component<IProps> {
             <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
               <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.BackgroundGradient}>
                 <View style={styles.LogoContainer}>
-
+                  <AppText style={{fontSize: 30}}>Dokodemo</AppText>
                 </View>
                 <View style={styles.ContentContainer}>
                   <View style={styles.LoginInputContainer}>
@@ -69,7 +69,7 @@ class LoginScreen extends Component<IProps> {
                   </TouchableOpacity>
 
                   <AppText>or</AppText>
-                  <Button iconLeft style={styles.LoginWithFBButton}>
+                  <Button iconLeft style={styles.LoginWithFBButton} onPress={this.props.loginWithFacebook}>
                     <Icon name='facebook' type="Entypo" style={styles.LoginWithFBIcon}/>
                     <AppText style={styles.LoginWithFBText}>Login with Facebook</AppText>
                   </Button>

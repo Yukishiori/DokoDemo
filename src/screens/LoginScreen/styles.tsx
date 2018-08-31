@@ -13,7 +13,9 @@ const LoginText: TextStyle = {
 }
 
 const LogoContainer: ViewStyle = {
-  flex: 1
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'center'
 }
 
 const ContentContainer: ViewStyle = {
@@ -31,7 +33,8 @@ const Icon: TextStyle = {
 
 const LoginTextContainer: ViewStyle = {
   marginTop: 5,
-  marginBottom: 10
+  marginBottom: 10,
+  flexDirection: 'row'
 }
 
 const TextInput = { 
