@@ -21,7 +21,6 @@ interface IProps extends NavigationScreenProps {
 class SplashScreen extends Component<IProps> {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(res => {
-      console.log(res);
       res !== null
       ? setTimeout(() => this.props.navigation.navigate('Main'), 500)
       : setTimeout(() => this.props.navigation.navigate('Login'), 500)

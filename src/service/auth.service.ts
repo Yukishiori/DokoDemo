@@ -1,22 +1,8 @@
 import firebase from 'firebase';
-
-interface ISignUpParams {
-  email : string;
-  password: string;
-  fullName: string;
-}
-
-interface ISignUpInputs {
-  email : string;
-  password: string;
-  fullName: string;
-  confirmPassword: string;
-}
-
-interface ISignInParams {
-  email : string;
-  password : string;
-}
+import { LoginManager, LoginResult, AccessToken } from 'react-native-fbsdk';
+import { ISignInParams, ISignUpInputs, ISignUpParams, IUserInfo } from './interface.service';
+import userService from './user.service';
+import config from '../config';
 
 const validateLoginInput = (input: ISignInParams) => {
   if (!input.email) {
@@ -28,11 +14,11 @@ const validateLoginInput = (input: ISignInParams) => {
   if (!input.password) {
     return {
       status: false,
-      message : "Password is required"
+      message: "Password is required"
     }
   }
   return {
-    status : true,
+    status: true,
     message: "Validate successfully"
   }
 }
@@ -47,7 +33,7 @@ const validateSignUpInput = (input: ISignUpInputs) => {
   if (!input.email) {
     return {
       status: false,
-      message : "Email is required"
+      message: "Email is required"
     }
   }
   var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -72,7 +58,7 @@ const validateSignUpInput = (input: ISignUpInputs) => {
   if (input.password.length < 6) {
     return {
       status: false,
-      message : "Password must be at least 6 characters"
+      message: "Password must be at least 6 characters"
     }
   }
   return {
@@ -80,29 +66,43 @@ const validateSignUpInput = (input: ISignUpInputs) => {
     message: "Validate successfully"
   }
 }
-  
+
 const signUpWithEmail = async ({ email, password, fullName }: ISignUpParams) => {
   return firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
     const user = firebase.auth().currentUser;
     const uid = user.uid;
     firebase.firestore().collection('users').doc(uid).set(
-        {
-          fullName
-        },
-        { merge: true }).then(() => {
-          return user;
-        });
-  }).catch((err) => {throw new Error(err.message)});
+      {
+        fullName
+      },
+      { merge: true }).then(() => {
+        return user;
+      });
+  }).catch((err) => { throw new Error(err.message) });
 }
 
 const signInWithEmail = async ({ email, password }: ISignInParams) => {
   await firebase.auth()
-      .signInWithEmailAndPassword(email, password);
+    .signInWithEmailAndPassword(email, password);
+}
+
+const LoginWithFacebook = async () => {
+  const result: LoginResult = await LoginManager.logInWithReadPermissions(config.facebook.permissions);
+  console.log('shit', result);
+  if (result.isCancelled) {
+    return;
+  }
+  const accessToken: AccessToken = await AccessToken.getCurrentAccessToken();
+
+  const userInfo = await userService.login({ loginType: 'facebook', token: accessToken.accessToken });
+  console.log('userInfo', userInfo);
+  return userInfo;
 }
 
 export default {
   validateSignUpInput,
   validateLoginInput,
   signUpWithEmail,
-  signInWithEmail
+  signInWithEmail,
+  LoginWithFacebook
 }
