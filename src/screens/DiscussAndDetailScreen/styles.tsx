@@ -76,7 +76,6 @@ const Rec: ViewStyle = {
     justifyContent: 'center',
     marginTop: height * 0.02
 }
-console.log(height * 0.3)
 const MoreInfo: ViewStyle = {
     // flex: 1,
     position: 'absolute',
@@ -87,7 +86,9 @@ const MoreInfo: ViewStyle = {
     // marginBottom: 20,
     // backgroundColor: 'blue',
 }
-
+const FlatList: ViewStyle = {
+    // paddingTop: height * 0.1
+}
 export default {
     Container,
     Solid,
@@ -100,5 +101,6 @@ export default {
     ButtonContainer,
     Bar,
     Rec,
-    MoreInfo
+    MoreInfo,
+    FlatList
 }

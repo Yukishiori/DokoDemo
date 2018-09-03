@@ -88,14 +88,12 @@ const signInWithEmail = async ({ email, password }: ISignInParams) => {
 
 const LoginWithFacebook = async () => {
   const result: LoginResult = await LoginManager.logInWithReadPermissions(config.facebook.permissions);
-  console.log('shit', result);
   if (result.isCancelled) {
     return;
   }
   const accessToken: AccessToken = await AccessToken.getCurrentAccessToken();
 
   const userInfo = await userService.login({ loginType: 'facebook', token: accessToken.accessToken });
-  console.log('userInfo', userInfo);
   return userInfo;
 }
 

@@ -29,8 +29,8 @@ export default class App extends Component {
 
 const AuthStack = FluidNavigator({
   Splash: SplashScreen,
-  // SignUp: SignUpScreen,
-  // Login: LoginScreen,
+  SignUp: SignUpScreen,
+  Login: LoginScreen,
 });
 
 const MainStack = FluidNavigator({
@@ -47,6 +47,6 @@ const MainStack = FluidNavigator({
 
 const SwitchNavigation = createSwitchNavigator(
   {
-    Auth: AuthStack,
+    // Auth: AuthStack, 
     Main: MainStack,
   });

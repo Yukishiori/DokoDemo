@@ -47,6 +47,7 @@ const Panel: ViewStyle = {
     borderRadius: 20,
     backgroundColor: 'white',
     marginTop: height * 0.05,
+    justifyContent: 'center'
 }
 
 const Button: ViewStyle = {
@@ -60,7 +61,7 @@ const Button: ViewStyle = {
 const ButtonContainer: ViewStyle = {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: height * 0.05
+    marginTop: height * 0.02
 }
 
 const Bar: ViewStyle = {
@@ -76,7 +77,6 @@ const Rec: ViewStyle = {
     justifyContent: 'center',
     marginTop: height * 0.02
 }
-console.log(height * 0.3)
 const MoreInfo: ViewStyle = {
     // flex: 1,
     position: 'absolute',

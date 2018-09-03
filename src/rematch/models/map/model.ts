@@ -53,8 +53,6 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             try {
                 if (placeCombo[index]) {
                     const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${placeCombo[index]}&language=vi`)).results;
-                    console.log(resultPlaces);
-                    
                     const bestPlace = getNumberOfBestPlace(
                         resultPlaces,
                         location, 1);
@@ -91,7 +89,6 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
 
 
 const parsePolyline = (response: any): ICoord[] => {
-    console.log(response);
     return _.flatten(response.routes[0].legs.map(leg => {
         const route: ICoord[] = [];
         leg.steps.forEach((step, index) => {

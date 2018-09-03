@@ -79,7 +79,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
-        console.log(item);
         return <PlaceCard
             name={item.name}
             rating={item.rating}

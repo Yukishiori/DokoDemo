@@ -53,7 +53,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                     <View style={styles.Cover} />
 
                     <TouchableOpacity style={{ flex: 1, position: 'absolute', top: '5%', left: '3%' }} onPress={() => this.props.navigation.goBack()}>
-                        <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 30 }} />
+                        <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: gradient[0], fontSize: 30 }} />
                     </TouchableOpacity>
                     <LinearGradient style={styles.Solid} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
                         <Image source={{ uri: this.state.uri }} style={styles.Image} />
@@ -78,7 +78,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                             </View>
                         </View>
                         <View style={styles.MoreInfo}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenNames.Discuss)}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenNames.Discuss, { chosenPlace: this.props.navigation.state.params.chosenPlace })}>
                                 <AppText style={{ color: 'white' }}>More info</AppText>
                                 <View style={{ borderRadius: 20, backgroundColor: 'white', height: 3 }} />
                             </TouchableOpacity>
