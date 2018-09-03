@@ -125,7 +125,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     horizontal
                     style={{ position: 'absolute', top: '65%' }}
                     showsHorizontalScrollIndicator={false}
-                    onViewableItemsChanged={this.onViewableItemsChanged}
+                    // onViewableItemsChanged={this.onViewableItemsChanged}
                     viewabilityConfig={this.viewabilityConfig}
                     pagingEnabled
                 />

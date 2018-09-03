@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import placeService from '../../service/place.service';
 import AppText from '../../components/AppText';
 import { Transition } from 'react-navigation-fluid-transitions';
+import ScreenNames from '../ScreenNames';
 
 interface IProps extends NavigationScreenProps {
 }
@@ -58,12 +59,32 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                         <Image source={{ uri: this.state.uri }} style={styles.Image} />
                         <AppText style={styles.Title}>{chosenPlace.name}</AppText>
                         <View style={styles.Panel}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <AppText style={{ fontSize: 22 }}>Recommended by</AppText>
-                                <AppText style={{ fontSize: 26, color: gradient[0], fontWeight: 'bold' }}>{chosenPlace.rating * 20} %</AppText>
+                            <View style={styles.Rec}>
+                                <AppText style={{ fontSize: 20, fontWeight: 'bold' }}>Recommended by</AppText>
+                                <AppText style={{ fontSize: 24, color: gradient[0], fontWeight: 'bold' }}> {chosenPlace.rating * 20} %</AppText>
+                            </View>
+                            <LinearGradient style={styles.Bar} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient} />
+                            <View style={styles.ButtonContainer}>
+                                <TouchableOpacity >
+                                    <LinearGradient style={styles.Button} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
+                                        <AppText style={{ color: 'white' }}>I like it !!!</AppText>
+                                    </LinearGradient>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ marginLeft: '5%' }}>
+                                    <LinearGradient style={styles.Button} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
+                                        <AppText style={{ color: 'white' }}>I dislike it</AppText>
+                                    </LinearGradient>
+                                </TouchableOpacity>
                             </View>
                         </View>
+                        <View style={styles.MoreInfo}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenNames.Discuss)}>
+                                <AppText style={{ color: 'white' }}>More info</AppText>
+                                <View style={{ borderRadius: 20, backgroundColor: 'white', height: 3 }} />
+                            </TouchableOpacity>
+                        </View>
                     </LinearGradient>
+
                 </View>
             </Transition>
         );

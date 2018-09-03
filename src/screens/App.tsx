@@ -12,6 +12,8 @@ import { Provider } from 'react-redux';
 import store from '../rematch/store';
 import LikeDisLikeScreen from './LikeDislikeScreen';
 import bootstrapFirebase from '../bootstrap/bootstrap-firebase';
+import DiscussAndDetailScreen from './DiscussAndDetailScreen';
+// import Discuss
 
 
 bootstrapFirebase();
@@ -38,6 +40,7 @@ const MainStack = FluidNavigator({
   Think: ThinkScreen,
   MainMap: MainMapWithCardScreen,
   LikeDisLikeScreen: LikeDisLikeScreen,
+  Discuss: DiscussAndDetailScreen
 }, {
     headerMode: 'none',
   });
