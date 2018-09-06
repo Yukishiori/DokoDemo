@@ -10,9 +10,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import MapView from 'react-native-maps';
 import config from '../../../config';
+import { connect } from 'react-redux';
 
 interface IProps extends NavigationScreenProps {
-
+  photoURL : string;
 }
 class ThinkScreen extends Component<IProps> {
     render() {
@@ -57,8 +58,7 @@ class ThinkScreen extends Component<IProps> {
                         </LinearGradient>
                     </Transition>
                     <Image source={{
-                        uri:
-                            'https://scontent.fhan1-1.fna.fbcdn.net/v/t1.0-9/31510482_2142751972626891_6298532426771595264_n.jpg?_nc_cat=0&oh=cf65edd1397ca15cac6cfdb2c7cf8142&oe=5BF6E34D'
+                        uri: this.props.photoURL || "https://i.imgur.com/oO3jT0b.png"
                     }}
                         style={styles.Circle}
                     />
@@ -68,4 +68,16 @@ class ThinkScreen extends Component<IProps> {
     }
 }
 
-export default ThinkScreen;
+const mapState = (rootState: any) => {
+  return {
+    ...rootState.profileModel
+  };
+};
+
+const mapDispatch = (rootReducer: any) => {
+  return {
+    ...rootReducer.profileModel,
+  };
+};
+
+export default connect(mapState, mapDispatch)(ThinkScreen);
