@@ -86,7 +86,7 @@ const loginPageModel: ModelConfig<ILoginPageState> = createModel({
     async loginWithFacebook(): Promise<void> {
       try {
         await authService.LoginWithFacebook();
-        // this.loginSuccess();
+        this.loginSuccess();
       } catch (err) {
         this.loginError(err.message);
       }

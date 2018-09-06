@@ -87,6 +87,7 @@ const signInWithEmail = async ({ email, password }: ISignInParams) => {
 }
 
 const LoginWithFacebook = async () => {
+  await LoginManager.logOut();
   const result: LoginResult = await LoginManager.logInWithReadPermissions(config.facebook.permissions);
   if (result.isCancelled) {
     return;
