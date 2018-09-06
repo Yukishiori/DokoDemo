@@ -62,10 +62,13 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
 
     renderMarker = () => {
         return this.props.chosenPlaces.map((chosenPlace, index) =>
-            <Marker coordinate={{
-                longitude: chosenPlace.geometry.location.lng,
-                latitude: chosenPlace.geometry.location.lat
-            }} key={index} title={chosenPlace.name} />
+            <Marker
+                coordinate={{
+                    longitude: chosenPlace.geometry.location.lng,
+                    latitude: chosenPlace.geometry.location.lat
+                }} key={index} title={chosenPlace.name}
+                pinColor="orange"
+            />
         )
     }
 
@@ -100,8 +103,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     toggleModal = () => {
         this.setState({ isModalVisible: !this.state.isModalVisible });
     }
-    viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 }
-
 
     render() {
 
@@ -122,11 +123,10 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     horizontal
-                    style={{ position: 'absolute', top: '65%' }}
+                    style={{ position: 'absolute', bottom: '5%' }}
                     showsHorizontalScrollIndicator={false}
                     // onViewableItemsChanged={this.onViewableItemsChanged}
-                    viewabilityConfig={this.viewabilityConfig}
-                    pagingEnabled
+                    // pagingEnabled
                 />
             </View >
         );

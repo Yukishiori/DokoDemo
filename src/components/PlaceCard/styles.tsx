@@ -4,15 +4,17 @@ const { width, height } = Dimensions.get('screen');
 
 const CardImage: ImageStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    width: width * 0.80,
-    height: width * 0.8 / 16 * 10,
-    borderRadius: 20
+    width: width * 0.75,
+    height: width * 0.75 / 16 * 10,
+    borderRadius: 10,
+    // borderWidth: 2,
+    // borderColor: 'white'
 }
 
 const Card: ViewStyle = {
     flex: 1,
-    marginHorizontal: width * 0.1,
-    borderRadius: 20,
+    marginHorizontal: width * 0.03,
+    borderRadius: 10,
     overflow: 'hidden'
 }
 
@@ -20,17 +22,20 @@ const Title: ViewStyle = {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    width: width * 0.86,
+    width: width * 0.75,
     height: height * 0.09,
-    borderBottomEndRadius: 20,
-    borderBottomStartRadius: 20,
+    borderBottomEndRadius: 10,
+    borderBottomStartRadius: 10,
     justifyContent: 'center',
-    padding: 10
+    padding: 10,
+    borderColor: 'white',
+    backgroundColor: 'white'
 }
 
 const Text: TextStyle = {
     fontSize: 14,
-    color: 'white'
+    color: 'white',
+    fontWeight: 'bold'
 }
 
 export default {

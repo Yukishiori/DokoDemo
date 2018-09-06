@@ -86,9 +86,36 @@ const MoreInfo: ViewStyle = {
     // marginBottom: 20,
     // backgroundColor: 'blue',
 }
-const FlatList: ViewStyle = {
-    // paddingTop: height * 0.1
+
+const Header: ViewStyle = {
+    flexDirection: 'row',
+    height: height * 0.1,
+    alignItems: 'center'
 }
+
+const TotalPanel: ViewStyle = {
+    borderRadius: 20,
+    backgroundColor: 'white',
+    paddingVertical: height * 0.05,
+    paddingHorizontal: width * 0.03,
+    marginHorizontal: width * 0.05,
+    marginVertical: height * 0.05
+}
+
+const GradientButton: ViewStyle = {
+    marginTop: height * 0.03,
+    borderRadius: 20,
+    height: height * 0.07,
+    marginHorizontal: width * 0.05,
+    justifyContent: 'center',
+    alignItems: 'center'
+}
+
+const TextInPanel: ViewStyle = {
+    marginHorizontal: width * 0.05,
+
+}
+
 export default {
     Container,
     Solid,
@@ -102,5 +129,8 @@ export default {
     Bar,
     Rec,
     MoreInfo,
-    FlatList
+    Header,
+    TotalPanel,
+    GradientButton,
+    TextInPanel
 }

@@ -79,7 +79,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                         </View>
                         <View style={styles.MoreInfo}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate(ScreenNames.Discuss, { chosenPlace: this.props.navigation.state.params.chosenPlace })}>
-                                <AppText style={{ color: 'white' }}>More info</AppText>
+                                <AppText style={{ color: 'white' }}>More details</AppText>
                                 <View style={{ borderRadius: 20, backgroundColor: 'white', height: 3 }} />
                             </TouchableOpacity>
                         </View>

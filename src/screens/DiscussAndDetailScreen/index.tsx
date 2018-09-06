@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { View, TouchableOpacity, FlatList } from 'react-native';
+import { View, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { Transition } from 'react-navigation-fluid-transitions';
 import { Icon } from 'native-base';
 import { gradient, height } from '../../commonStyle';
@@ -11,7 +11,8 @@ import placeService from '../../service/place.service';
 import { IPlaceFromGoogle, IPlaceDetailFromGoogle, Review } from '../../rematch/models/map/interface';
 import ReviewCard from '../../components/ReviewCard';
 import styles from './styles';
-import Layout from '../../components/Layout';
+import AppText from '../../components/AppText';
+import moment from 'moment';
 
 interface IProps extends NavigationScreenProps {
 
@@ -43,30 +44,41 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
                 console.log(err)
             })
     }
-
-    renderItem = ({ item, index }: { item: Review, index: number }) => {
-        return <ReviewCard text={item.text} direction={index % 2 === 0 ? 'right' : 'left'} />
-    }
-
     render() {
-        console.log(this.state.placeDetail ? this.state.placeDetail.result.reviews : '');
         return (
             <Transition appear="vertical">
                 <LinearGradient style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={{ flex: 1 }} onPress={() => this.props.navigation.goBack()}>
+                    <View style={styles.Header}>
+                        <TouchableOpacity style={{ flex: 1, marginLeft: '3%' }} onPress={() => this.props.navigation.goBack()}>
                             <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 30 }} />
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.FlatList}>
+                    <ScrollView>
                         {this.state.placeDetail
-                            && <FlatList
-                                data={this.state.placeDetail.result.reviews}
-                                renderItem={this.renderItem}
-                                keyExtractor={(item, index) => index.toString()}
-                            />
+                            && this.state.placeDetail.result.reviews.map((item, index) => {
+                                return <ReviewCard key={index} text={item.text} direction={index % 2 === 0 ? 'right' : 'left'} />
+                            })
                         }
-                    </View>
+                        <View style={styles.TotalPanel}>
+                            {
+                                this.state.placeDetail && <View style={styles.TextInPanel}>
+                                    <View>
+                                        <AppText style={{ fontSize: 12 }}>Address: </AppText>
+                                        <AppText style={{ fontWeight: 'bold', fontSize: 16 }}>{this.state.placeDetail.result.vicinity}</AppText>
+                                    </View>
+                                    <View>
+                                        <AppText style={{ fontSize: 12 }}>Contact: </AppText>
+                                        <AppText style={{ fontWeight: 'bold', fontSize: 16 }}>{this.state.placeDetail.result.formatted_phone_number}</AppText>
+                                    </View>
+                                </View>
+                            }
+                            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                                <LinearGradient style={styles.GradientButton} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient} >
+                                    <AppText style={{ color: 'white', fontWeight: 'bold' }}>OKAY</AppText>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
                 </LinearGradient>
             </Transition>
         );

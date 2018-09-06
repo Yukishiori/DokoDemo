@@ -38,7 +38,9 @@ const Cover: ViewStyle = {
 const Title: TextStyle = {
     marginTop: height * 0.12,
     color: 'white',
-    fontSize: 20
+    fontSize: 20,
+    marginHorizontal: width * 0.05,
+    textAlign: 'center'
 }
 
 const Panel: ViewStyle = {
