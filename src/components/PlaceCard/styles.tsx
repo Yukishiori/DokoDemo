@@ -38,9 +38,21 @@ const Text: TextStyle = {
     fontWeight: 'bold'
 }
 
+const DeleteButton: ViewStyle = {
+    height: height * 0.05, 
+    width: width * 0.1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    position: 'absolute',
+    top: 0,
+    right: 0
+}
+
 export default {
     Card,
     CardImage,
     Title,
-    Text
+    Text,
+    DeleteButton
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import styles from './styles';
@@ -18,6 +18,7 @@ interface IProps extends NavigationScreenProps {
     chosenPlaces: IPlaceFromGoogle[],
     getNearByPlaceUsingCombo: (location: ICoord) => void;
     polylineCoords: ICoord[];
+    isBusy: boolean;
 }
 
 
@@ -83,10 +84,8 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
 
     renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
         return <PlaceCard
-            name={item.name}
-            rating={item.rating}
+            place={item}
             onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
-            photoReference={item.photos ? item.photos[0].photo_reference : null}
         />
     }
     onViewableItemsChanged = ({ viewableItems }) => {
@@ -104,8 +103,17 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
         this.setState({ isModalVisible: !this.state.isModalVisible });
     }
 
-    render() {
 
+
+    render() {
+        if (this.props.isBusy) {
+            return <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color={gradient[1]} />
+            </View>
+        }
+
+
+        console.log(this.props);
         return (
             <View>
                 <MapView
@@ -119,14 +127,15 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     {this.renderPolyline()}
                 </MapView>
                 <FlatList
-                    data={this.props.chosenPlaces}
+                    data={this.props.isBusy ? [] : this.props.chosenPlaces}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     horizontal
                     style={{ position: 'absolute', bottom: '5%' }}
                     showsHorizontalScrollIndicator={false}
-                    // onViewableItemsChanged={this.onViewableItemsChanged}
-                    // pagingEnabled
+                    onViewableItemsChanged={this.onViewableItemsChanged}
+                    extraData={this.props}
+                // pagingEnabled
                 />
             </View >
         );

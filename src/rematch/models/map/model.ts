@@ -11,7 +11,8 @@ import { IRootState } from '../../interface';
 const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     state: {
         chosenPlaces: [],
-        polylineCoords: []
+        polylineCoords: [],
+        isBusy: false
     },
     reducers: {
         addChosenPlace: (
@@ -31,6 +32,24 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 ...state,
                 ...payload
             }
+        },
+        removeChosenPlace: (
+            state: IMapScreenState,
+            payload: { placeId: string }
+        ): IMapScreenState => {
+            return {
+                ...state,
+                chosenPlaces: state.chosenPlaces.filter((chosenPlace) => chosenPlace.place_id !== payload.placeId)
+            }
+        },
+        updateBusyState: (
+            state: IMapScreenState,
+            payload: boolean
+        ): IMapScreenState => {
+            return {
+                ...state,
+                isBusy: payload
+            }
         }
     },
     effects: {
@@ -42,6 +61,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
 
                 //     return bestPlace
                 // }));
+                this.updateBusyState(true);
                 await this.getAnotherPlaceFromThisPlace({ placeCombo, location, index: 0 });
                 await this.getDirection(location)
             } catch (err) {
@@ -64,6 +84,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                         }, index: index + 1
                     })
                 }
+                this.updateBusyState(false);
             } catch (err) {
                 // this.loginError({ error: err.message });
                 console.log(err)
