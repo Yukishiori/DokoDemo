@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, ImageBackground, View, Image } from 'react-native';
+import { TouchableOpacity, ImageBackground, View, Image, AlertAndroid, Alert } from 'react-native';
 import AppText from '../AppText';
 import styles from './styles'
 import placeService from '../../service/place.service';
@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { IRootState } from '../../rematch/interface';
 import { Icon } from 'native-base';
 import { IPlaceFromGoogle } from '../../rematch/models/map/interface';
+import FastImage from 'react-native-fast-image';
 interface IProps {
     place: IPlaceFromGoogle;
     // photoReference: string;
@@ -27,18 +28,23 @@ class PlaceCard extends Component<IProps, IState> {
             uri: ''
         };
 
-        if (this.props.place.photos && this.props.place.photos[0].photo_reference) {
-            placeService.getImageUris([this.props.place.photos[0].photo_reference]).then(res => {
-                this.setState({
-                    uri: res[0]
-                })
-            })
-        }
+    }
+
+    deleteItem = () => {
+        // Alert.alert(
+
+        // )
+        this.props.removeChosenPlace({ placeId: this.props.place.place_id });
     }
     render() {
         return (
             <TouchableOpacity onPress={this.props.onPress} style={styles.Card}>
-                <Image source={{ uri: this.state.uri }} style={styles.CardImage} />
+                {this.props.place.firstImageUrl
+                    ? <FastImage
+                        source={{ uri: this.props.place.firstImageUrl }}
+                        style={styles.CardImage}
+                    />
+                    : <View style={[styles.CardImage, { backgroundColor: 'gray' }]} />}
                 <LinearGradient style={styles.Title} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
                     <AppText style={styles.Text}>{this.props.place.name.toUpperCase()}</AppText>
                     <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
@@ -47,7 +53,7 @@ class PlaceCard extends Component<IProps, IState> {
                     </View>
                 </LinearGradient>
                 <TouchableOpacity style={styles.DeleteButton}
-                    onPress={() => this.props.removeChosenPlace({ placeId: this.props.place.place_id })}>
+                    onPress={this.deleteItem}>
                     <Icon name="x" type="Feather" style={{ color: "#565656" }} />
                 </TouchableOpacity>
             </TouchableOpacity>

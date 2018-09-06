@@ -53,7 +53,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         }
     },
     effects: {
-        async getNearByPlaceUsingCombo(location: ICoord, state: IRootState): Promise<void> {
+        async getNearByPlaceUsingCombo(location: ICoord): Promise<void> {
             try {
                 const placeCombo = getCombo();
 
@@ -76,7 +76,9 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                     const bestPlace = getNumberOfBestPlace(
                         resultPlaces,
                         location, 1);
-                    this.addChosenPlace({ chosenPlace: bestPlace[0] });
+                    const firstImageUrl = (await placeService.getImageUris([bestPlace[0].photos[0].photo_reference]))[0];
+
+                    this.addChosenPlace({ chosenPlace: { ...bestPlace[0], firstImageUrl } });
                     await this.getAnotherPlaceFromThisPlace({
                         placeCombo, location: {
                             latitude: bestPlace[0].geometry.location.lat,

@@ -112,8 +112,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             </View>
         }
 
-
-        console.log(this.props);
         return (
             <View>
                 <MapView
@@ -133,7 +131,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     horizontal
                     style={{ position: 'absolute', bottom: '5%' }}
                     showsHorizontalScrollIndicator={false}
-                    onViewableItemsChanged={this.onViewableItemsChanged}
+                    // onViewableItemsChanged={this.onViewableItemsChanged}
                     extraData={this.props}
                 // pagingEnabled
                 />

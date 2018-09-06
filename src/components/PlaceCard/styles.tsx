@@ -29,7 +29,6 @@ const Title: ViewStyle = {
     justifyContent: 'center',
     padding: 10,
     borderColor: 'white',
-    backgroundColor: 'white'
 }
 
 const Text: TextStyle = {
@@ -39,14 +38,15 @@ const Text: TextStyle = {
 }
 
 const DeleteButton: ViewStyle = {
-    height: height * 0.05, 
+    height: width * 0.1, 
     width: width * 0.1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     position: 'absolute',
-    top: 0,
-    right: 0
+    top: 5,
+    right: 5,
+    borderRadius: 5
 }
 
 export default {

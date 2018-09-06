@@ -39,6 +39,7 @@ export interface IPlaceFromGoogle {
     types: string[];
     vicinity: string;
     rating: number;
+    firstImageUrl?: string;
 }
 
 export interface IRootObject {
