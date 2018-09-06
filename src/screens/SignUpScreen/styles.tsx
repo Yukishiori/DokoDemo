@@ -1,5 +1,4 @@
 import { ViewStyle, Dimensions, Platform, ImageStyle, TextStyle } from "react-native";
-const { width, height } = Dimensions.get('window');
 
 const BackgroundGradient: ViewStyle = {
     width: '100%',
@@ -14,7 +13,7 @@ const SignUpText: TextStyle = {
 }
 
 const LogoContainer: ViewStyle = {
-  flex: 1/3
+  flex: Platform.OS === 'ios' ? 1/3 : 1/5
 }
 
 const ContentContainer: ViewStyle = {
@@ -37,22 +36,25 @@ const LoginTextContainer: ViewStyle = {
 }
 
 const TextInput = { 
-  paddingLeft: 5,
+  paddingLeft: 5, 
+  marginHorizontal : Platform.OS === 'ios' ? 0 : 5,
   color: '#565656', 
+  marginBottom: Platform.OS === 'ios' ? 0 : 3,
   fontFamily: 'Comfortaa-Regular'
 }
 
 const IconContainer: ViewStyle = {
   position: 'absolute', 
   top: 7, 
-  left: 15
+  left: Platform.OS === 'ios' ? 7 : 13
 }
 
 const LoginInputContainer: ViewStyle = {
   width: '100%',
   marginVertical: 10,
-  height: 35,
-  padding : 10,
+  height: Platform.OS === 'ios' ? 35 : 45,
+  paddingHorizontal : 10,
+  paddingVertical : Platform.OS === 'ios' ? 10 : 0,
   borderRadius: 20,
   backgroundColor: 'rgba(255,255,255,0.6)'
   

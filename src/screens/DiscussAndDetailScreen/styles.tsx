@@ -90,17 +90,10 @@ const MoreInfo: ViewStyle = {
 const Header: ViewStyle = {
     flexDirection: 'row',
     height: height * 0.1,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: Platform.OS === 'ios' ? height * 0.02 : 0
 }
 
-const TotalPanel: ViewStyle = {
-    borderRadius: 20,
-    backgroundColor: 'white',
-    paddingVertical: height * 0.05,
-    paddingHorizontal: width * 0.03,
-    marginHorizontal: width * 0.05,
-    marginVertical: height * 0.05
-}
 
 const GradientButton: ViewStyle = {
     marginTop: height * 0.03,
@@ -113,7 +106,34 @@ const GradientButton: ViewStyle = {
 
 const TextInPanel: ViewStyle = {
     marginHorizontal: width * 0.05,
+}
 
+const CommentBar: ViewStyle = {
+    flex: 1,
+    width: width * 0.9,
+    backgroundColor: 'white',
+    paddingVertical: height * 0.03,
+    paddingLeft: width * 0.05,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: width * 0.05,
+    marginVertical: height * 0.015,
+    borderRadius: height * 0.05,
+    flexDirection: 'row'
+}
+
+
+
+const TextInput: ViewStyle = {
+    height: height * 0.05,
+    width: width * 0.7
+}
+
+const Send: ViewStyle = {
+    width: width * 0.1,
+    height: height * 0.05,
+    justifyContent: 'center',
+    alignItems: 'center'
 }
 
 export default {
@@ -130,7 +150,9 @@ export default {
     Rec,
     MoreInfo,
     Header,
-    TotalPanel,
     GradientButton,
-    TextInPanel
+    TextInPanel,
+    CommentBar,
+    TextInput,
+    Send
 }

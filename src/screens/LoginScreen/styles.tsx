@@ -13,7 +13,7 @@ const LoginText: TextStyle = {
 }
 
 const LogoContainer: ViewStyle = {
-  flex: 1,
+  flex: Platform.OS === 'ios' ? 1 : 1/3,
   alignItems: 'center',
   justifyContent: 'center'
 }
@@ -38,22 +38,25 @@ const LoginTextContainer: ViewStyle = {
 }
 
 const TextInput = { 
-  paddingLeft: 30, 
+  paddingLeft: Platform.OS === 'ios' ? 30 : 5, 
+  marginLeft: Platform.OS === 'ios' ? 0 : 25,
   color: '#565656', 
+  marginBottom: Platform.OS === 'ios' ? 0 : 5,
   fontFamily: 'Comfortaa-Regular'
 }
 
 const IconContainer: ViewStyle = {
   position: 'absolute', 
-  top: 7, 
+  top: Platform.OS === 'ios' ? 7 : 13, 
   left: 15
 }
 
 const LoginInputContainer: ViewStyle = {
   width: '100%',
   marginVertical: 10,
-  height: 35,
-  padding : 10,
+  height: Platform.OS === 'ios' ? 35 : 45,
+  paddingHorizontal : 10,
+  paddingVertical : Platform.OS === 'ios' ? 10 : 0,
   borderRadius: 20,
   backgroundColor: 'rgba(255,255,255,0.6)'
   

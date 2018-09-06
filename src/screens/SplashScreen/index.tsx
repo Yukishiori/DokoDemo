@@ -10,6 +10,7 @@ import AppText from '../../components/AppText';
 import { gradient } from '../../commonStyle';
 import styles from './styles';
 import ScreenNames from '../ScreenNames';
+import { connect } from 'react-redux';
 
 interface IProps extends NavigationScreenProps {
   changeEmail: any;
@@ -17,14 +18,21 @@ interface IProps extends NavigationScreenProps {
   changePassword: any;
   email: string;
   password: string;
+  retriveDataSuccess: any;
 }
 
 class SplashScreen extends Component<IProps> {
   componentDidMount() {
+    // firebase.auth().signOut();
     firebase.auth().onAuthStateChanged(res => {
-      res !== null
-        ? setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
-        : setTimeout(() => this.props.navigation.navigate(ScreenNames.LoginScreen), 500)
+      if (res) {
+        if (res.providerData && res.providerData.length) {
+          this.props.retriveDataSuccess({result : res.providerData[0]});
+        }
+        setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+      } else {
+        setTimeout(() => this.props.navigation.navigate(ScreenNames.LoginScreen), 500)
+      }
     })
   };
 
@@ -39,4 +47,17 @@ class SplashScreen extends Component<IProps> {
   }
 }
 
-export default SplashScreen;
+
+const mapState = (rootState: any) => {
+  return {
+    ...rootState.profileModel
+  };
+};
+
+const mapDispatch = (rootReducer: any) => {
+  return {
+    ...rootReducer.profileModel,
+  };
+};
+
+export default connect(mapState, mapDispatch)(SplashScreen);

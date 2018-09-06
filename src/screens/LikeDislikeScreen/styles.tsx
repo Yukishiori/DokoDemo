@@ -2,105 +2,113 @@ import { ViewStyle, Dimensions, Platform, ImageStyle, TextStyle } from "react-na
 import { gradient } from "../../commonStyle";
 const { width, height } = Dimensions.get('screen');
 const Container: ViewStyle = {
-    width,
-    height,
+    alignItems: 'center'
 }
 
 const Image: ImageStyle = {
-    position: 'absolute',
     height: width * 0.8 / 16 * 10,
     width: width * 0.8,
     borderRadius: 20,
-    top: - height * 0.175,
-    shadowColor: '#000',
-}
-
-const Solid: ViewStyle = {
-    width,
-    height: height * 0.65,
-    alignItems: 'center',
-}
-
-const Map: ViewStyle = {
-    width,
-    height: height * 0.35
-}
-
-const Cover: ViewStyle = {
-    width,
-    height: height * 0.4,
-    opacity: 0.3,
-    backgroundColor: gradient[0],
-    position: 'absolute',
-    top: 0
+    marginTop: height * 0.05
 }
 
 const Title: TextStyle = {
-    marginTop: height * 0.12,
+    marginTop: height * 0.05,
     color: 'white',
     fontSize: 20,
-    marginHorizontal: width * 0.05,
+    marginHorizontal: width * 0.1,
     textAlign: 'center'
 }
 
-const Panel: ViewStyle = {
-    height: width * 0.8 / 16 * 9,
-    width: width * 0.8,
+const ScrollView: ViewStyle = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width
+}
+
+const Header: ViewStyle = {
+    width,
+    flexDirection: 'row',
+    position: 'absolute',
+    height: height === 812 ? '125%' : '100%',
+    marginTop: Platform.OS === 'ios' ? (height === 812 ? 30 : 20) : 0,
+    paddingHorizontal: '5%',
+    backgroundColor: gradient[1],
+};
+
+const TotalPanel: ViewStyle = {
     borderRadius: 20,
     backgroundColor: 'white',
-    marginTop: height * 0.05,
-    justifyContent: 'center'
+    paddingVertical: height * 0.025,
+    marginHorizontal: width * 0.05,
+    marginVertical: height * 0.05,
+    width: width * 0.8
 }
 
-const Button: ViewStyle = {
-    paddingVertical: height * 0.01,
-    // paddingHorizontal: width * 0.03,
-    alignItems: 'center',
-    width: width * 0.3,
-    borderRadius: 20
+const TextInPanel: ViewStyle = {
+    marginHorizontal: width * 0.05,
 }
 
-const ButtonContainer: ViewStyle = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: height * 0.02
+const SmallText: TextStyle = {
+    marginLeft: '5%',
+    fontSize: 12,
+    marginVertical: Platform.OS === 'ios' ? 4 : 0
+}
+
+const BigText: TextStyle = {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginVertical: Platform.OS === 'ios' ? 7 : 3
 }
 
 const Bar: ViewStyle = {
-    marginHorizontal: '5%',
-    height: 6,
+    height: 7,
     borderRadius: 20,
-    marginTop: '2%'
+    marginBottom: height * 0.03,
+    marginTop: height * 0.01
+}
+
+const IconText: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'center',
 }
 
 const Rec: ViewStyle = {
     flexDirection: 'row',
-    alignItems: 'baseline',
     justifyContent: 'center',
-    marginTop: height * 0.02
+    marginTop: Platform.OS === 'ios' ? 7 : 0
 }
-const MoreInfo: ViewStyle = {
-    // flex: 1,
-    position: 'absolute',
-    top: height * 0.52,
+
+const Star: ViewStyle = {
+    borderRadius: 5,
+    backgroundColor: 'gray',
+    width: width * 0.1,
+    height: width * 0.1,
+    justifyContent: 'center',
     alignItems: 'center',
-    // // height: height * 0.1,
-    // justifyContent: 'flex-end',
-    // marginBottom: 20,
-    // backgroundColor: 'blue',
+    marginRight: width * 0.05
+}
+
+const Action: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
 }
 
 export default {
+    Rec,
     Container,
-    Solid,
     Image,
     Map,
-    Cover,
     Title,
-    Panel,
-    Button,
-    ButtonContainer,
+    ScrollView,
+    Header,
+    TotalPanel,
+    TextInPanel,
+    BigText,
+    SmallText,
     Bar,
-    Rec,
-    MoreInfo
+    IconText,
+    Star,
+    Action
 }
