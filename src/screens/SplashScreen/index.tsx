@@ -19,6 +19,7 @@ interface IProps extends NavigationScreenProps {
   email: string;
   password: string;
   retriveDataSuccess: any;
+  createOrUpdateFirebaseUser: any;
 }
 
 class SplashScreen extends Component<IProps> {
@@ -28,6 +29,7 @@ class SplashScreen extends Component<IProps> {
       if (res) {
         if (res.providerData && res.providerData.length) {
           this.props.retriveDataSuccess({result : res.providerData[0]});
+          this.props.createOrUpdateFirebaseUser({result: res.providerData[0]});
         }
         setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
       } else {

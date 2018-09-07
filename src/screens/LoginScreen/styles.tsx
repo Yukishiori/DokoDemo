@@ -9,7 +9,8 @@ const BackgroundGradient: ViewStyle = {
 }
 
 const LoginText: TextStyle = {
-  fontSize: 22
+  fontSize: 22,
+  color: 'white'
 }
 
 const LogoContainer: ViewStyle = {
@@ -34,7 +35,12 @@ const Icon: TextStyle = {
 const LoginTextContainer: ViewStyle = {
   marginTop: 5,
   marginBottom: 10,
-  flexDirection: 'row'
+  flexDirection: 'row',
+  backgroundColor: '#565656',
+  width: '100%',
+  padding: 10,
+  justifyContent: 'center',
+  borderRadius: 5
 }
 
 const TextInput = { 
@@ -82,6 +88,10 @@ const SignUpContainer: ViewStyle = {
   marginBottom: 20
 }
 
+const WhiteText: TextStyle = {
+  color: 'white'
+}
+
 export default {
     BackgroundGradient,
     LoginText,
@@ -95,5 +105,6 @@ export default {
     LoginWithFBText,
     LoginWithFBIcon,
     LoginWithFBButton,
-    SignUpContainer
+    SignUpContainer,
+    WhiteText
 }

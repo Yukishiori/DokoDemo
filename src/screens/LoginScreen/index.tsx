@@ -76,7 +76,7 @@ class LoginScreen extends Component<IProps> {
           </View>
           <View style={styles.SignUpContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
-              <AppText>Dont' have an account? Sign up now.</AppText>
+              <AppText style={{textDecorationLine: 'underline', fontSize: 16}}>Dont' have an account? Sign up now.</AppText>
             </TouchableOpacity>
           </View>
         </LinearGradient>

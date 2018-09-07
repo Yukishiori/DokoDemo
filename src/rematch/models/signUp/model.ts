@@ -1,4 +1,5 @@
 import { createModel, ModelConfig } from '@rematch/core';
+import firebase from 'firebase';
 import {
   ISignUpPageState,
   IChangeEmailPayload,

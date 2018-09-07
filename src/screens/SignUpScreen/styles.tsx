@@ -9,7 +9,7 @@ const BackgroundGradient: ViewStyle = {
 
 const SignUpText: TextStyle = {
   fontSize: 22,
-  marginVertical: 15
+  color: 'white'
 }
 
 const LogoContainer: ViewStyle = {
@@ -30,9 +30,14 @@ const Icon: TextStyle = {
 }
 
 const LoginTextContainer: ViewStyle = {
-  marginTop: 5,
+  marginTop: 10,
   marginBottom: 10,
-  flexDirection: 'row'
+  flexDirection: 'row',
+  backgroundColor: '#565656',
+  width: '100%',
+  padding: 10,
+  justifyContent: 'center',
+  borderRadius: 5
 }
 
 const TextInput = { 
