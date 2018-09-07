@@ -73,7 +73,10 @@ const signUpWithEmail = async ({ email, password, fullName }: ISignUpParams) => 
     const uid = user.uid;
     firebase.firestore().collection('users').doc(uid).set(
       {
-        fullName
+        email,
+        displayName: fullName,
+        photoURL: '',
+        phoneNumber: '',
       },
       { merge: true }).then(() => {
         return user;

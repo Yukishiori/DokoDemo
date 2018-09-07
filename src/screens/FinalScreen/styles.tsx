@@ -17,7 +17,6 @@ const Header: ViewStyle = {
 
 const BigContainer: ViewStyle = {
   minHeight: '100%',
-  marginTop: 20
 }
 
 const BigLinearGradient: ViewStyle = {
