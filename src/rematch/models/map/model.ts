@@ -8,11 +8,13 @@ import haversine from 'haversine';
 import _ from 'lodash';
 import { IState } from '../../../components/Layout';
 import { IRootState } from '../../interface';
+
 const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     state: {
         chosenPlaces: [],
         polylineCoords: [],
-        isBusy: false
+        isBusy: false,
+        currentLocation: null
     },
     reducers: {
         addChosenPlace: (
@@ -50,10 +52,36 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 ...state,
                 isBusy: payload
             }
+        },
+        updateCurrentLocation: (
+            state: IMapScreenState,
+            payload: ICoord
+        ): IMapScreenState => {
+            return {
+                ...state,
+                currentLocation: payload
+            }
+        },
+        addToChosenPlaces: (
+            state: IMapScreenState,
+            payload: IPlaceFromGoogle
+        ): IMapScreenState => {
+            return {
+                ...state,
+                chosenPlaces: [...state.chosenPlaces, payload]
+            }
+        },
+        clearChosenPlaces: (
+            state: IMapScreenState
+        ): IMapScreenState => {
+            return {
+                ...state,
+                chosenPlaces: []
+            }
         }
     },
     effects: {
-        async getNearByPlaceUsingCombo(location: ICoord): Promise<void> {
+        async getNearByPlaceUsingCombo(something, state): Promise<void> {
             try {
                 const placeCombo = getCombo();
 
@@ -62,8 +90,8 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 //     return bestPlace
                 // }));
                 this.updateBusyState(true);
-                await this.getAnotherPlaceFromThisPlace({ placeCombo, location, index: 0 });
-                await this.getDirection(location)
+                await this.getAnotherPlaceFromThisPlace({ placeCombo, location: state.mapScreenModel.currentLocation, index: 0 });
+                await this.getDirection(state.mapScreenModel.currentLocation)
             } catch (err) {
                 // this.loginError({ error: err.message });
                 console.log(err)
@@ -101,10 +129,10 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                     return acc + (acc === '' ? `place_id:${chosenPlace.place_id}` : `|place_id:${chosenPlace.place_id}`)
                 }
                     , '')
-                const polylineCoords = parsePolyline(await placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${location.latitude},${location.longitude}&destination=place_id:${state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1].place_id}&waypoints=${waypoints}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ`))
+                const polylineCoords = parsePolyline(await placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${state.mapScreenModel.currentLocation.latitude},${state.mapScreenModel.currentLocation.longitude}&destination=place_id:${state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1].place_id}&waypoints=${waypoints}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ`))
                 this.updatePolylineCoords({ polylineCoords });
             } catch (err) {
-
+                console.log(err)
             }
         }
     }

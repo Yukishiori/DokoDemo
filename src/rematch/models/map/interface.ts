@@ -51,7 +51,8 @@ export interface IRootObject {
 export interface IMapScreenState {
     chosenPlaces: IPlaceFromGoogle[],
     polylineCoords: ICoord[],
-    isBusy: boolean
+    isBusy: boolean,
+    currentLocation: ICoord
 }
 
 export interface IAddChosenPlacePayload {

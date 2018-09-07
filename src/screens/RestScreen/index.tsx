@@ -12,11 +12,24 @@ import MapView from 'react-native-maps';
 import config from '../../../config';
 import ScreenNames from '../ScreenNames';
 import { connect } from 'react-redux';
+import { ICoord } from '../../service/interface.service';
 
 interface IProps extends NavigationScreenProps {
-  photoURL : string;
+    photoURL: string;
+    updateCurrentLocation: (coord: ICoord) => void;
+    clearChosenPlaces: () => void;
 }
 class RestScreen extends Component<IProps> {
+
+    componentDidMount() {
+        this.props.clearChosenPlaces();
+        navigator.geolocation.getCurrentPosition(
+            (position: Position) => {
+                this.props.updateCurrentLocation(position.coords);
+            }
+        );
+    }
+
     render() {
         return (
             <Layout>
@@ -41,24 +54,22 @@ class RestScreen extends Component<IProps> {
                         provider="google"
                         customMapStyle={config.mapStyle}
                     />
-                    <Transition appear="horizontal">
-                        <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
-                            <AppText style={styles.FirstText}>I WANT TO</AppText>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={{ flex: 1 }} />
-                                <View style={{ flex: 3, alignItems: 'center' }}>
-                                    <AppText style={styles.Text2}>REST</AppText>
-                                </View>
-                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }}
-                                    onPress={() => { this.props.navigation.navigate('Think') }}>
-                                    <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
-                                </TouchableOpacity>
+                    {<LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
+                        <AppText style={styles.FirstText}>I WANT TO</AppText>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flex: 1 }} />
+                            <View style={{ flex: 3, alignItems: 'center' }}>
+                                <AppText style={styles.Text2}>REST</AppText>
                             </View>
-                            <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate(ScreenNames.MainMap)}>
-                                <AppText >MAKE A PLAN FOR ME</AppText>
+                            <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }}
+                                onPress={() => { this.props.navigation.navigate('Think') }}>
+                                <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                             </TouchableOpacity>
-                        </LinearGradient>
-                    </Transition>
+                        </View>
+                        <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate(ScreenNames.MainMap)}>
+                            <AppText >MAKE A PLAN FOR ME</AppText>
+                        </TouchableOpacity>
+                    </LinearGradient>}
                     <Image source={{
                         uri: this.props.photoURL || "https://i.imgur.com/oO3jT0b.png"
                     }}
@@ -72,15 +83,17 @@ class RestScreen extends Component<IProps> {
 
 
 const mapState = (rootState: any) => {
-  return {
-    ...rootState.profileModel
-  };
+    return {
+        ...rootState.profileModel,
+        ...rootState.mapScreenModel
+    };
 };
 
 const mapDispatch = (rootReducer: any) => {
-  return {
-    ...rootReducer.profileModel,
-  };
+    return {
+        ...rootReducer.profileModel,
+        ...rootReducer.mapScreenModel
+    };
 };
 
 export default connect(mapState, mapDispatch)(RestScreen);

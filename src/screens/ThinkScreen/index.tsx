@@ -11,9 +11,10 @@ import styles from './styles';
 import MapView from 'react-native-maps';
 import config from '../../../config';
 import { connect } from 'react-redux';
+import ScreenNames from '../ScreenNames';
 
 interface IProps extends NavigationScreenProps {
-  photoURL : string;
+    photoURL: string;
 }
 class ThinkScreen extends Component<IProps> {
     render() {
@@ -44,7 +45,7 @@ class ThinkScreen extends Component<IProps> {
                         <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
                             <AppText style={styles.FirstText}>I want to</AppText>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }} onPress={() => { this.props.navigation.navigate('Rest') }}>
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }} onPress={() => { this.props.navigation.navigate(ScreenNames.RestScreen) }}>
                                     <Icon name="arrow-left" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                                 </TouchableOpacity>
                                 <View style={{ flex: 3, alignItems: 'center' }}>
@@ -52,7 +53,7 @@ class ThinkScreen extends Component<IProps> {
                                 </View>
                                 <View style={{ flex: 1 }} />
                             </View>
-                            <TouchableOpacity style={styles.Button} >
+                            <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate(ScreenNames.SearchScreen)}>
                                 <AppText >MAKE YOUR OWN PLAN</AppText>
                             </TouchableOpacity>
                         </LinearGradient>
@@ -69,15 +70,15 @@ class ThinkScreen extends Component<IProps> {
 }
 
 const mapState = (rootState: any) => {
-  return {
-    ...rootState.profileModel
-  };
+    return {
+        ...rootState.profileModel
+    };
 };
 
 const mapDispatch = (rootReducer: any) => {
-  return {
-    ...rootReducer.profileModel,
-  };
+    return {
+        ...rootReducer.profileModel,
+    };
 };
 
 export default connect(mapState, mapDispatch)(ThinkScreen);

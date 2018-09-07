@@ -20,12 +20,11 @@ import AppText from '../../components/AppText';
 
 interface IProps extends NavigationScreenProps {
     chosenPlaces: IPlaceFromGoogle[],
-    getNearByPlaceUsingCombo: (location: ICoord) => void;
+    getNearByPlaceUsingCombo: () => void;
     polylineCoords: ICoord[];
     isBusy: boolean;
+    getDirection: () => void;
 }
-
-
 
 interface IState {
     region: {
@@ -60,7 +59,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
                     }
-                }, () => this.props.getNearByPlaceUsingCombo(this.state.region));
+                }, () => this.props.getNearByPlaceUsingCombo());
             }
         );
     }
@@ -141,20 +140,21 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     // pagingEnabled
                     />
                 </View>
-                <TouchableOpacity 
-                  style={{
-                    flex: 1,
-                    position: 'absolute',
-                    left: '25%',
-                    top: '15%',
-                  }}
-                  onPress={() => this.props.navigation.navigate(ScreenNames.FinalScreen)}
-                >
-                    {this.props.chosenPlaces.length > 0
-                        && <LinearGradient style={styles.ShowSchedule} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
+                {this.props.chosenPlaces.length > 0
+                    &&
+                    <TouchableOpacity
+                        onPress={this.props.getDirection}
+                        style={{
+                            flex: 1,
+                            position: 'absolute',
+                            left: '25%',
+                            top: '15%',
+                        }}>
+                        <LinearGradient style={styles.ShowSchedule} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
                             <AppText style={{ color: 'white', fontSize: 16 }}>Show schedule</AppText>
-                        </LinearGradient>}
-                </TouchableOpacity>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                }
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
                         <Left style={{ flex: 1, alignItems: 'flex-start' }}>
@@ -164,8 +164,10 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         </Left>
                         <View style={{ flex: 1 }} />
                         <Right style={{ flex: 1 }}>
-                            <TouchableOpacity style={{ justifyContent: 'flex-start', alignItems: 'center' }}>
-                                <Icon name="ios-add" style={{ color: 'white', fontSize: 45 }} type="Ionicons" />
+                            <TouchableOpacity style={{ justifyContent: 'flex-start', alignItems: 'center' }}
+                                onPress={() => this.props.navigation.navigate(ScreenNames.SearchScreen)}
+                            >
+                                <Icon name="ios-search" style={{ color: 'white', fontSize: 30 }} type="Ionicons" />
                             </TouchableOpacity>
                         </Right>
                     </LinearGradient>
