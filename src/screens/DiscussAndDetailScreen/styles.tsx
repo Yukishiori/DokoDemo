@@ -126,7 +126,7 @@ const CommentBar: ViewStyle = {
 
 const TextInput: ViewStyle = {
     height: height * 0.05,
-    width: width * 0.7
+    width: width * 0.8
 }
 
 const Send: ViewStyle = {

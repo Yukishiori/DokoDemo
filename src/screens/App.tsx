@@ -13,6 +13,7 @@ import store from '../rematch/store';
 import LikeDisLikeScreen from './LikeDislikeScreen';
 import bootstrapFirebase from '../bootstrap/bootstrap-firebase';
 import DiscussAndDetailScreen from './DiscussAndDetailScreen';
+import SearchScreen from './SearchScreen';
 // import Discuss
 
 
@@ -40,7 +41,8 @@ const MainStack = FluidNavigator({
   Think: ThinkScreen,
   MainMap: MainMapWithCardScreen,
   LikeDisLikeScreen: LikeDisLikeScreen,
-  Discuss: DiscussAndDetailScreen
+  Discuss: DiscussAndDetailScreen,
+  Search: SearchScreen
 }, {
     headerMode: 'none',
   });

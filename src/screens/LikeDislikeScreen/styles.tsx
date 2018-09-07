@@ -77,7 +77,8 @@ const IconText: ViewStyle = {
 const Rec: ViewStyle = {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: Platform.OS === 'ios' ? 7 : 0
+    marginTop: Platform.OS === 'ios' ? 7 : 0,
+    alignItems: 'flex-end'
 }
 
 const Star: ViewStyle = {
@@ -95,6 +96,16 @@ const Action: ViewStyle = {
     alignItems: 'flex-end',
 }
 
+const AddButton: ViewStyle = {
+    borderRadius: 20,
+    width: width * 0.7,
+    height: height * 0.07,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    marginBottom: height * 0.05
+}
+
 export default {
     Rec,
     Container,
@@ -110,5 +121,6 @@ export default {
     Bar,
     IconText,
     Star,
-    Action
+    Action,
+    AddButton
 }

@@ -52,10 +52,10 @@ class PlaceCard extends Component<IProps, IState> {
                         <AppText style={{ color: 'white', fontSize: 12 }}>recommended by {this.props.place.rating * 20} % users</AppText>
                     </View>
                 </LinearGradient>
-                <TouchableOpacity style={styles.DeleteButton}
+                {this.props.removeChosenPlace && < TouchableOpacity style={styles.DeleteButton}
                     onPress={this.deleteItem}>
                     <Icon name="x" type="Feather" style={{ color: "#565656" }} />
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </TouchableOpacity>
         );
     }

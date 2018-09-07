@@ -45,7 +45,7 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
                         })}
                     </ScrollView>
                     <KeyboardAvoidingView
-                        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -180}
+                        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -200}
                         behavior="padding">
                         <View style={styles.CommentBar}>
                             <TextInput

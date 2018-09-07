@@ -14,8 +14,12 @@ import { Transition } from 'react-navigation-fluid-transitions';
 import ScreenNames from '../ScreenNames';
 import Layout from '../../components/Layout';
 import FastImage from 'react-native-fast-image';
+import { connect } from 'react-redux';
+import { IRootState } from '../../rematch/interface';
 
 interface IProps extends NavigationScreenProps {
+
+    addToChosenPlaces: (place: IPlaceFromGoogle) => void;
 }
 
 
@@ -101,6 +105,15 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                     </View>
                                 </View>
                             </View>
+                            {
+                                this.props.navigation.state.params.fromSearch
+                                && <TouchableOpacity style={styles.AddButton} onPress={() => {
+                                    this.props.addToChosenPlaces(chosenPlace);
+                                    this.props.navigation.navigate(ScreenNames.MainMap);
+                                }}>
+                                    <AppText style={{ fontSize: 18, color: gradient[0] }}>ADD TO SCHEDULE</AppText>
+                                </TouchableOpacity>
+                            }
                         </View>
                     </ScrollView>
                 </LinearGradient>
@@ -109,4 +122,16 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
     }
 }
 
-export default LikeDisLikeScreen;
+const mapState = (rootState: IRootState) => {
+    return {
+        ...rootState.mapScreenModel
+    };
+};
+
+const mapDispatch = (rootReducer: any) => {
+    return {
+        ...rootReducer.mapScreenModel
+    };
+};
+
+export default connect(mapState, mapDispatch)(LikeDisLikeScreen);
