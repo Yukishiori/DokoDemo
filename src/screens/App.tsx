@@ -14,6 +14,7 @@ import LikeDisLikeScreen from './LikeDislikeScreen';
 import bootstrapFirebase from '../bootstrap/bootstrap-firebase';
 import DiscussAndDetailScreen from './DiscussAndDetailScreen';
 import SearchScreen from './SearchScreen';
+import FinalScreen from './FinalScreen';
 // import Discuss
 
 
@@ -42,7 +43,8 @@ const MainStack = FluidNavigator({
   MainMap: MainMapWithCardScreen,
   LikeDisLikeScreen: LikeDisLikeScreen,
   Discuss: DiscussAndDetailScreen,
-  Search: SearchScreen
+  Search: SearchScreen,
+  Final: FinalScreen
 }, {
     headerMode: 'none',
   });

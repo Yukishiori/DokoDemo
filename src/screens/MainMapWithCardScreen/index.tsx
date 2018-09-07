@@ -178,7 +178,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 }
 
-// Rematch for testing, will move to login screen later
 const mapState = (rootState: IRootState) => {
     return {
         ...rootState.mapScreenModel
