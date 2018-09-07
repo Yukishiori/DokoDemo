@@ -45,7 +45,8 @@ const TextContainer: ViewStyle = {
   borderBottomRightRadius: 15,
   alignItems: 'flex-end',
   justifyContent: 'center',
-  padding: 10
+  padding: 10,
+  overflow: 'hidden'
 }
 
 export default {
