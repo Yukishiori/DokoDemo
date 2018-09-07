@@ -141,12 +141,15 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     // pagingEnabled
                     />
                 </View>
-                <TouchableOpacity style={{
+                <TouchableOpacity 
+                  style={{
                     flex: 1,
                     position: 'absolute',
                     left: '25%',
                     top: '15%',
-                }}>
+                  }}
+                  onPress={() => this.props.navigation.navigate(ScreenNames.FinalScreen)}
+                >
                     {this.props.chosenPlaces.length > 0
                         && <LinearGradient style={styles.ShowSchedule} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
                             <AppText style={{ color: 'white', fontSize: 16 }}>Show schedule</AppText>
@@ -173,7 +176,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 }
 
-// Rematch for testing, will move to login screen later
 const mapState = (rootState: IRootState) => {
     return {
         ...rootState.mapScreenModel

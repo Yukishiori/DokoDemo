@@ -5,6 +5,7 @@ const Discuss = 'Discuss';
 const LikeDisLikeScreen = 'LikeDisLikeScreen';
 const LoginScreen = 'Login';
 const SignUpScreen = 'SignUp';
+const FinalScreen = 'Final';
 export default {
     RestScreen,
     ThinkScreen,
@@ -12,5 +13,6 @@ export default {
     LikeDisLikeScreen,
     Discuss,
     LoginScreen,
-    SignUpScreen
+    SignUpScreen,
+    FinalScreen
 }
