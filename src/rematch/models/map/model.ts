@@ -100,7 +100,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         async getAnotherPlaceFromThisPlace({ placeCombo, location, index }): Promise<void> {
             try {
                 if (placeCombo[index]) {
-                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${placeCombo[index]}&language=vi`)).results;
+                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
                     const bestPlace = getNumberOfBestPlace(
                         resultPlaces,
                         location, 1);
@@ -123,7 +123,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         async getDirection(location: ICoord, state: IRootState): Promise<void> {
             try {
                 const waypoints = state.mapScreenModel.chosenPlaces.reduce((acc, chosenPlace, index) => {
-                    if (index === state.mapScreenModel.chosenPlaces.length - 1) {
+                    if (index === state.mapScreenModel.chosenPlaces.length - 1 || !chosenPlace) {
                         return acc;
                     }
                     return acc + (acc === '' ? `place_id:${chosenPlace.place_id}` : `|place_id:${chosenPlace.place_id}`)
@@ -159,14 +159,7 @@ const parsePolyline = (response: any): ICoord[] => {
 }
 
 const getCombo = (): string[] => {
-    let combo = [];
-    const currentHour = moment().get('hour');
-    if (currentHour >= 20) {
-        combo = placeCombo[2];
-    } else {
-        combo = placeCombo[2];
-    }
-    return combo;
+    return placeCombo[Math.floor(Math.random() * placeCombo.length - 1)];
 }
 
 const getNumberOfBestPlace = (places: IPlaceFromGoogle[], currentLocation: ICoord, number = 1): IPlaceFromGoogle[] => {

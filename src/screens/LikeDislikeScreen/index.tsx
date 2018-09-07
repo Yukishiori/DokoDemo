@@ -16,6 +16,7 @@ import Layout from '../../components/Layout';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 import { IRootState } from '../../rematch/interface';
+import { phonecall } from 'react-native-communications';
 
 interface IProps extends NavigationScreenProps {
 
@@ -73,7 +74,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                 <LinearGradient style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
                     <ScrollView>
                         <View style={styles.Container}>
-                            <FastImage style={styles.Image} source={{ uri: chosenPlace.firstImageUrl }} />
+                            {chosenPlace.firstImageUrl && <FastImage style={styles.Image} source={{ uri: chosenPlace.firstImageUrl }} />}
                             <AppText style={styles.Title}>{chosenPlace.name}</AppText>
                             <View style={styles.TotalPanel}>
                                 <View style={styles.TextInPanel}>
@@ -82,7 +83,6 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                         <AppText style={{ color: gradient[1], fontWeight: 'bold', fontSize: 24 }}> {chosenPlace.rating * 20} %</AppText>
                                     </View>
                                     <LinearGradient style={styles.Bar} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient} />
-
                                     <View style={styles.IconText}>
                                         <Icon name="location" type="Entypo" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Address: </AppText>
@@ -93,7 +93,11 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                         <AppText style={styles.SmallText}>Contact: </AppText>
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                        <AppText style={styles.BigText}>{this.state.placeDetail.result.formatted_phone_number}</AppText>
+                                        <TouchableOpacity
+                                            onPress={() => phonecall(this.state.placeDetail.result.formatted_phone_number, true)}
+                                        >
+                                            <AppText style={styles.BigText}>{this.state.placeDetail.result.formatted_phone_number}</AppText>
+                                        </TouchableOpacity>
                                         <View style={styles.Action}>
                                             <TouchableOpacity style={styles.Star}>
                                                 <Icon name="star" type="FontAwesome" style={{ fontSize: 18, color: gradient[0] }} />
