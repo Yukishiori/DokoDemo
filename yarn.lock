@@ -545,12 +545,6 @@
   dependencies:
     redux "4.0.0"
 
-"@rematch/persist@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@rematch/persist/-/persist-1.1.0.tgz#d73a622f5bad56c41f054a6079d70945734def5f"
-  dependencies:
-    redux-persist "^5.10.0"
-
 "@types/es6-promise@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@types/es6-promise/-/es6-promise-3.3.0.tgz#61b55e554fd807b563f158a7986ee53d3a5a5a9d"

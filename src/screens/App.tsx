@@ -17,18 +17,12 @@ import SearchScreen from './SearchScreen';
 import FinalScreen from './FinalScreen';
 // import Discuss
 
-import { getPersistor } from '@rematch/persist'
-import { PersistGate } from 'redux-persist/lib/integration/react'
-
-const persistor = getPersistor()
 bootstrapFirebase();
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <SwitchNavigation />
-        </PersistGate>
+        <SwitchNavigation />
       </Provider>
     );
   }

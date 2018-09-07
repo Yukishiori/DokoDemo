@@ -132,7 +132,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                             flex: 1,
                             position: 'absolute',
                             left: '25%',
-                            top: '15%',
+                            top: '13%',
                         }}>
                         <LinearGradient style={styles.ShowSchedule} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
                             <AppText style={{ color: 'white', fontSize: 16 }}>Show schedule</AppText>

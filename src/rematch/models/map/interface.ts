@@ -133,7 +133,7 @@ export interface Review {
     time: number;
 }
 
-export interface Result {
+export interface IPlaceDetailResult {
     address_components: AddressComponent[];
     adr_address: string;
     formatted_address: string;
@@ -158,10 +158,30 @@ export interface Result {
     website: string;
 }
 
+export interface IFirebasePlace {
+    createTime: number;
+    favoriteBy: any;
+    name: string;
+    ratings: number;
+}
+
+export interface ICombinePlaceDetail extends IFirebasePlace, IPlaceDetailResult {
+
+}
 export interface IPlaceDetailFromGoogle {
     html_attributions: any[];
-    result: Result;
+    result: IPlaceDetailResult;
     status: string;
 }
 
+export interface IComment {
+    text: string;
+    createTime: number;
+    placeId: string;
+    user: IUser
+}
 
+export interface IUser {
+    id: string;
+    name: string;
+}

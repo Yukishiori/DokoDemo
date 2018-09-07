@@ -1,7 +1,8 @@
 import { ICoord } from "./interface.service";
 import config from "../../config";
-import { IPlaceDetailFromGoogle, IPlaceFromGoogle } from "../rematch/models/map/interface";
-
+import { IPlaceDetailFromGoogle, IPlaceFromGoogle, IPlaceDetailResult, ICombinePlaceDetail, IFirebasePlace, IComment } from "../rematch/models/map/interface";
+import firebase from 'firebase';
+import moment from "moment";
 const betterFetch = async (url: string) => {
     const res = await fetch(url)
     return await res.json();
@@ -17,10 +18,31 @@ const getImageUris = async (photo_references: string[]): Promise<string[]> => {
 
 }
 
-const getPlaceDetail = async (placeId: string): Promise<IPlaceDetailFromGoogle> => {
+const getPlaceDetail = async (placeId: string): Promise<ICombinePlaceDetail> => {
     try {
-        const res: IPlaceDetailFromGoogle = await betterFetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${config.apiKey}`);
-        return res;
+        const res: IPlaceDetailResult = (await betterFetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${config.apiKey}`)).result;
+        let combinedPlace: ICombinePlaceDetail = null;
+        const doc = await firebase.firestore().collection('places').doc(placeId).get()
+        if (doc && doc.exists) {
+            combinedPlace = { ...res, ...doc.data() as IFirebasePlace };
+        } else {
+            combinedPlace = {
+                ...res,
+                createTime: moment().unix(),
+                favoriteBy: {},
+                ratings: null,
+                name: ''
+            }
+            firebase.firestore().collection('places').doc(placeId).set({
+                createTime: moment().unix(),
+                favoriteBy: {},
+                ratings: null,
+                name: res.name
+            })
+
+        }
+
+        return combinedPlace;
     } catch (err) {
         console.log(err);
     }
@@ -58,11 +80,17 @@ const getAutoComplete = async (input: string, location: ICoord, radius: number, 
     return res.predictions.map((prediction: any) => prediction.description);
 }
 
+const getComment = async (placeId: string): Promise<IComment[]> => {
+    const docs = (await firebase.firestore().collection('comments').where('placeId', '==', placeId).get()).docs;
+    return docs.map(doc => doc.data() as IComment)
+}
+
 
 export default {
     betterFetch,
     getImageUris,
     getPlaceDetail,
     getPlaceFromKeyword,
-    getAutoComplete
+    getAutoComplete,
+    getComment
 }

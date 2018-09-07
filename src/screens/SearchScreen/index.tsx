@@ -111,6 +111,7 @@ class SearchScreen extends Component<IProps, IState> {
 
   renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
     return <PlaceCard
+      cannotDelete
       place={item}
       onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, {
         chosenPlace: item,
@@ -130,6 +131,7 @@ class SearchScreen extends Component<IProps, IState> {
             longitudeDelta: 0.0070,
           }}
           customMapStyle={config.mapStyle}
+          provider="google"
         >
           {this.renderMarker()}
         </MapView>
