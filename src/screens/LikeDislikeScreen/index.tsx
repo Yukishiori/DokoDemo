@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
 import { View, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
 import { gradient } from '../../commonStyle';
-import { IPlaceFromGoogle, IPhoto, IPlaceDetailFromGoogle } from '../../rematch/models/map/interface';
+import { IPlaceFromGoogle, IPhoto, IPlaceDetailFromGoogle, IPlaceDetailResult, ICombinePlaceDetail } from '../../rematch/models/map/interface';
 import styles from './styles';
 import { Icon, Header, Left, Button, Right, Content } from 'native-base';
 import MapView from 'react-native-maps';
@@ -16,7 +16,8 @@ import Layout from '../../components/Layout';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 import { IRootState } from '../../rematch/interface';
-
+import { phonecall } from 'react-native-communications';
+import firebase from 'firebase';
 interface IProps extends NavigationScreenProps {
 
     addToChosenPlaces: (place: IPlaceFromGoogle) => void;
@@ -24,14 +25,16 @@ interface IProps extends NavigationScreenProps {
 
 
 interface IState {
-    placeDetail: IPlaceDetailFromGoogle;
+    placeDetail: ICombinePlaceDetail;
+    isFavorite: boolean;
 }
 class LikeDisLikeScreen extends Component<IProps, IState> {
 
     constructor(props: IProps) {
         super(props);
         this.state = {
-            placeDetail: null
+            placeDetail: null,
+            isFavorite: false
         }
     }
 
@@ -42,10 +45,27 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                 this.setState({
                     placeDetail
                 })
+                this.setState({
+                    isFavorite: placeDetail.favoriteBy[firebase.auth().currentUser.uid] ? true : false
+                })
             })
             .catch(err => {
                 console.log(err)
             })
+
+    }
+
+    onFavorite = () => {
+        this.setState({
+            isFavorite: !this.state.isFavorite
+        }, () => {
+            firebase.firestore().collection('places').doc(this.state.placeDetail.place_id).set({
+                favoriteBy: {
+                    [firebase.auth().currentUser.uid]: this.state.isFavorite
+                }
+            }, { merge: true })
+        });
+
     }
 
     render() {
@@ -73,7 +93,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                 <LinearGradient style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
                     <ScrollView>
                         <View style={styles.Container}>
-                            <FastImage style={styles.Image} source={{ uri: chosenPlace.firstImageUrl }} />
+                            {chosenPlace.firstImageUrl && <FastImage style={styles.Image} source={{ uri: chosenPlace.firstImageUrl }} />}
                             <AppText style={styles.Title}>{chosenPlace.name}</AppText>
                             <View style={styles.TotalPanel}>
                                 <View style={styles.TextInPanel}>
@@ -82,21 +102,24 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                         <AppText style={{ color: gradient[1], fontWeight: 'bold', fontSize: 24 }}> {chosenPlace.rating * 20} %</AppText>
                                     </View>
                                     <LinearGradient style={styles.Bar} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient} />
-
                                     <View style={styles.IconText}>
                                         <Icon name="location" type="Entypo" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Address: </AppText>
                                     </View>
-                                    <AppText style={styles.BigText}>{this.state.placeDetail.result.vicinity}</AppText>
+                                    <AppText style={styles.BigText}>{this.state.placeDetail.vicinity}</AppText>
                                     <View style={styles.IconText}>
                                         <Icon name="address-book" type="FontAwesome" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Contact: </AppText>
                                     </View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                        <AppText style={styles.BigText}>{this.state.placeDetail.result.formatted_phone_number}</AppText>
+                                        <TouchableOpacity
+                                            onPress={() => phonecall(this.state.placeDetail.formatted_phone_number, true)}
+                                        >
+                                            <AppText style={styles.BigText}>{this.state.placeDetail.formatted_phone_number}</AppText>
+                                        </TouchableOpacity>
                                         <View style={styles.Action}>
-                                            <TouchableOpacity style={styles.Star}>
-                                                <Icon name="star" type="FontAwesome" style={{ fontSize: 18, color: gradient[0] }} />
+                                            <TouchableOpacity style={styles.Star} onPress={this.onFavorite}>
+                                                <Icon name="star" type="FontAwesome" style={{ fontSize: 18, color: this.state.isFavorite ? gradient[0] : 'white' }} />
                                             </TouchableOpacity>
                                             <TouchableOpacity style={styles.Star} onPress={() => this.props.navigation.navigate(ScreenNames.Discuss, { placeDetail: this.state.placeDetail })} >
                                                 <Icon name="comment" type="Foundation" style={{ fontSize: 18, color: 'white' }} />

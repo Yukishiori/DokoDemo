@@ -8,21 +8,20 @@ import config from '../../../config';
 import { connect } from 'react-redux';
 import { IPlaceFromGoogle } from '../../rematch/models/map/interface';
 import { IRootState } from '../../rematch/interface';
-import { ICoord, IPlace } from '../../service/interface.service';
+import { ICoord } from '../../service/interface.service';
 import { gradient } from '../../commonStyle';
 import PlaceCard from '../../components/PlaceCard';
-import Modal from 'react-native-modal';
 import ScreenNames from '../ScreenNames';
 import Layout from '../../components/Layout';
-import { Content, Header, Left, Icon, Right, Button } from 'native-base';
+import { Header, Left, Icon, Right, Button } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../components/AppText';
 
 interface IProps extends NavigationScreenProps {
     chosenPlaces: IPlaceFromGoogle[],
-    getNearByPlaceUsingCombo: () => void;
     polylineCoords: ICoord[];
     isBusy: boolean;
+    currentLocation: ICoord;
     getDirection: () => void;
 }
 
@@ -43,25 +42,12 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
         super(props);
         this.state = {
             region: {
-                latitude: 0,
-                longitude: 0,
+                ...props.currentLocation,
                 latitudeDelta: 0.00070,
                 longitudeDelta: 0.0070,
             },
             isModalVisible: false,
         };
-
-        navigator.geolocation.getCurrentPosition(
-            (position: Position) => {
-                this.setState({
-                    region: {
-                        ...this.state.region,
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    }
-                }, () => this.props.getNearByPlaceUsingCombo());
-            }
-        );
     }
 
     renderMarker = () => {
@@ -102,12 +88,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
         }
     }
 
-    toggleModal = () => {
-        this.setState({ isModalVisible: !this.state.isModalVisible });
-    }
-
-
-
     render() {
         if (this.props.isBusy) {
             return <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
@@ -143,12 +123,16 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 {this.props.chosenPlaces.length > 0
                     &&
                     <TouchableOpacity
-                        onPress={this.props.getDirection}
+                        onPress={() => {
+
+                            this.props.getDirection();
+                            this.props.navigation.navigate(ScreenNames.FinalScreen);
+                        }}
                         style={{
                             flex: 1,
                             position: 'absolute',
                             left: '25%',
-                            top: '15%',
+                            top: '13%',
                         }}>
                         <LinearGradient style={styles.ShowSchedule} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
                             <AppText style={{ color: 'white', fontSize: 16 }}>Show schedule</AppText>

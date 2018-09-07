@@ -18,11 +18,11 @@ interface IProps extends NavigationScreenProps {
     photoURL: string;
     updateCurrentLocation: (coord: ICoord) => void;
     clearChosenPlaces: () => void;
+    getNearByPlaceUsingCombo: () => void;
 }
 class RestScreen extends Component<IProps> {
 
     componentDidMount() {
-        this.props.clearChosenPlaces();
         navigator.geolocation.getCurrentPosition(
             (position: Position) => {
                 this.props.updateCurrentLocation(position.coords);
@@ -30,8 +30,16 @@ class RestScreen extends Component<IProps> {
         );
     }
 
+    toRest = () => {
+        this.props.clearChosenPlaces();
+        this.props.getNearByPlaceUsingCombo();
+        this.props.navigation.navigate(ScreenNames.MainMap);
+    }
+
     render() {
+        console.log(this.props);
         return (
+        
             <Layout>
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
@@ -66,7 +74,7 @@ class RestScreen extends Component<IProps> {
                                 <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate(ScreenNames.MainMap)}>
+                        <TouchableOpacity style={styles.Button} onPress={this.toRest}>
                             <AppText >MAKE A PLAN FOR ME</AppText>
                         </TouchableOpacity>
                     </LinearGradient>}

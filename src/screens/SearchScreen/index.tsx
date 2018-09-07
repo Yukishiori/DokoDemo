@@ -4,7 +4,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import AppText from '../../components/AppText';
 import { Transition } from 'react-navigation-fluid-transitions';
 import Layout from '../../components/Layout';
-import { Header, Left, Right, Icon, Content, Button } from 'native-base';
+import { Header, Left, Right, Icon, Content, Button, Footer, Toast } from 'native-base';
 import { gradient } from '../../commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
@@ -51,14 +51,14 @@ class SearchScreen extends Component<IProps, IState> {
     this.setState({
       text
     });
-    placeService.getAutoComplete(text, this.props.currentLocation, 1500, this.state.sessionToken)
-      .then(predictions =>
-        this.setState({
-          predictions
-        }))
-      .catch(err => {
-        console.log(err)
-      })
+    // placeService.getAutoComplete(text, this.props.currentLocation, 1500, this.state.sessionToken)
+    //   .then(predictions =>
+    //     this.setState({
+    //       predictions
+    //     }))
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
   }
 
   search = () => {
@@ -72,14 +72,20 @@ class SearchScreen extends Component<IProps, IState> {
           loading: false
         },
         () => {
-          this.map.fitToCoordinates(this.state.searchedLocations.map(
-            searchedLocation => ({
-              latitude: searchedLocation.geometry.location.lat,
-              longitude: searchedLocation.geometry.location.lng
-            })
-          ), {
-              edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }
-            })
+          if (this.state.searchedLocations && this.state.searchedLocations.length > 0) {
+
+            this.map.fitToCoordinates(this.state.searchedLocations.map(
+              searchedLocation => ({
+                latitude: searchedLocation.geometry.location.lat,
+                longitude: searchedLocation.geometry.location.lng
+              })
+            ), {
+                edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }
+              })
+          } else {
+            // Toast.show({ text: "Find no place match this keyword", duration: 500 })
+          }
+
         }
       )
     })
@@ -105,25 +111,13 @@ class SearchScreen extends Component<IProps, IState> {
 
   renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
     return <PlaceCard
+      cannotDelete
       place={item}
       onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, {
         chosenPlace: item,
         fromSearch: true
       })}
     />
-  }
-
-  renderPrediction = ({ item, index }: { item: string, index: number }) => {
-    return <TouchableOpacity
-      key={index}
-      style={styles.PredictionCard}
-      onPress={() => {
-        console.log('wat')
-        this.setState({ blur: true, text: item });
-      }}
-    >
-      <AppText>{item}</AppText>
-    </TouchableOpacity>
   }
 
   render() {
@@ -137,6 +131,7 @@ class SearchScreen extends Component<IProps, IState> {
             longitudeDelta: 0.0070,
           }}
           customMapStyle={config.mapStyle}
+          provider="google"
         >
           {this.renderMarker()}
         </MapView>
@@ -168,15 +163,7 @@ class SearchScreen extends Component<IProps, IState> {
             </TouchableOpacity>
             : <ActivityIndicator color={gradient[1]} size="small" />}
         </View>
-        {this.state.predictions.length > 0
-          && !this.state.blur
-          && <FlatList
-            data={this.state.predictions}
-            renderItem={this.renderPrediction}
-            style={styles.PredictionList}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        }
+
       </Layout >
     );
   }

@@ -15,8 +15,16 @@ import ScreenNames from '../ScreenNames';
 
 interface IProps extends NavigationScreenProps {
     photoURL: string;
+    updateCurrentLocation: (coord: ICoord) => void;
+    clearChosenPlaces: () => void;
 }
 class ThinkScreen extends Component<IProps> {
+    
+    toThink = () => {
+        this.props.clearChosenPlaces();
+        this.props.navigation.navigate(ScreenNames.SearchScreen);
+    }
+
     render() {
         return (
             <Layout>
@@ -53,7 +61,7 @@ class ThinkScreen extends Component<IProps> {
                                 </View>
                                 <View style={{ flex: 1 }} />
                             </View>
-                            <TouchableOpacity style={styles.Button} onPress={() => this.props.navigation.navigate(ScreenNames.SearchScreen)}>
+                            <TouchableOpacity style={styles.Button} onPress={this.toThink}>
                                 <AppText >MAKE YOUR OWN PLAN</AppText>
                             </TouchableOpacity>
                         </LinearGradient>
@@ -71,13 +79,15 @@ class ThinkScreen extends Component<IProps> {
 
 const mapState = (rootState: any) => {
     return {
-        ...rootState.profileModel
+        ...rootState.profileModel,
+        ...rootState.mapScreenModel
     };
 };
 
 const mapDispatch = (rootReducer: any) => {
     return {
         ...rootReducer.profileModel,
+        ...rootReducer.mapScreenModel
     };
 };
 

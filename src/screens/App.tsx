@@ -17,7 +17,6 @@ import SearchScreen from './SearchScreen';
 import FinalScreen from './FinalScreen';
 // import Discuss
 
-
 bootstrapFirebase();
 export default class App extends Component {
   render() {
@@ -51,6 +50,6 @@ const MainStack = FluidNavigator({
 
 const SwitchNavigation = createSwitchNavigator(
   {
-    Auth: AuthStack, 
+    Auth: AuthStack,
     Main: MainStack,
   });

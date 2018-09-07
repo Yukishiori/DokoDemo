@@ -7,30 +7,82 @@ import { gradient } from '../../commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux';
 import { IRootState } from '../../rematch/interface';
-import { IPlaceDetailFromGoogle } from '../../rematch/models/map/interface';
+import { IPlaceDetailFromGoogle, IPlaceDetailResult, IComment } from '../../rematch/models/map/interface';
 import ReviewCard from '../../components/ReviewCard';
 import styles from './styles';
-
+import placeService from '../../service/place.service';
+import firebase from 'firebase';
+import moment from 'moment';
 interface IProps extends NavigationScreenProps {
 
 }
 
 interface IState {
     text: string;
+    comments: IComment[];
 }
 
 class DiscussAndDetailScreen extends Component<IProps, IState> {
-
+    scrollView: ScrollView = null;
     constructor(props: any) {
         super(props);
         this.state = {
-            text: ""
+            text: "",
+            comments: []
         }
     }
 
+    componentDidMount() {
+        const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult };
+        placeService.getComment(placeDetail.place_id)
+            .then(comments => {
+                console.log(comments);
+                this.setState({
+                    comments
+                })
+            }).catch(err => console.log(err))
+    }
+
+    renderComments = () => {
+        const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult };
+        const comments = [...placeDetail.reviews.filter(review => review.text), ...this.state.comments.filter(comment => comment.text)]
+        return comments.map((item, index) => {
+            return <ReviewCard key={index} text={item.text} direction={index % 2 === 0 ? 'right' : 'left'} />
+        })
+    }
+
+    addComment = () => {
+        if (this.state.text) {
+            const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult };
+            firebase.firestore().collection('comments').add({
+                createTime: moment().unix(),
+                placeId: placeDetail.place_id,
+                text: this.state.text,
+                user: {
+                    id: firebase.auth().currentUser.uid,
+                    name: ''
+                }
+            }).then(res => {
+                this.setState({
+                    comments: [
+                        ...this.state.comments,
+                        {
+                            createTime: moment().unix(),
+                            placeId: placeDetail.place_id,
+                            text: this.state.text,
+                            user: {
+                                id: firebase.auth().currentUser.uid,
+                                name: ''
+                            }
+                        }
+                    ],
+                    text: '',
+                }, () => { setInterval(() => { if (this.scrollView) this.scrollView.scrollToEnd() }, 500) })
+            }).catch(err => console.log(err));
+        }
+    }
 
     render() {
-        const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailFromGoogle };
         return (
             <Transition appear="vertical">
                 <LinearGradient style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
@@ -39,10 +91,10 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
                             <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 30 }} />
                         </TouchableOpacity>
                     </View>
-                    <ScrollView>
-                        {placeDetail.result.reviews.map((item, index) => {
-                            return <ReviewCard key={index} text={item.text} direction={index % 2 === 0 ? 'right' : 'left'} />
-                        })}
+                    <ScrollView
+                        ref={scrollView => { this.scrollView = scrollView; }}
+                    >
+                        {this.renderComments()}
                     </ScrollView>
                     <KeyboardAvoidingView
                         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -200}
@@ -53,8 +105,9 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
                                 style={[styles.TextInput, { fontFamily: 'Comfortaa-Regular' }]} placeholder="And what do you think ?"
                                 onChangeText={(text) => this.setState({ text })}
                                 value={this.state.text}
+                                onSubmitEditing={this.addComment}
                             />
-                            <TouchableOpacity style={styles.Send}>
+                            <TouchableOpacity style={styles.Send} onPress={this.addComment}>
                                 <Icon name="send" type="MaterialIcons" style={{ color: 'black' }} />
                             </TouchableOpacity>
                         </View>
