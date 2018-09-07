@@ -82,28 +82,24 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     },
     effects: {
         async getNearByPlaceUsingCombo(something, state): Promise<void> {
-            try {
-                const placeCombo = getCombo();
+            const placeCombo = getCombo();
 
-                // const chosenPlacesArray = await Promise.all(placeCombo.map(async (currentValue) => {
+            // const chosenPlacesArray = await Promise.all(placeCombo.map(async (currentValue) => {
 
-                //     return bestPlace
-                // }));
-                this.updateBusyState(true);
-                await this.getAnotherPlaceFromThisPlace({ placeCombo, location: state.mapScreenModel.currentLocation, index: 0 });
-                await this.getDirection(state.mapScreenModel.currentLocation)
-            } catch (err) {
-                // this.loginError({ error: err.message });
-                console.log(err)
-            }
+            //     return bestPlace
+            // }));
+            this.updateBusyState(true);
+            await this.getAnotherPlaceFromThisPlace({ placeCombo, location: state.mapScreenModel.currentLocation, index: 0 });
+            await this.getDirection()
         },
         async getAnotherPlaceFromThisPlace({ placeCombo, location, index }): Promise<void> {
-            try {
-                if (placeCombo[index]) {
-                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
-                    const bestPlace = getNumberOfBestPlace(
-                        resultPlaces,
-                        location, 1);
+            if (placeCombo[index]) {
+                const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
+                const bestPlace = getNumberOfBestPlace(
+                    resultPlaces,
+                    location, 1);
+                console.log('bestPlace', bestPlace)
+                if (bestPlace && bestPlace[0]) {
                     const firstImageUrl = (await placeService.getImageUris([bestPlace[0].photos[0].photo_reference]))[0];
 
                     this.addChosenPlace({ chosenPlace: { ...bestPlace[0], firstImageUrl } });
@@ -113,27 +109,25 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                             longitude: bestPlace[0].geometry.location.lng
                         }, index: index + 1
                     })
+                } else {
+                    await this.getAnotherPlaceFromThisPlace({
+                        placeCombo, location, index: index + 1
+                    })
                 }
-                this.updateBusyState(false);
-            } catch (err) {
-                // this.loginError({ error: err.message });
-                console.log(err)
+
             }
+            this.updateBusyState(false);
         },
         async getDirection(location: ICoord, state: IRootState): Promise<void> {
-            try {
-                const waypoints = state.mapScreenModel.chosenPlaces.reduce((acc, chosenPlace, index) => {
-                    if (index === state.mapScreenModel.chosenPlaces.length - 1 || !chosenPlace) {
-                        return acc;
-                    }
-                    return acc + (acc === '' ? `place_id:${chosenPlace.place_id}` : `|place_id:${chosenPlace.place_id}`)
+            const waypoints = state.mapScreenModel.chosenPlaces.reduce((acc, chosenPlace, index) => {
+                if (index === state.mapScreenModel.chosenPlaces.length - 1 || chosenPlace === undefined) {
+                    return acc;
                 }
-                    , '')
-                const polylineCoords = parsePolyline(await placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${state.mapScreenModel.currentLocation.latitude},${state.mapScreenModel.currentLocation.longitude}&destination=place_id:${state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1].place_id}&waypoints=${waypoints}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ`))
-                this.updatePolylineCoords({ polylineCoords });
-            } catch (err) {
-                console.log(err)
+                return acc + (acc === '' ? `place_id:${chosenPlace.place_id}` : `|place_id:${chosenPlace.place_id}`)
             }
+                , '')
+            const polylineCoords = parsePolyline(await placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${state.mapScreenModel.currentLocation.latitude},${state.mapScreenModel.currentLocation.longitude}&destination=place_id:${state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1].place_id}&waypoints=${waypoints}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ`))
+            this.updatePolylineCoords({ polylineCoords });
         }
     }
 });

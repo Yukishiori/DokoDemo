@@ -36,7 +36,6 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
         const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult };
         placeService.getComment(placeDetail.place_id)
             .then(comments => {
-                console.log(comments);
                 this.setState({
                     comments
                 })

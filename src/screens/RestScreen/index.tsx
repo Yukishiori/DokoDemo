@@ -37,7 +37,6 @@ class RestScreen extends Component<IProps> {
     }
 
     render() {
-        console.log(this.props);
         return (
         
             <Layout>

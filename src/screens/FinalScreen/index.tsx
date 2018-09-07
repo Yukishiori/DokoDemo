@@ -47,7 +47,6 @@ class FinalScreen extends Component<IProps, IState> {
   }
 
   render() {
-    console.log('props', this.props);
     return (
       <ScrollView contentContainerStyle={styles.BigContainer}>
         <LinearGradient style={styles.BigLinearGradient} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >

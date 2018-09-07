@@ -68,7 +68,6 @@ const getPlaceFromKeyword = async (location: ICoord, keyword: string): Promise<I
             }
 
         }))
-        console.log(placeWithImage)
         return placeWithImage;
     } catch (err) {
         console.log(err);
