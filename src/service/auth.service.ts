@@ -75,8 +75,6 @@ const signUpWithEmail = async ({ email, password, fullName }: ISignUpParams) => 
       {
         email,
         displayName: fullName,
-        photoURL: '',
-        phoneNumber: '',
       },
       { merge: true }).then(() => {
         return user;

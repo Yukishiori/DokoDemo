@@ -12,6 +12,8 @@ import MapView from 'react-native-maps';
 import config from '../../../config';
 import { connect } from 'react-redux';
 import ScreenNames from '../ScreenNames';
+import { ICoord } from '../../service/interface.service';
+import { DEFAULT_AVATAR } from '../../config/constants';
 
 interface IProps extends NavigationScreenProps {
     photoURL: string;
@@ -31,7 +33,7 @@ class ThinkScreen extends Component<IProps> {
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
                         <Left style={{ flex: 1 }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
                                 <Icon name="three-bars" style={{ color: 'white' }} type="Octicons" />
                             </TouchableOpacity>
                         </Left>
@@ -67,7 +69,7 @@ class ThinkScreen extends Component<IProps> {
                         </LinearGradient>
                     </Transition>
                     <Image source={{
-                        uri: this.props.photoURL || "https://i.imgur.com/oO3jT0b.png"
+                        uri: this.props.photoURL || DEFAULT_AVATAR
                     }}
                         style={styles.Circle}
                     />

@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
-import { StackNavigator, createSwitchNavigator, NavigationScreenProps } from 'react-navigation';
+import { View } from 'react-native';
+import { StackNavigator, createSwitchNavigator, NavigationScreenProps, createDrawerNavigator } from 'react-navigation';
 import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
@@ -15,6 +16,8 @@ import bootstrapFirebase from '../bootstrap/bootstrap-firebase';
 import DiscussAndDetailScreen from './DiscussAndDetailScreen';
 import SearchScreen from './SearchScreen';
 import FinalScreen from './FinalScreen';
+import SideBar from '../components/SideBar';
+import ProfileScreen from './ProfileScreen';
 // import Discuss
 
 bootstrapFirebase();
@@ -29,27 +32,30 @@ export default class App extends Component {
 }
 
 const AuthStack = FluidNavigator({
+  // Profile: ProfileScreen,
   Splash: SplashScreen,
   SignUp: SignUpScreen,
   Login: LoginScreen,
 });
 
-const MainStack = FluidNavigator({
-  Rest: {
-    screen: RestScreen,
+const MenuStack = createDrawerNavigator(
+  {
+    Rest: RestScreen,
+    Think: ThinkScreen,
+    Profile: ProfileScreen,
+    MainMap: MainMapWithCardScreen,
+    LikeDisLikeScreen: LikeDisLikeScreen,
+    Discuss: DiscussAndDetailScreen,
+    Search: SearchScreen,
+    Final: FinalScreen
   },
-  Think: ThinkScreen,
-  MainMap: MainMapWithCardScreen,
-  LikeDisLikeScreen: LikeDisLikeScreen,
-  Discuss: DiscussAndDetailScreen,
-  Search: SearchScreen,
-  Final: FinalScreen
-}, {
-    headerMode: 'none',
-  });
+  {
+    contentComponent: props => <SideBar {...props} />
+  }
+);
 
 const SwitchNavigation = createSwitchNavigator(
   {
     Auth: AuthStack,
-    Main: MainStack,
+    Menu: MenuStack,
   });
