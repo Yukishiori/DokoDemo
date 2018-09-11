@@ -7,7 +7,7 @@ import { gradient, width } from '../../commonStyle';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux';
 import { IRootState } from '../../rematch/interface';
-import { Icon } from 'native-base';
+import { Icon, CheckBox } from 'native-base';
 import { IPlaceFromGoogle } from '../../rematch/models/map/interface';
 import FastImage from 'react-native-fast-image';
 interface IProps {
@@ -16,33 +16,38 @@ interface IProps {
 
 interface IState {
   uri: string;
+  checked: boolean;
 }
 
 class FinalCard extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      uri: ''
+      uri: '',
+      checked: false
     };
+  }
+
+  handlePress = () => {
+    this.setState({checked: !this.state.checked})
   }
 
   render() {
     return (
-      <View style={styles.Card}>
+      <View>
         {this.props.place.estimatedTime ?
-          (<View style={{alignItems: 'flex-end', marginBottom: 20, width: '100%', paddingHorizontal: 50}}>
-            <AppText style={{color: 'white', fontSize: 16}}>{`~ ${this.props.place.estimatedTime.text} moving`}</AppText>
+          (<View style={{alignItems: 'flex-start', marginVertical: 10, width: '100%', paddingHorizontal: 30}}>
+            <AppText style={{color: 'white', fontSize: 16}}>{`${this.props.place.estimatedTime.text} moving`}</AppText>
           </View>) : <View></View>
         }
-        {this.props.place.firstImageUrl
-          ? <FastImage
-            resizeMode="stretch"
-            source={{ uri: this.props.place.firstImageUrl }}
-            style={styles.CardImage}
-          />
-          : <View style={[styles.CardImage, { backgroundColor: 'gray' }]} />}
         <View style={styles.TextContainer}>
-          <AppText style={styles.Text}>{this.props.place.name.toUpperCase()}</AppText>
+          <CheckBox checked={this.state.checked} onPress={this.handlePress} color="green"></CheckBox>
+          <View style={{flex: 1, alignItems: 'flex-start', marginLeft: 20}}>
+            <AppText style={styles.Text}>{this.props.place.name}</AppText>
+          </View>
+          <View style={{paddingHorizontal: 10, minWidth: 60}}>
+            {this.state.checked ? <AppText>1h40m</AppText> : <View></View>}
+          </View>
         </View>
       </View>
     );

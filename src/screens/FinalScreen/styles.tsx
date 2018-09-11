@@ -1,8 +1,8 @@
 import { ViewStyle, TextStyle, Dimensions, Platform } from "react-native";
 const { width, height } = Dimensions.get('window');
 const Map: ViewStyle = {
-    width,
-    height
+    width : width,
+    height : height/4,
 };
 
 const Header: ViewStyle = {
@@ -22,13 +22,13 @@ const BigContainer: ViewStyle = {
 }
 
 const BigScrollViewContainer: ViewStyle = {
-  minHeight: '100%',
+  flex: 1,
   paddingBottom: 60
 }
 
 const BigLinearGradient: ViewStyle = {
-  minHeight: '100%',
-  margin: 0,
+  height: height / 4 * 3,
+  marginBottom: 30,
   padding: 0
 }
 
@@ -42,9 +42,9 @@ const ShowSchedule: ViewStyle = {
 }
 
 const SumsContainer: ViewStyle = {
-  marginVertical: 40,
+  marginBottom: 80,
   width: width * 0.75 + 10,
-  height: height / 4,
+  flex: 1/3,
   borderRadius: 15,
   backgroundColor: 'white',
   padding: 10,

@@ -31,22 +31,17 @@ const Text: TextStyle = {
     fontSize: 14,
     color: '#333',
     fontWeight: 'bold',
-    textAlign: 'right',
-    lineHeight: 25
+    textAlign: 'left',
+    lineHeight: 20
 }
 
 const TextContainer: ViewStyle = {
-  position: 'absolute',
-  width: width * 0.75,
-  height: width * 0.75 / 40 * 10,
-  bottom: 0,
+  flexDirection: 'row',
   backgroundColor: 'white',
-  borderBottomLeftRadius: 15,
-  borderBottomRightRadius: 15,
-  alignItems: 'flex-end',
-  justifyContent: 'center',
-  padding: 10,
-  overflow: 'hidden'
+  padding: 5,
+  alignItems: 'center',
+  marginHorizontal: 20,
+  borderRadius: 10
 }
 
 export default {
