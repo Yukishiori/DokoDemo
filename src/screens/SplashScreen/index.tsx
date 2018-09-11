@@ -51,7 +51,7 @@ class SplashScreen extends Component<IProps> {
           setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
         })
       } else {
-        setTimeout(() => this.props.navigation.navigate('Auth'), 500)
+        setTimeout(() => this.props.navigation.navigate(ScreenNames.LoginScreen), 500)
       }
     })
   };
