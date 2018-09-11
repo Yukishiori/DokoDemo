@@ -1,6 +1,6 @@
 import { ViewStyle, Dimensions, ImageStyle, TextStyle, Platform } from "react-native";
 import { gradient } from "../../commonStyle";
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const CardImage: ImageStyle = {
     width: width * 0.75,

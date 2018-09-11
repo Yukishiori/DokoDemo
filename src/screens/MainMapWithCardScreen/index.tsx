@@ -16,6 +16,9 @@ import Layout from '../../components/Layout';
 import { Header, Left, Icon, Right, Button } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../components/AppText';
+import 'core-js/es6/map'
+import 'core-js/es6/symbol'
+import 'core-js/fn/symbol/iterator'
 
 interface IProps extends NavigationScreenProps {
     chosenPlaces: IPlaceFromGoogle[],
@@ -52,9 +55,27 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             },
             isModalVisible: false,
         };
+    }
+
+    componentDidMount() {
+        // BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+        DeviceEventEmitter.removeAllListeners('hardwareBackPress');
         DeviceEventEmitter.addListener('hardwareBackPress', () => {
+            // Alert.alert(
+            //   'Warning',
+            //   'Do you want to close the app ? ',
+            //   [
+            //     { text: 'Cancel', style: 'cancel' },
+            //     {
+            //       text: 'OK', onPress: () => {
+            //         BackHandler.exitApp();
+            //       },
+            //     },
+            //   ],
+            //   { cancelable: false }
+            // );
             this.props.navigation.goBack();
-		});
+        });
     }
 
     renderMarker = () => {
@@ -95,7 +116,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
         />
     }
-    onViewableItemsChanged = ({ viewableItems, changed }) => {
+    onViewableItemsChanged = ({ viewableItems, changed }: any) => {
         try {
             if (viewableItems[0].index > -1) {
                 const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
@@ -134,7 +155,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         horizontal
                         style={{ position: 'absolute', bottom: '5%' }}
                         showsHorizontalScrollIndicator={false}
-                        // onViewableItemsChanged={this.onViewableItemsChanged}
+                        onViewableItemsChanged={this.onViewableItemsChanged}
                         extraData={this.props}
                         viewabilityConfig={itemVisiblePercentThreshold}
                     // pagingEnabled

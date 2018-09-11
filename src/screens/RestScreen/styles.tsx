@@ -11,7 +11,7 @@ const Header: ViewStyle = {
 };
 
 const MapStyle: ViewStyle = {
-    height: height * 0.40,
+    // height: height * 0.40,
     width,
     flex: 1
 };
@@ -23,10 +23,10 @@ const Circle: ImageStyle = {
 };
 
 const Content: ViewStyle = {
-    height: 0.53 * height,
+    // height: 0.53 * height,
     alignItems: 'center',
-    width
-    // flex: 1,
+    width,
+    flex: 1,
 }
 
 const FirstText: TextStyle = {
@@ -42,7 +42,7 @@ const Text2: TextStyle = {
 };
 
 const Button: ViewStyle = {
-    marginTop: '5%',
+    // marginTop: '5%',
     backgroundColor: 'white',
     width: width * 0.8,
     paddingVertical: height * 0.015,
@@ -53,6 +53,7 @@ const Button: ViewStyle = {
     shadowOpacity: 1,
     shadowRadius: 2,
     elevation: 4,
+    marginBottom: 5,
 };
 
 const Or: ViewStyle = {

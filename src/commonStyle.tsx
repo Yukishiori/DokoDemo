@@ -1,5 +1,5 @@
 import { ViewStyle, Platform, Dimensions } from "react-native";
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 const Container: ViewStyle = {
     marginTop: Platform.OS === 'ios' ? 20 : 0
 };

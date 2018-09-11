@@ -31,9 +31,8 @@ class RestScreen extends Component<IProps> {
                     this.props.updateCurrentLocation(position.coords);
                 }
             );
-            console.log(this.props, this.flatList)
         } catch (err) {
-            
+            console.log(err)
         }
     }
 
@@ -63,9 +62,11 @@ class RestScreen extends Component<IProps> {
                         <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.Button} onPress={this.toRest}>
-                    <AppText >MAKE A PLAN FOR ME</AppText>
-                </TouchableOpacity>
+                <View style={{ justifyContent: 'center', flex: 1 }}>
+                    <TouchableOpacity style={styles.Button} onPress={this.toRest}>
+                        <AppText >MAKE A PLAN FOR ME</AppText>
+                    </TouchableOpacity>
+                </View>
             </LinearGradient>
             : <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
                 <AppText style={styles.FirstText}>I want to</AppText>
@@ -79,9 +80,11 @@ class RestScreen extends Component<IProps> {
                     </View>
                     <View style={{ flex: 1 }} />
                 </View>
-                <TouchableOpacity style={styles.Button} onPress={this.toThink}>
-                    <AppText >MAKE YOUR OWN PLAN</AppText>
-                </TouchableOpacity>
+                <View style={{ justifyContent: 'center', flex: 1 }}>
+                    <TouchableOpacity style={styles.Button} onPress={this.toThink}>
+                        <AppText >MAKE YOUR OWN PLAN</AppText>
+                    </TouchableOpacity>
+                </View>
             </LinearGradient>
     }
 

@@ -93,7 +93,6 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     effects: {
         async getNearByPlaceUsingCombo(something, state): Promise<void> {
             const placeCombo = getCombo();
-            console.log(placeCombo)
             // const chosenPlacesArray = await Promise.all(placeCombo.map(async (currentValue) => {
 
             //     return bestPlace
@@ -109,7 +108,6 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                     const bestPlace = getNumberOfBestPlace(
                         resultPlaces,
                         location, 1);
-                    console.log('bestPlace', bestPlace)
                     if (bestPlace && bestPlace[0]) {
                         let firstImageUrl = '';
                         if (bestPlace[0].photos && bestPlace[0].photos[0]) {

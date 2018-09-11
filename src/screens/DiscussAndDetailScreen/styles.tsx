@@ -1,6 +1,6 @@
 import { ViewStyle, Dimensions, Platform, ImageStyle, TextStyle } from "react-native";
 import { gradient } from "../../commonStyle";
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 const Container: ViewStyle = {
     width,
     height,

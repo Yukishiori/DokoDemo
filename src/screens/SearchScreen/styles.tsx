@@ -1,6 +1,6 @@
 import { ViewStyle, Dimensions, Platform } from "react-native";
 import { gradient } from "../../commonStyle";
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 const MapView: ViewStyle = {
   height,
   width,
@@ -42,7 +42,7 @@ const SearchPanel: ViewStyle = {
 const TextInput: ViewStyle = {
   height: height * 0.05,
   width: width * 0.7,
-  marginLeft: width * 0.03
+  marginLeft: width * 0.03,
 }
 
 

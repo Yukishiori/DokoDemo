@@ -1,6 +1,6 @@
 import { ViewStyle, Dimensions, ImageStyle, TextStyle } from "react-native";
 import { gradient } from "../../commonStyle";
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('window');
 
 const CardImage: ImageStyle = {
     backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -34,7 +34,8 @@ const Title: ViewStyle = {
 const Text: TextStyle = {
     fontSize: 14,
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    
 }
 
 const DeleteButton: ViewStyle = {

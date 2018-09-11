@@ -47,7 +47,7 @@ class PlaceCard extends Component<IProps, IState> {
                     : <FastImage style={styles.CardImage} source={require('../../../assets/images/default.png')} />
                 }
                 <LinearGradient style={styles.Title} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
-                    <AppText style={styles.Text}>{this.props.place.name.toUpperCase()}</AppText>
+                    <AppText style={styles.Text} numberOfLines={2}>{this.props.place.name.toUpperCase()}</AppText>
                     <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                         {/* <View style={{ borderRadius: 20, width: width * 0.4 / 5 * this.props.rating, backgroundColor: 'white', height: 3 }}></View> */}
                         {

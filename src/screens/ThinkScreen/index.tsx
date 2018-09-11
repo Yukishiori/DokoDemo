@@ -21,7 +21,7 @@ interface IProps extends NavigationScreenProps {
     clearChosenPlaces: () => void;
 }
 class ThinkScreen extends Component<IProps> {
-    
+
     toThink = () => {
         this.props.clearChosenPlaces();
         this.props.navigation.navigate(ScreenNames.SearchScreen);
@@ -51,23 +51,21 @@ class ThinkScreen extends Component<IProps> {
                         provider="google"
                         customMapStyle={config.mapStyle}
                     />
-                    <Transition appear="horizontal">
-                        <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
-                            <AppText style={styles.FirstText}>I want to</AppText>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }} onPress={() => { this.props.navigation.navigate(ScreenNames.RestScreen) }}>
-                                    <Icon name="arrow-left" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
-                                </TouchableOpacity>
-                                <View style={{ flex: 3, alignItems: 'center' }}>
-                                    <AppText style={styles.Text2}>THINK</AppText>
-                                </View>
-                                <View style={{ flex: 1 }} />
-                            </View>
-                            <TouchableOpacity style={styles.Button} onPress={this.toThink}>
-                                <AppText >MAKE YOUR OWN PLAN</AppText>
+                    <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
+                        <AppText style={styles.FirstText}>I want to</AppText>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }} onPress={() => { this.props.navigation.navigate(ScreenNames.RestScreen) }}>
+                                <Icon name="arrow-left" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
                             </TouchableOpacity>
-                        </LinearGradient>
-                    </Transition>
+                            <View style={{ flex: 3, alignItems: 'center' }}>
+                                <AppText style={styles.Text2}>THINK</AppText>
+                            </View>
+                            <View style={{ flex: 1 }} />
+                        </View>
+                        <TouchableOpacity style={styles.Button} onPress={this.toThink}>
+                            <AppText >MAKE YOUR OWN PLAN</AppText>
+                        </TouchableOpacity>
+                    </LinearGradient>
                     <Image source={{
                         uri: this.props.photoURL || DEFAULT_AVATAR
                     }}

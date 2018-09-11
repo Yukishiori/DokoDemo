@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, BackHandler, DeviceEventEmitter, Alert } from 'react-native';
 import { NavigationScreenProps, NavigationActions } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
@@ -35,25 +35,28 @@ class SignUpScreen extends Component<IProps> {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    // BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+    DeviceEventEmitter.removeAllListeners('hardwareBackPress');
+    DeviceEventEmitter.addListener('hardwareBackPress', () => {
+      // Alert.alert(
+      //   'Warning',
+      //   'Do you want to close the app ? ',
+      //   [
+      //     { text: 'Cancel', style: 'cancel' },
+      //     {
+      //       text: 'OK', onPress: () => {
+      //         BackHandler.exitApp();
+      //       },
+      //     },
+      //   ],
+      //   { cancelable: false }
+      // );
+      this.props.navigation.goBack();
+    });
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
-
-  onBackPress = () => {
-    const { dispatch, state } = this.props;
-    // console.log('this.props:', this.props);
-    // console.log({ ...state });
-    if (state.index === 0) {
-      return false;
-    }
-    this.props.navigation.goBack()
-    // dispatch(NavigationActions.back());
-    return true;
-  };
-
 
   render() {
     return (

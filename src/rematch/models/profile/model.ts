@@ -13,7 +13,7 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
     displayName: '',
     email: '',
     phoneNumber: null,
-    photoURL : "",
+    photoURL: "",
     gender: "",
     dob: "",
     uid: null,
@@ -37,12 +37,12 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
     ): IProfileState => {
       return {
         ...state,
-        updateInputs: {...state.updateInputs, ...payload}
+        updateInputs: { ...state.updateInputs, ...payload }
       }
     }
   },
   effects: {
-    async createOrUpdateFirebaseUser (
+    async createOrUpdateFirebaseUser(
       payload: IRetriveDataSuccess,
       _rootState: any
     ): Promise<void> {
@@ -58,40 +58,39 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
           'Something went wrong! Please try again.',
           "",
           [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
+            { text: 'Cancel', onPress: () => { }, style: 'cancel' },
+            { text: 'OK', onPress: () => { } },
           ],
           { cancelable: false }
         )
         console.log(err);
       }
     },
-    async updateProfileUser (
+    async updateProfileUser(
       payload: IUpdateProfileUser,
       _rootState: any
     ): Promise<void> {
       try {
-        console.log('payload', payload);
         firebase.firestore().collection('users').doc(payload.uid).set(
           payload,
           { merge: true }).then(() => {
             return payload;
           });
-          Alert.alert(
-            'Update successfully!',
-            "",
-            [
-              {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ],
-            { cancelable: false }
-          )
+        Alert.alert(
+          'Update successfully!',
+          "",
+          [
+            { text: 'OK', onPress: () => { } },
+          ],
+          { cancelable: false }
+        )
       } catch (err) {
         Alert.alert(
           'Something went wrong! Please try again.',
           "",
           [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
+            { text: 'Cancel', onPress: () => { }, style: 'cancel' },
+            { text: 'OK', onPress: () => { } },
           ],
           { cancelable: false }
         )

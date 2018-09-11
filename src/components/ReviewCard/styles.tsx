@@ -1,5 +1,5 @@
 import { ViewStyle, Dimensions, TextStyle } from "react-native";
-const { height, width } = Dimensions.get('screen');
+const { height, width } = Dimensions.get('window');
 const Container: ViewStyle = {
     backgroundColor: 'white',
     borderRadius: 20,

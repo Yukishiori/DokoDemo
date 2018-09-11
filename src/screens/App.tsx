@@ -22,6 +22,7 @@ import ProfileScreen from './ProfileScreen';
 
 bootstrapFirebase();
 export default class App extends Component {
+  
     render() {
         return (
             <Provider store={store}>
@@ -30,6 +31,8 @@ export default class App extends Component {
         );
     }
 }
+
+
 
 const AuthStack = FluidNavigator({
   // Profile: ProfileScreen,

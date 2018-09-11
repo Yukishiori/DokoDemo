@@ -1,5 +1,5 @@
 
-const theDarkNightSpecial = ['tea', 'coffee', 'lake'];
+const theDarkNightSpecial = ['tea', 'lake'];
 const nguyenTienThinh = ['tea', 'book'];
 
 const qk1 = ['Cinema', 'restaurant', 'walk'];
@@ -12,10 +12,10 @@ const qk6 = ['Gaming center', 'grill', 'iced tea'];
 const qk7 = ['Book coffee', 'beef steak', 'cinema'];
 
 const dh1 = ['coffee', 'cinema', 'restaurant'];
-const dh2 = ['coffee', 'shopping']; 
+const dh2 = ['coffee', 'shopping'];
 
 const nhi1 = ['phở', 'Book coffee', 'walk']
-const nhi2 = ['phở', 'Music', 'walk']
+// const nhi2 = ['phở', 'Music', 'walk']
 
 const placeCombo = [
     theDarkNightSpecial,
@@ -30,6 +30,6 @@ const placeCombo = [
     dh1,
     dh2,
     nhi1,
-    nhi2
+    // nhi2
 ]
 export default placeCombo;

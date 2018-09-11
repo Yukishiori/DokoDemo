@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, Image, KeyboardAvoidingView, Platform, TextInput, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, Image, KeyboardAvoidingView, Platform, TextInput, ActivityIndicator, FlatList, DeviceEventEmitter } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import AppText from '../../components/AppText';
 import { Transition } from 'react-navigation-fluid-transitions';
@@ -18,10 +18,13 @@ import { IPlaceFromGoogle } from '../../rematch/models/map/interface';
 import placeService from '../../service/place.service';
 import PlaceCard from '../../components/PlaceCard';
 import moment from 'moment';
-
+import 'core-js/es6/map'
+import 'core-js/es6/symbol'
+import 'core-js/fn/symbol/iterator'
 interface IProps extends NavigationScreenProps {
   photoURL: string;
   currentLocation: ICoord;
+  chosenPlaces: IPlaceFromGoogle[],
 }
 
 interface IState {
@@ -31,6 +34,12 @@ interface IState {
   sessionToken: number,
   predictions: string[];
   blur: boolean;
+}
+
+
+
+const itemVisiblePercentThreshold = {
+  itemVisiblePercentThreshold: 50
 }
 
 class SearchScreen extends Component<IProps, IState> {
@@ -59,6 +68,15 @@ class SearchScreen extends Component<IProps, IState> {
     //   .catch(err => {
     //     console.log(err)
     //   })
+  }
+
+  componentDidMount() {
+    DeviceEventEmitter.removeAllListeners('hardwareBackPress');
+    DeviceEventEmitter.addListener('hardwareBackPress', () => {
+      this.props.chosenPlaces && this.props.chosenPlaces.length > 0
+        ? this.props.navigation.navigate(ScreenNames.MainMap)
+        : this.props.navigation.goBack();
+    });
   }
 
   search = () => {
@@ -108,7 +126,6 @@ class SearchScreen extends Component<IProps, IState> {
     })
   }
 
-
   renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
     return <PlaceCard
       cannotDelete
@@ -118,6 +135,17 @@ class SearchScreen extends Component<IProps, IState> {
         fromSearch: true
       })}
     />
+  }
+
+  onViewableItemsChanged = ({ viewableItems, changed }: any) => {
+    try {
+      if (viewableItems[0].index > -1) {
+        const { lat, lng } = this.state.searchedLocations[viewableItems[0].index].geometry.location;
+        this.map.animateToCoordinate({ latitude: lat, longitude: lng });
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   render() {
@@ -143,10 +171,14 @@ class SearchScreen extends Component<IProps, IState> {
           style={{ position: 'absolute', bottom: '5%' }}
           showsHorizontalScrollIndicator={false}
           extraData={this.props}
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          viewabilityConfig={itemVisiblePercentThreshold}
         />
         <View style={styles.Header} >
           <TouchableOpacity style={{ marginLeft: '3%' }}
-            onPress={() => this.props.navigation.goBack()} >
+            onPress={() => this.props.chosenPlaces && this.props.chosenPlaces.length > 0
+              ? this.props.navigation.navigate(ScreenNames.MainMap)
+              : this.props.navigation.goBack()} >
             <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: gradient[1], fontSize: 20 }} />
           </TouchableOpacity>
           <TextInput style={[styles.TextInput, { fontFamily: 'Comfortaa-Regular', color: gradient[1] }]}

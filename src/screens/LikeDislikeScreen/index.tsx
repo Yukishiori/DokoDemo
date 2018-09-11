@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { View, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, Image, ScrollView, ActivityIndicator, DeviceEventEmitter } from 'react-native';
 import { gradient } from '../../commonStyle';
 import { IPlaceFromGoogle, IPhoto, IPlaceDetailFromGoogle, IPlaceDetailResult, ICombinePlaceDetail } from '../../rematch/models/map/interface';
 import styles from './styles';
@@ -40,6 +40,24 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
 
     componentDidMount(): any {
         const { chosenPlace }: { chosenPlace: IPlaceFromGoogle } = this.props.navigation.state.params as any;
+
+        DeviceEventEmitter.removeAllListeners('hardwareBackPress');
+        DeviceEventEmitter.addListener('hardwareBackPress', () => {
+            // Alert.alert(
+            //   'Warning',
+            //   'Do you want to close the app ? ',
+            //   [
+            //     { text: 'Cancel', style: 'cancel' },
+            //     {
+            //       text: 'OK', onPress: () => {
+            //         BackHandler.exitApp();
+            //       },
+            //     },
+            //   ],
+            //   { cancelable: false }
+            // );
+            this.props.navigation.navigate(ScreenNames.MainMap);
+        });
         placeService.getPlaceDetail(chosenPlace.place_id)
             .then(placeDetail => {
                 this.setState({
@@ -55,6 +73,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
 
     }
 
+
     onFavorite = () => {
         this.setState({
             isFavorite: !this.state.isFavorite
@@ -69,7 +88,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
     }
 
     render() {
-        const { chosenPlace }: { chosenPlace: IPlaceFromGoogle } = this.props.navigation.state.params as any;
+        const { chosenPlace, fromSearch }: { chosenPlace: IPlaceFromGoogle, fromSearch: boolean } = this.props.navigation.state.params as any;
 
         if (!this.state.placeDetail) {
             return <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
@@ -82,7 +101,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                 <Header style={{ padding: 0 }}>
                     <View style={styles.Header} >
                         <Left style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Button transparent onPress={() => this.props.navigation.goBack()} style={{ justifyContent: 'flex-start' }}>
+                            <Button transparent onPress={() => this.props.navigation.navigate(fromSearch ? ScreenNames.SearchScreen : ScreenNames.MainMap)} style={{ justifyContent: 'flex-start' }}>
                                 <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />
                             </Button>
                         </Left>
@@ -121,7 +140,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                             <TouchableOpacity style={styles.Star} onPress={this.onFavorite}>
                                                 <Icon name="star" type="FontAwesome" style={{ fontSize: 18, color: this.state.isFavorite ? gradient[0] : 'white' }} />
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={styles.Star} onPress={() => this.props.navigation.navigate(ScreenNames.Discuss, { placeDetail: this.state.placeDetail })} >
+                                            <TouchableOpacity style={styles.Star} onPress={() => this.props.navigation.navigate(ScreenNames.Discuss, { placeDetail: this.state.placeDetail, chosenPlace, fromSearch })} >
                                                 <Icon name="comment" type="Foundation" style={{ fontSize: 18, color: 'white' }} />
                                             </TouchableOpacity>
                                         </View>
