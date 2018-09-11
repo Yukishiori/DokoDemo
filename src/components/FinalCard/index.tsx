@@ -29,6 +29,11 @@ class FinalCard extends Component<IProps, IState> {
   render() {
     return (
       <View style={styles.Card}>
+        {this.props.place.estimatedTime ?
+          (<View style={{alignItems: 'flex-end', marginBottom: 20, width: '100%', paddingHorizontal: 50}}>
+            <AppText style={{color: 'white', fontSize: 16}}>{`~ ${this.props.place.estimatedTime.text} moving`}</AppText>
+          </View>) : <View></View>
+        }
         {this.props.place.firstImageUrl
           ? <FastImage
             resizeMode="stretch"

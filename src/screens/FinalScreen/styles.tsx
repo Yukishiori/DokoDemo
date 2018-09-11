@@ -17,11 +17,19 @@ const Header: ViewStyle = {
 
 const BigContainer: ViewStyle = {
   minHeight: '100%',
+  marginTop: Platform.OS === 'ios' ? 20 : 0,
+  // marginBottom: -20
+}
+
+const BigScrollViewContainer: ViewStyle = {
+  minHeight: '100%',
+  paddingBottom: 60
 }
 
 const BigLinearGradient: ViewStyle = {
   minHeight: '100%',
-  padding: 20,
+  margin: 0,
+  padding: 0
 }
 
 const ShowSchedule: ViewStyle = {
@@ -56,7 +64,19 @@ const GoButton: ViewStyle = {
 
 const EstimateTime: TextStyle = {
   alignSelf: 'center',
+  fontWeight: 'bold',
+  color: 'black',
+  fontSize: 16
+}
+
+const EstimateNumber: TextStyle = {
+  alignSelf: 'center',
   fontWeight: 'bold'
+}
+
+const HeaderContainer: ViewStyle = { 
+  padding: 0 ,
+  marginTop: Platform.OS === 'ios' ? -20 : 0
 }
 
 export default {
@@ -67,5 +87,8 @@ export default {
     BigLinearGradient,
     SumsContainer,
     GoButton,
-    EstimateTime
+    EstimateTime,
+    BigScrollViewContainer,
+    EstimateNumber,
+    HeaderContainer
 }

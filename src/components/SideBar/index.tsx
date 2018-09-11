@@ -31,7 +31,7 @@ export default class SideBar extends React.Component<any, any> {
             icon
             onPress={() => this.props.navigation.navigate(ScreenNames.RestScreen)}>
             <Left>
-              <Button style={{ backgroundColor: "#007AFF" }}>
+              <Button style={{ backgroundColor: "#007AFF" }} onPress={() => this.props.navigation.navigate(ScreenNames.RestScreen)}>
                 <Icon active name="home" type="FontAwesome" style={{color: 'white'}}></Icon>
               </Button>
             </Left>
@@ -47,7 +47,7 @@ export default class SideBar extends React.Component<any, any> {
             icon
             onPress={() => this.props.navigation.navigate(ScreenNames.ProfileScreen)}>
             <Left>
-              <Button style={{ backgroundColor: "#00B386" }}>
+              <Button style={{ backgroundColor: "#00B386" }} onPress={() => this.props.navigation.navigate(ScreenNames.ProfileScreen)}>
                 <Icon active name="user" type="FontAwesome" style={{color: 'white'}}></Icon>
               </Button>
             </Left>
@@ -64,7 +64,7 @@ export default class SideBar extends React.Component<any, any> {
             onPress={() => this.logOut()}
           >
             <Left>
-              <Button style={{ backgroundColor: "red" }}>
+              <Button style={{ backgroundColor: "red" }} onPress={() => this.logOut()}>
                 <Icon active name="power-off" type="FontAwesome" style={{color: 'white'}}></Icon>
               </Button>
             </Left>
