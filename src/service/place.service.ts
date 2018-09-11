@@ -2,7 +2,7 @@ import { ICoord } from "./interface.service";
 import config from "../../config";
 import { IPlaceDetailFromGoogle, IPlaceFromGoogle, IPlaceDetailResult, ICombinePlaceDetail, IFirebasePlace, IComment } from "../rematch/models/map/interface";
 import firebase from 'firebase';
-import moment from "moment";
+import moment, { unix } from "moment";
 const betterFetch = async (url: string) => {
     const res = await fetch(url)
     return await res.json();
@@ -30,13 +30,13 @@ const getPlaceDetail = async (placeId: string): Promise<ICombinePlaceDetail> => 
                 ...res,
                 createTime: moment().unix(),
                 favoriteBy: {},
-                ratings: null,
+                ratings: res.rating ? res.rating : 0,
                 name: ''
             }
             firebase.firestore().collection('places').doc(placeId).set({
                 createTime: moment().unix(),
                 favoriteBy: {},
-                ratings: null,
+                ratings: res.rating ? res.rating : 0,
                 name: res.name
             })
 
@@ -51,7 +51,6 @@ const getPlaceDetail = async (placeId: string): Promise<ICombinePlaceDetail> => 
 const getPlaceFromKeyword = async (location: ICoord, keyword: string): Promise<IPlaceFromGoogle[]> => {
     try {
         const res: IPlaceFromGoogle[] = (await betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(keyword)}&language=vi`)).results
-        console.log(res)
         const placeWithImage = await Promise.all(res.splice(0, 5).map(async (place) => {
             if (place.photos) {
 
@@ -66,8 +65,25 @@ const getPlaceFromKeyword = async (location: ICoord, keyword: string): Promise<I
                     firstImageUrl: null
                 }
             }
+        }));
+        const searchedCollection = firebase.firestore().collection('searched');
+        const wordInFirebase = await searchedCollection.where('value', '==', keyword).get();
+        if (wordInFirebase && !wordInFirebase.empty) {
+            const word = wordInFirebase.docs[0]
+            searchedCollection.doc(word.id).set({
+                ...word.data(),
+                timeSearched: word.data().timeSearched + 1,
+                mostRecentSearched: moment().unix()
+            }, { merge: true })
+        } else {
+            searchedCollection.add({
+                value: keyword,
+                createTime: moment().unix(),
+                timeSearched: 1,
+                mostRecentSearched: moment().unix()
+            })
+        }
 
-        }))
         return placeWithImage;
     } catch (err) {
         console.log(err);

@@ -80,7 +80,7 @@ class SearchScreen extends Component<IProps, IState> {
                 longitude: searchedLocation.geometry.location.lng
               })
             ), {
-                edgePadding: { top: 10, right: 10, bottom: 10, left: 10 }
+                edgePadding: { top: 50, right: 30, bottom: 50, left: 30 }
               })
           } else {
             // Toast.show({ text: "Find no place match this keyword", duration: 500 })

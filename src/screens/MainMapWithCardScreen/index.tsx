@@ -35,6 +35,10 @@ interface IState {
     isModalVisible: boolean;
 }
 
+
+const itemVisiblePercentThreshold = {
+    itemVisiblePercentThreshold: 50
+}
 class MainMapWithCardScreen extends Component<IProps, IState> {
     map: MapView = null;
 
@@ -57,10 +61,21 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     longitude: chosenPlace.geometry.location.lng,
                     latitude: chosenPlace.geometry.location.lat
                 }} key={index} title={chosenPlace.name}
-                pinColor="orange"
             />
         )
     }
+
+    // componentWillReceiveProps(nextProps: IProps) {
+    //     if (nextProps.isBusy === false && this.props.isBusy && this.map) {
+    //         this.map.fitToCoordinates(
+    //             this.props.chosenPlaces.map((chosenPlace, index) =>
+    //                 ({
+    //                     longitude: chosenPlace.geometry.location.lng,
+    //                     latitude: chosenPlace.geometry.location.lat
+    //                 })
+    //             ))
+    //     }
+    // }
 
     renderPolyline = () => {
         return this.props.polylineCoords
@@ -77,7 +92,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
         />
     }
-    onViewableItemsChanged = ({ viewableItems }) => {
+    onViewableItemsChanged = ({ viewableItems, changed }) => {
         try {
             if (viewableItems[0].index > -1) {
                 const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
@@ -87,6 +102,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             console.log(err)
         }
     }
+
 
     render() {
         if (this.props.isBusy) {
@@ -115,8 +131,9 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         horizontal
                         style={{ position: 'absolute', bottom: '5%' }}
                         showsHorizontalScrollIndicator={false}
-                        // onViewableItemsChanged={this.onViewableItemsChanged}
+                        onViewableItemsChanged={this.onViewableItemsChanged}
                         extraData={this.props}
+                        viewabilityConfig={itemVisiblePercentThreshold}
                     // pagingEnabled
                     />
                 </View>

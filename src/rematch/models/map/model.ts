@@ -83,7 +83,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     effects: {
         async getNearByPlaceUsingCombo(something, state): Promise<void> {
             const placeCombo = getCombo();
-
+            console.log(placeCombo)
             // const chosenPlacesArray = await Promise.all(placeCombo.map(async (currentValue) => {
 
             //     return bestPlace
@@ -93,30 +93,38 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             await this.getDirection()
         },
         async getAnotherPlaceFromThisPlace({ placeCombo, location, index }): Promise<void> {
-            if (placeCombo[index]) {
-                const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
-                const bestPlace = getNumberOfBestPlace(
-                    resultPlaces,
-                    location, 1);
-                console.log('bestPlace', bestPlace)
-                if (bestPlace && bestPlace[0]) {
-                    const firstImageUrl = (await placeService.getImageUris([bestPlace[0].photos[0].photo_reference]))[0];
+            try {
 
-                    this.addChosenPlace({ chosenPlace: { ...bestPlace[0], firstImageUrl } });
-                    await this.getAnotherPlaceFromThisPlace({
-                        placeCombo, location: {
-                            latitude: bestPlace[0].geometry.location.lat,
-                            longitude: bestPlace[0].geometry.location.lng
-                        }, index: index + 1
-                    })
-                } else {
-                    await this.getAnotherPlaceFromThisPlace({
-                        placeCombo, location, index: index + 1
-                    })
+                if (placeCombo[index]) {
+                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
+                    const bestPlace = getNumberOfBestPlace(
+                        resultPlaces,
+                        location, 1);
+                    console.log('bestPlace', bestPlace)
+                    if (bestPlace && bestPlace[0]) {
+                        let firstImageUrl = '';
+                        if (bestPlace[0].photos && bestPlace[0].photos[0]) {
+                            firstImageUrl = (await placeService.getImageUris([bestPlace[0].photos[0].photo_reference]))[0];
+                        }
+
+                        this.addChosenPlace({ chosenPlace: { ...bestPlace[0], firstImageUrl } });
+                        await this.getAnotherPlaceFromThisPlace({
+                            placeCombo, location: {
+                                latitude: bestPlace[0].geometry.location.lat,
+                                longitude: bestPlace[0].geometry.location.lng
+                            }, index: index + 1
+                        })
+                    } else {
+                        await this.getAnotherPlaceFromThisPlace({
+                            placeCombo, location, index: index + 1
+                        })
+                    }
                 }
-
+            } catch (err) {
+                console.log(err)
+            } finally {
+                this.updateBusyState(false);
             }
-            this.updateBusyState(false);
         },
         async getDirection(location: ICoord, state: IRootState): Promise<void> {
             const waypoints = state.mapScreenModel.chosenPlaces.reduce((acc, chosenPlace, index) => {
@@ -153,7 +161,7 @@ const parsePolyline = (response: any): ICoord[] => {
 }
 
 const getCombo = (): string[] => {
-    return placeCombo[Math.floor(Math.random() * placeCombo.length - 1)];
+    return placeCombo[Math.floor(Math.random() * placeCombo.length) - 1];
 }
 
 const getNumberOfBestPlace = (places: IPlaceFromGoogle[], currentLocation: ICoord, number = 1): IPlaceFromGoogle[] => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, BackHandler } from 'react-native';
+import { NavigationScreenProps, NavigationActions } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 import { gradient } from '../../commonStyle';
@@ -33,6 +33,28 @@ class SignUpScreen extends Component<IProps> {
       setTimeout(() => this.props.navigation.navigate('Main'), 1000);
     }
   }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
+  }
+
+  onBackPress = () => {
+    const { dispatch, state } = this.props;
+    // console.log('this.props:', this.props);
+    // console.log({ ...state });
+    if (state.index === 0) {
+      return false;
+    }
+    this.props.navigation.goBack()
+    // dispatch(NavigationActions.back());
+    return true;
+  };
+
+
   render() {
     return (
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
@@ -91,7 +113,7 @@ class SignUpScreen extends Component<IProps> {
           </View>
           <View style={styles.SignUpContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-              <AppText style={{textDecorationLine: 'underline', fontSize: 16}}>Already have an account? Login now.</AppText>
+              <AppText style={{ textDecorationLine: 'underline', fontSize: 16 }}>Already have an account? Login now.</AppText>
             </TouchableOpacity>
           </View>
         </LinearGradient>

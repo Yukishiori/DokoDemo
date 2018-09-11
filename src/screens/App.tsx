@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StackNavigator, createSwitchNavigator, NavigationScreenProps } from 'react-navigation';
+import { createStackNavigator, createSwitchNavigator, NavigationScreenProps } from 'react-navigation';
 import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
@@ -19,37 +19,39 @@ import FinalScreen from './FinalScreen';
 
 bootstrapFirebase();
 export default class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <SwitchNavigation />
-      </Provider>
-    );
-  }
+    render() {
+        return (
+            <Provider store={store}>
+                <SwitchNavigation />
+            </Provider>
+        );
+    }
 }
 
-const AuthStack = FluidNavigator({
-  Splash: SplashScreen,
-  SignUp: SignUpScreen,
-  Login: LoginScreen,
-});
+const AuthStack = createStackNavigator({
+    Login: LoginScreen,
+    SignUp: SignUpScreen,
+}, {
+        headerMode: 'none',
+    });
 
 const MainStack = FluidNavigator({
-  Rest: {
-    screen: RestScreen,
-  },
-  Think: ThinkScreen,
-  MainMap: MainMapWithCardScreen,
-  LikeDisLikeScreen: LikeDisLikeScreen,
-  Discuss: DiscussAndDetailScreen,
-  Search: SearchScreen,
-  Final: FinalScreen
+    Rest: {
+        screen: RestScreen,
+    },
+    Think: ThinkScreen,
+    MainMap: MainMapWithCardScreen,
+    LikeDisLikeScreen: LikeDisLikeScreen,
+    Discuss: DiscussAndDetailScreen,
+    Search: SearchScreen,
+    Final: FinalScreen
 }, {
-    headerMode: 'none',
-  });
+        headerMode: 'none',
+    });
 
 const SwitchNavigation = createSwitchNavigator(
-  {
-    Auth: AuthStack,
-    Main: MainStack,
-  });
+    {
+        Splash: SplashScreen,
+        Auth: AuthStack,
+        Main: MainStack,
+    });

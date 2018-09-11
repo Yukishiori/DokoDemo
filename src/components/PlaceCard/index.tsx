@@ -50,7 +50,13 @@ class PlaceCard extends Component<IProps, IState> {
                     <AppText style={styles.Text}>{this.props.place.name.toUpperCase()}</AppText>
                     <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                         {/* <View style={{ borderRadius: 20, width: width * 0.4 / 5 * this.props.rating, backgroundColor: 'white', height: 3 }}></View> */}
-                        <AppText style={{ color: 'white', fontSize: 12 }}>recommended by {this.props.place.rating * 20} % users</AppText>
+                        {
+                            this.props.place.rating === 0
+                                ? <AppText style={{ color: 'white', fontSize: 12 }}>new place</AppText>
+                                : this.props.place.rating === 5
+                                    ? <AppText style={{ color: 'white', fontSize: 12 }}>recommended by lots</AppText>
+                                    : <AppText style={{ color: 'white', fontSize: 12 }}>recommended by {this.props.place.rating * 20} % users</AppText>
+                        }
                     </View>
                 </LinearGradient>
                 {!this.props.cannotDelete && < TouchableOpacity style={styles.DeleteButton}
