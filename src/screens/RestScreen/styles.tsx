@@ -11,26 +11,22 @@ const Header: ViewStyle = {
 };
 
 const MapStyle: ViewStyle = {
-    height: height * 0.40,
+    // height: height * 0.40,
     width,
     flex: 1
 };
 
 const Circle: ImageStyle = {
-    height: width * 0.32,
-    width: width * 0.32,
-    borderRadius: width * 0.16,
-    position: 'absolute',
-    left: width * 0.34,
-    top: 0.30 * height,
-
+    height: width * 0.1,
+    width: width * 0.1,
+    borderRadius: width * 0.05,
 };
 
 const Content: ViewStyle = {
-    height: 0.53 * height,
+    // height: 0.53 * height,
     alignItems: 'center',
-    width
-    // flex: 1,
+    width,
+    flex: 1,
 }
 
 const FirstText: TextStyle = {
@@ -46,7 +42,7 @@ const Text2: TextStyle = {
 };
 
 const Button: ViewStyle = {
-    marginTop: '5%',
+    // marginTop: '5%',
     backgroundColor: 'white',
     width: width * 0.8,
     paddingVertical: height * 0.015,
@@ -57,12 +53,21 @@ const Button: ViewStyle = {
     shadowOpacity: 1,
     shadowRadius: 2,
     elevation: 4,
+    marginBottom: 5,
 };
 
 const Or: ViewStyle = {
     flex: 1,
     justifyContent: 'flex-end',
     marginBottom: 10
+}
+
+const User: ViewStyle = {
+    top: height * 0.5,
+    justifyContent: 'center',
+    position: 'absolute',
+    flexDirection: 'row',
+    width
 }
 
 export default {
@@ -73,5 +78,6 @@ export default {
     FirstText,
     Text2,
     Button,
-    Or
+    Or,
+    User
 }

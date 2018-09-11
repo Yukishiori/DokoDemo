@@ -29,21 +29,23 @@ class SplashScreen extends Component<IProps> {
     firebase.auth().onAuthStateChanged(res => {
       if (res) {
         if (res.providerData && res.providerData.length) {
-          this.props.createOrUpdateFirebaseUser({result: {
-            email: res.providerData[0].email,
-            displayName: res.providerData[0].displayName,
-            photoURL: res.providerData[0].photoURL
-          }, uid: res.uid});
+          this.props.createOrUpdateFirebaseUser({
+            result: {
+              email: res.providerData[0].email,
+              displayName: res.providerData[0].displayName,
+              photoURL: res.providerData[0].photoURL
+            }, uid: res.uid
+          });
         }
         firebase.firestore().collection('users').doc(res.uid).get().then((doc) => {
-          if(doc.exists) {
-            this.props.retriveDataSuccess({result : doc.data(), uid: res.uid});
+          if (doc.exists) {
+            this.props.retriveDataSuccess({ result: doc.data(), uid: res.uid });
           } else {
             Alert.alert(
               'Cannot fetch data, please log out and try again!',
               "",
               [
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
               ],
               { cancelable: false }
             )
@@ -59,9 +61,10 @@ class SplashScreen extends Component<IProps> {
   render() {
     return (
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-        <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.BackgroundGradient}>
-          <AppText style={{ fontSize: 30, color: 'white' }}>Dokodemo</AppText>
-        </LinearGradient>
+        <View style={styles.BackgroundGradient}>
+          <Image source={require('../../../assets/images/appLogo.png')} style={styles.Logo} />
+          <AppText style={{ fontSize: 30, color: gradient[0], marginTop: '5%' }}>Dokodemo</AppText>
+        </View>
       </View>
     );
   }

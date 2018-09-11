@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { View, FlatList, ActivityIndicator, TouchableOpacity, ScrollView, DeviceEventEmitter } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import styles from './styles';
@@ -60,6 +60,10 @@ class FinalScreen extends Component<IProps, IState> {
 
   componentDidMount() {
     this.props.getEstimatedTime({ chosenPlaces: this.props.chosenPlaces, currentLocation: this.props.currentLocation });
+    DeviceEventEmitter.removeAllListeners('hardwareBackPress');
+    DeviceEventEmitter.addListener('hardwareBackPress', () => {
+      this.props.navigation.navigate(ScreenNames.MainMap)
+    });
   }
 
   calculateTotalTime = (chosenPlaces: any) => {
@@ -104,7 +108,9 @@ class FinalScreen extends Component<IProps, IState> {
         <Header style={styles.HeaderContainer}>
           <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
             <Left style={{ flex: 1, alignItems: 'flex-start' }}>
-              <Button transparent onPress={() => this.props.navigation.goBack()} style={{ justifyContent: 'flex-start' }}>
+              <Button transparent onPress={() =>
+                this.props.navigation.navigate(ScreenNames.MainMap)
+              } style={{ justifyContent: 'flex-start' }}>
                 <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />
               </Button>
             </Left>

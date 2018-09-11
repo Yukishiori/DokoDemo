@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { View, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView, Platform, DeviceEventEmitter } from 'react-native';
 import { Transition } from 'react-navigation-fluid-transitions';
 import { Icon } from 'native-base';
 import { gradient } from '../../commonStyle';
@@ -13,6 +13,7 @@ import styles from './styles';
 import placeService from '../../service/place.service';
 import firebase from 'firebase';
 import moment from 'moment';
+import ScreenNames from '../ScreenNames';
 interface IProps extends NavigationScreenProps {
 
 }
@@ -33,13 +34,17 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
     }
 
     componentDidMount() {
-        const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult };
+        const { placeDetail, chosenPlace } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult, chosenPlace: any };
         placeService.getComment(placeDetail.place_id)
             .then(comments => {
                 this.setState({
                     comments
                 })
             }).catch(err => console.log(err))
+        DeviceEventEmitter.removeAllListeners('hardwareBackPress');
+        DeviceEventEmitter.addListener('hardwareBackPress', () => {
+            this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace, fromSearch: this.props.navigation.state.params.fromSearch })
+        });
     }
 
     renderComments = () => {
@@ -82,37 +87,38 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
     }
 
     render() {
+        const { chosenPlace } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult, chosenPlace: any };
         return (
-            <Transition appear="vertical">
-                <LinearGradient style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
-                    <View style={styles.Header}>
-                        <TouchableOpacity style={{ flex: 1, marginLeft: '3%' }} onPress={() => this.props.navigation.goBack()}>
-                            <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 30 }} />
+            <LinearGradient style={{ flex: 1 }} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} colors={gradient}>
+                <View style={styles.Header}>
+                    <TouchableOpacity style={{ flex: 1, marginLeft: '3%' }} onPress={() =>
+                        this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace, fromSearch: this.props.navigation.state.params.fromSearch })
+                    }>
+                        <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 30 }} />
+                    </TouchableOpacity>
+                </View>
+                <ScrollView
+                    ref={scrollView => { this.scrollView = scrollView; }}
+                >
+                    {this.renderComments()}
+                </ScrollView>
+                <KeyboardAvoidingView
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -200}
+                    behavior="padding">
+                    <View style={styles.CommentBar}>
+                        <TextInput
+                            underlineColorAndroid="rgba(0,0,0,0)"
+                            style={[styles.TextInput, { fontFamily: 'Comfortaa-Regular' }]} placeholder="And what do you think ?"
+                            onChangeText={(text) => this.setState({ text })}
+                            value={this.state.text}
+                            onSubmitEditing={this.addComment}
+                        />
+                        <TouchableOpacity style={styles.Send} onPress={this.addComment}>
+                            <Icon name="send" type="MaterialIcons" style={{ color: 'black' }} />
                         </TouchableOpacity>
                     </View>
-                    <ScrollView
-                        ref={scrollView => { this.scrollView = scrollView; }}
-                    >
-                        {this.renderComments()}
-                    </ScrollView>
-                    <KeyboardAvoidingView
-                        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -200}
-                        behavior="padding">
-                        <View style={styles.CommentBar}>
-                            <TextInput
-                                underlineColorAndroid="rgba(0,0,0,0)"
-                                style={[styles.TextInput, { fontFamily: 'Comfortaa-Regular' }]} placeholder="And what do you think ?"
-                                onChangeText={(text) => this.setState({ text })}
-                                value={this.state.text}
-                                onSubmitEditing={this.addComment}
-                            />
-                            <TouchableOpacity style={styles.Send} onPress={this.addComment}>
-                                <Icon name="send" type="MaterialIcons" style={{ color: 'black' }} />
-                            </TouchableOpacity>
-                        </View>
-                    </KeyboardAvoidingView>
-                </LinearGradient>
-            </Transition>
+                </KeyboardAvoidingView>
+            </LinearGradient>
         );
     }
 }

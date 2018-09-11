@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { StackNavigator, createSwitchNavigator, NavigationScreenProps, createDrawerNavigator } from 'react-navigation';
+import { StackNavigator, createSwitchNavigator, NavigationScreenProps, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
@@ -22,6 +22,7 @@ import ProfileScreen from './ProfileScreen';
 
 bootstrapFirebase();
 export default class App extends Component {
+  
     render() {
         return (
             <Provider store={store}>
@@ -30,6 +31,8 @@ export default class App extends Component {
         );
     }
 }
+
+
 
 const AuthStack = FluidNavigator({
   // Profile: ProfileScreen,
