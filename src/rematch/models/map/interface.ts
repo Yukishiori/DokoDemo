@@ -40,6 +40,7 @@ export interface IPlaceFromGoogle {
     vicinity: string;
     rating: number;
     firstImageUrl?: string;
+    estimatedTime?: any;
 }
 
 export interface IRootObject {

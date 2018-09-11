@@ -8,6 +8,7 @@ import haversine from 'haversine';
 import _ from 'lodash';
 import { IState } from '../../../components/Layout';
 import { IRootState } from '../../interface';
+import config from '../../../../config';
 
 const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     state: {
@@ -78,6 +79,15 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 ...state,
                 chosenPlaces: []
             }
+        },
+        updateChosenPlaces: (
+          state: IMapScreenState,
+          payload: {results: any}
+        ): IMapScreenState => {
+          return {
+            ...state,
+            chosenPlaces: payload.results
+          }
         }
     },
     effects: {
@@ -136,6 +146,25 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 , '')
             const polylineCoords = parsePolyline(await placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${state.mapScreenModel.currentLocation.latitude},${state.mapScreenModel.currentLocation.longitude}&destination=place_id:${state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1].place_id}&waypoints=${waypoints}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ`))
             this.updatePolylineCoords({ polylineCoords });
+        },
+        async getEstimatedTime(payload: any, state: IRootState): Promise<void> {
+          const promises = payload.chosenPlaces.map((val: any, index: number) => {
+            var origin = index > 0 ? `place_id:${payload.chosenPlaces[index - 1].place_id}` : `${payload.currentLocation.latitude},${payload.currentLocation.longitude}`;
+            var destination = `place_id:${val.place_id}`;
+            return placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${config.apiKey}`)
+          })
+      
+          var estimatedTimes = await Promise.all(promises) as any;
+          estimatedTimes = estimatedTimes.map((val: any) => {
+            if(val.routes.length && val.routes[0].legs && val.routes[0].legs.length && val.routes[0].legs[0].duration) {
+              return val.routes[0].legs[0].duration;
+            } else return null;
+          })
+          const results = payload.chosenPlaces.map((val: any, index: number) => {
+            val.estimatedTime = estimatedTimes[index];
+            return val;
+          })
+          this.updateChosenPlaces({results})
         }
     }
 });

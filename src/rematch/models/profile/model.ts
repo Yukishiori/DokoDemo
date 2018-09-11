@@ -1,9 +1,12 @@
 import { createModel, ModelConfig } from '@rematch/core';
 import {
   IProfileState,
-  IRetriveDataSuccess
+  IRetriveDataSuccess,
+  IChangeUpdateInput,
+  IUpdateProfileUser
 } from './interface';
 import firebase from 'firebase';
+import { Alert } from 'react-native';
 
 const loginPageModel: ModelConfig<IProfileState> = createModel({
   state: {
@@ -11,8 +14,11 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
     email: '',
     phoneNumber: null,
     photoURL : "",
+    gender: "",
+    dob: "",
     uid: null,
-    providerId: null
+    providerId: null,
+    updateInputs: {}
   },
   reducers: {
     retriveDataSuccess: (
@@ -21,7 +27,17 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
     ): IProfileState => {
       return {
         ...state,
-        ...payload.result
+        ...payload.result,
+        uid: payload.uid
+      }
+    },
+    changeUpdateInputs: (
+      state: IProfileState,
+      payload: IChangeUpdateInput
+    ): IProfileState => {
+      return {
+        ...state,
+        updateInputs: {...state.updateInputs, ...payload}
       }
     }
   },
@@ -31,17 +47,54 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
       _rootState: any
     ): Promise<void> {
       try {
-        firebase.firestore().collection('users').doc(payload.result.uid).set(
-          {
-            email : payload.result.email,
-            displayName : payload.result.displayName,
-            photoURL: payload.result.photoURL || '',
-            phoneNumber: payload.result.phoneNumber || '',
-          },
+        console.log('payload', payload);
+        firebase.firestore().collection('users').doc(payload.uid).set(
+          payload.result,
           { merge: true }).then(() => {
             return payload.result;
           });
       } catch (err) {
+        Alert.alert(
+          'Something went wrong! Please try again.',
+          "",
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
+        console.log(err);
+      }
+    },
+    async updateProfileUser (
+      payload: IUpdateProfileUser,
+      _rootState: any
+    ): Promise<void> {
+      try {
+        console.log('payload', payload);
+        firebase.firestore().collection('users').doc(payload.uid).set(
+          payload,
+          { merge: true }).then(() => {
+            return payload;
+          });
+          Alert.alert(
+            'Update successfully!',
+            "",
+            [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+          )
+      } catch (err) {
+        Alert.alert(
+          'Something went wrong! Please try again.',
+          "",
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        )
         console.log(err);
       }
     }

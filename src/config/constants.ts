@@ -1,0 +1,1 @@
+export const DEFAULT_AVATAR = "https://i.imgur.com/ArYmpHq.png";

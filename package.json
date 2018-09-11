@@ -28,6 +28,7 @@
     "react-native-linear-gradient": "^2.4.0",
     "react-native-maps": "^0.21.0",
     "react-native-modal": "^6.5.0",
+    "react-native-modal-datetime-picker": "^6.0.0",
     "react-navigation": "^2.12.1",
     "react-navigation-fluid-transitions": "^0.2.4",
     "react-redux": "^5.0.7",

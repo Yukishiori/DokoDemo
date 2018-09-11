@@ -4,6 +4,7 @@ import {
   View, StyleSheet
 } from 'react-native';
 import firebase from 'firebase';
+import { Alert } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../components/AppText';
@@ -28,10 +29,27 @@ class SplashScreen extends Component<IProps> {
     firebase.auth().onAuthStateChanged(res => {
       if (res) {
         if (res.providerData && res.providerData.length) {
-          this.props.retriveDataSuccess({result : res.providerData[0]});
-          this.props.createOrUpdateFirebaseUser({result: res.providerData[0]});
+          this.props.createOrUpdateFirebaseUser({result: {
+            email: res.providerData[0].email,
+            displayName: res.providerData[0].displayName,
+            photoURL: res.providerData[0].photoURL
+          }, uid: res.uid});
         }
-        setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+        firebase.firestore().collection('users').doc(res.uid).get().then((doc) => {
+          if(doc.exists) {
+            this.props.retriveDataSuccess({result : doc.data(), uid: res.uid});
+          } else {
+            Alert.alert(
+              'Cannot fetch data, please log out and try again!',
+              "",
+              [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ],
+              { cancelable: false }
+            )
+          }
+          setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+        })
       } else {
         setTimeout(() => this.props.navigation.navigate('Auth'), 500)
       }
