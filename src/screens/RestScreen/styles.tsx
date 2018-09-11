@@ -17,13 +17,9 @@ const MapStyle: ViewStyle = {
 };
 
 const Circle: ImageStyle = {
-    height: width * 0.32,
-    width: width * 0.32,
-    borderRadius: width * 0.16,
-    position: 'absolute',
-    left: width * 0.34,
-    top: 0.30 * height,
-
+    height: width * 0.1,
+    width: width * 0.1,
+    borderRadius: width * 0.05,
 };
 
 const Content: ViewStyle = {
@@ -65,6 +61,14 @@ const Or: ViewStyle = {
     marginBottom: 10
 }
 
+const User: ViewStyle = {
+    top: height * 0.5,
+    justifyContent: 'center',
+    position: 'absolute',
+    flexDirection: 'row',
+    width
+}
+
 export default {
     Header,
     MapStyle,
@@ -73,5 +77,6 @@ export default {
     FirstText,
     Text2,
     Button,
-    Or
+    Or,
+    User
 }

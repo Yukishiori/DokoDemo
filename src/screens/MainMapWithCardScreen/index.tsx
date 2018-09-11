@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, FlatList, ActivityIndicator, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import styles from './styles';
@@ -52,6 +52,9 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             },
             isModalVisible: false,
         };
+        DeviceEventEmitter.addListener('hardwareBackPress', () => {
+            this.props.navigation.goBack();
+		});
     }
 
     renderMarker = () => {
@@ -131,7 +134,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         horizontal
                         style={{ position: 'absolute', bottom: '5%' }}
                         showsHorizontalScrollIndicator={false}
-                        onViewableItemsChanged={this.onViewableItemsChanged}
+                        // onViewableItemsChanged={this.onViewableItemsChanged}
                         extraData={this.props}
                         viewabilityConfig={itemVisiblePercentThreshold}
                     // pagingEnabled

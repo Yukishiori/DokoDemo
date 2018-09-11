@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { StackNavigator, createSwitchNavigator, NavigationScreenProps, createDrawerNavigator } from 'react-navigation';
+import { StackNavigator, createSwitchNavigator, NavigationScreenProps, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import { FluidNavigator, Transition } from 'react-navigation-fluid-transitions';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';

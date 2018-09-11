@@ -81,13 +81,13 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             }
         },
         updateChosenPlaces: (
-          state: IMapScreenState,
-          payload: {results: any}
+            state: IMapScreenState,
+            payload: { results: any }
         ): IMapScreenState => {
-          return {
-            ...state,
-            chosenPlaces: payload.results
-          }
+            return {
+                ...state,
+                chosenPlaces: payload.results
+            }
         }
     },
     effects: {
@@ -104,7 +104,6 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         },
         async getAnotherPlaceFromThisPlace({ placeCombo, location, index }): Promise<void> {
             try {
-
                 if (placeCombo[index]) {
                     const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
                     const bestPlace = getNumberOfBestPlace(
@@ -148,23 +147,23 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             this.updatePolylineCoords({ polylineCoords });
         },
         async getEstimatedTime(payload: any, state: IRootState): Promise<void> {
-          const promises = payload.chosenPlaces.map((val: any, index: number) => {
-            var origin = index > 0 ? `place_id:${payload.chosenPlaces[index - 1].place_id}` : `${payload.currentLocation.latitude},${payload.currentLocation.longitude}`;
-            var destination = `place_id:${val.place_id}`;
-            return placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${config.apiKey}`)
-          })
-      
-          var estimatedTimes = await Promise.all(promises) as any;
-          estimatedTimes = estimatedTimes.map((val: any) => {
-            if(val.routes.length && val.routes[0].legs && val.routes[0].legs.length && val.routes[0].legs[0].duration) {
-              return val.routes[0].legs[0].duration;
-            } else return null;
-          })
-          const results = payload.chosenPlaces.map((val: any, index: number) => {
-            val.estimatedTime = estimatedTimes[index];
-            return val;
-          })
-          this.updateChosenPlaces({results})
+            const promises = payload.chosenPlaces.map((val: any, index: number) => {
+                var origin = index > 0 ? `place_id:${payload.chosenPlaces[index - 1].place_id}` : `${payload.currentLocation.latitude},${payload.currentLocation.longitude}`;
+                var destination = `place_id:${val.place_id}`;
+                return placeService.betterFetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${config.apiKey}`)
+            })
+
+            var estimatedTimes = await Promise.all(promises) as any;
+            estimatedTimes = estimatedTimes.map((val: any) => {
+                if (val.routes.length && val.routes[0].legs && val.routes[0].legs.length && val.routes[0].legs[0].duration) {
+                    return val.routes[0].legs[0].duration;
+                } else return null;
+            })
+            const results = payload.chosenPlaces.map((val: any, index: number) => {
+                val.estimatedTime = estimatedTimes[index];
+                return val;
+            })
+            this.updateChosenPlaces({ results })
         }
     }
 });
@@ -190,7 +189,7 @@ const parsePolyline = (response: any): ICoord[] => {
 }
 
 const getCombo = (): string[] => {
-    return placeCombo[Math.floor(Math.random() * placeCombo.length) - 1];
+    return placeCombo[Math.floor(Math.random() * (placeCombo.length - 1))];
 }
 
 const getNumberOfBestPlace = (places: IPlaceFromGoogle[], currentLocation: ICoord, number = 1): IPlaceFromGoogle[] => {

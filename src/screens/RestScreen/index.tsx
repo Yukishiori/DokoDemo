@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StatusBar, Image, FlatList } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import AppText from '../../components/AppText';
 import { Transition } from 'react-navigation-fluid-transitions';
@@ -20,15 +20,27 @@ interface IProps extends NavigationScreenProps {
     updateCurrentLocation: (coord: ICoord) => void;
     clearChosenPlaces: () => void;
     getNearByPlaceUsingCombo: () => void;
+    displayName?: string;
 }
 class RestScreen extends Component<IProps> {
-
+    flatList: FlatList<any> = null;
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition(
-            (position: Position) => {
-                this.props.updateCurrentLocation(position.coords);
-            }
-        );
+        try {
+            navigator.geolocation.getCurrentPosition(
+                (position: Position) => {
+                    this.props.updateCurrentLocation(position.coords);
+                }
+            );
+            console.log(this.props, this.flatList)
+        } catch (err) {
+            
+        }
+    }
+
+
+    toThink = () => {
+        this.props.clearChosenPlaces();
+        this.props.navigation.navigate(ScreenNames.SearchScreen);
     }
 
     toRest = () => {
@@ -37,9 +49,46 @@ class RestScreen extends Component<IProps> {
         this.props.navigation.navigate(ScreenNames.MainMap);
     }
 
+    renderItem = ({ item, index }: any) => {
+        return index === 0
+            ? <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
+                <AppText style={styles.FirstText}>I WANT TO</AppText>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flex: 1 }} />
+                    <View style={{ flex: 3, alignItems: 'center' }}>
+                        <AppText style={styles.Text2}>REST</AppText>
+                    </View>
+                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }}
+                        onPress={() => { this.flatList.scrollToIndex({ index: 1 }) }}>
+                        <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.Button} onPress={this.toRest}>
+                    <AppText >MAKE A PLAN FOR ME</AppText>
+                </TouchableOpacity>
+            </LinearGradient>
+            : <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
+                <AppText style={styles.FirstText}>I want to</AppText>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }}
+                        onPress={() => { this.flatList.scrollToIndex({ index: 0 }) }}>
+                        <Icon name="arrow-left" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
+                    </TouchableOpacity>
+                    <View style={{ flex: 3, alignItems: 'center' }}>
+                        <AppText style={styles.Text2}>THINK</AppText>
+                    </View>
+                    <View style={{ flex: 1 }} />
+                </View>
+                <TouchableOpacity style={styles.Button} onPress={this.toThink}>
+                    <AppText >MAKE YOUR OWN PLAN</AppText>
+                </TouchableOpacity>
+            </LinearGradient>
+    }
+
+
+
     render() {
         return (
-        
             <Layout>
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
@@ -51,7 +100,7 @@ class RestScreen extends Component<IProps> {
                         <Right />
                     </LinearGradient>
                 </Header>
-                <Content>
+                <View style={{ flex: 1 }}>
                     <MapView initialRegion={{
                         latitude: 37.78825,
                         longitude: -122.4324,
@@ -62,28 +111,27 @@ class RestScreen extends Component<IProps> {
                         provider="google"
                         customMapStyle={config.mapStyle}
                     />
-                    {<LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
-                        <AppText style={styles.FirstText}>I WANT TO</AppText>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View style={{ flex: 1 }} />
-                            <View style={{ flex: 3, alignItems: 'center' }}>
-                                <AppText style={styles.Text2}>REST</AppText>
-                            </View>
-                            <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }}
-                                onPress={() => { this.props.navigation.navigate('Think') }}>
-                                <Icon name="arrow-right" type="SimpleLineIcons" style={{ fontSize: 40, color: 'white' }} />
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={styles.Button} onPress={this.toRest}>
-                            <AppText >MAKE A PLAN FOR ME</AppText>
-                        </TouchableOpacity>
-                    </LinearGradient>}
-                    <Image source={{
-                        uri: this.props.photoURL || DEFAULT_AVATAR
-                    }}
-                        style={styles.Circle}
-                    />
-                </Content>
+                    {
+                        <FlatList
+                            data={[1, 2]}
+                            renderItem={this.renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            pagingEnabled
+                            horizontal
+                            ref={flatList => { this.flatList = flatList; }}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    }
+                    {/* <View style={styles.User}>
+                        <Image source={{
+                            uri: this.props.photoURL || DEFAULT_AVATAR
+                        }}
+                            style={styles.Circle}
+                        />
+                        <AppText style={{ marginLeft: '5%', color: 'white', fontSize: 18 }}>{this.props.displayName ? this.props.displayName : this.props.email.split('@')[0]}</AppText>
+
+                    </View> */}
+                </View>
             </Layout >
         );
     }
