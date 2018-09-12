@@ -15,6 +15,7 @@ interface IProps {
     // photoReference: string;
     onPress: () => void;
     removeChosenPlace?: (item: { placeId: string }) => void;
+    onDelete?: () => void
 }
 
 interface IState {
@@ -34,6 +35,7 @@ class PlaceCard extends Component<IProps, IState> {
         // Alert.alert(
 
         // )
+        this.props.onDelete ? this.props.onDelete() : null;
         this.props.removeChosenPlace({ placeId: this.props.place.place_id });
     }
     render() {

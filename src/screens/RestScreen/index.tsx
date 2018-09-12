@@ -51,11 +51,11 @@ class RestScreen extends Component<IProps> {
     renderItem = ({ item, index }: any) => {
         return index === 0
             ? <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
-                <AppText style={styles.FirstText}>I WANT TO</AppText>
+                <AppText style={styles.FirstText}>I DON'T WANT TO</AppText>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View style={{ flex: 1 }} />
                     <View style={{ flex: 3, alignItems: 'center' }}>
-                        <AppText style={styles.Text2}>REST</AppText>
+                        <AppText style={styles.Text2}>THINK</AppText>
                     </View>
                     <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: 5 }}
                         onPress={() => { this.flatList.scrollToIndex({ index: 1 }) }}>
@@ -69,7 +69,7 @@ class RestScreen extends Component<IProps> {
                 </View>
             </LinearGradient>
             : <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.Content}>
-                <AppText style={styles.FirstText}>I want to</AppText>
+                <AppText style={styles.FirstText}>I WANT TO</AppText>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start', marginLeft: 5 }}
                         onPress={() => { this.flatList.scrollToIndex({ index: 0 }) }}>
@@ -82,7 +82,7 @@ class RestScreen extends Component<IProps> {
                 </View>
                 <View style={{ justifyContent: 'center', flex: 1 }}>
                     <TouchableOpacity style={styles.Button} onPress={this.toThink}>
-                        <AppText >MAKE YOUR OWN PLAN</AppText>
+                        <AppText >MAKE MY OWN PLAN</AppText>
                     </TouchableOpacity>
                 </View>
             </LinearGradient>

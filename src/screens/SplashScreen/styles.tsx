@@ -6,7 +6,6 @@ const BackgroundGradient: ViewStyle = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white'
 }
 
 const Logo: ImageStyle = {

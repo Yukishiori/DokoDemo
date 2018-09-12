@@ -60,12 +60,12 @@ class SplashScreen extends Component<IProps> {
 
   render() {
     return (
-      <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+      <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <View style={styles.BackgroundGradient}>
           <Image source={require('../../../assets/images/appLogo.png')} style={styles.Logo} />
-          <AppText style={{ fontSize: 30, color: gradient[0], marginTop: '5%' }}>Dokodemo</AppText>
+          <AppText style={{ fontSize: 30, color: 'white', marginTop: '5%' }}>Dokodemo</AppText>
         </View>
-      </View>
+      </LinearGradient>
     );
   }
 }

@@ -77,12 +77,14 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     renderPolyline = () => {
-        return this.props.polylineCoords
-            && <Polyline
-                coordinates={this.props.polylineCoords}
-                strokeWidth={6}
-                strokeColor={gradient[1]}
-            />
+        if (!this.state.editing) {
+            return this.props.polylineCoords
+                && <Polyline
+                    coordinates={this.props.polylineCoords}
+                    strokeWidth={6}
+                    strokeColor={gradient[1]}
+                />
+        }
     }
 
     renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
