@@ -195,7 +195,7 @@ class FinalScreen extends Component<IProps, IState> {
           onSwipe={() => this.props.toggleRatingModal(false)}
           swipeDirection="left"
         >
-          <View style={{ backgroundColor: 'white', paddingHorizontal: width * 0.1, borderRadius: 5 }}>
+          <View style={{ backgroundColor: 'white', paddingHorizontal: width * 0.1, borderRadius: 5, paddingVertical: height * 0.03 }}>
             <AppText style={{ fontSize: 16, color: '#f55555', textAlign: 'center', marginBottom: 10 }}>Enjoy your trip? Rate it!</AppText>
             <StarRating
               disabled={false}
