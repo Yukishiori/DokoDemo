@@ -47,7 +47,6 @@ const loginPageModel: ModelConfig<IProfileState> = createModel({
       _rootState: any
     ): Promise<void> {
       try {
-        console.log('payload', payload);
         firebase.firestore().collection('users').doc(payload.uid).set(
           payload.result,
           { merge: true }).then(() => {

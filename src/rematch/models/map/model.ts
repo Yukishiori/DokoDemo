@@ -9,13 +9,18 @@ import _ from 'lodash';
 import { IState } from '../../../components/Layout';
 import { IRootState } from '../../interface';
 import config from '../../../../config';
+import firebase from 'firebase';
+import { Alert } from 'react-native';
 
 const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     state: {
         chosenPlaces: [],
         polylineCoords: [],
         isBusy: false,
-        currentLocation: null
+        currentLocation: null,
+        checkedPlaces : [],
+        ratingModalVisible: false,
+        rating: 0
     },
     reducers: {
         addChosenPlace: (
@@ -88,6 +93,50 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 ...state,
                 chosenPlaces: payload.results
             }
+        },
+        addOrRemoveCheckedPlaces: (
+          state: IMapScreenState,
+          payload: {
+            placeId: string,
+            placeName: string
+          }
+        ): IMapScreenState => {
+            return {
+              ...state,
+              checkedPlaces: state.checkedPlaces.filter(val => val.placeId === payload.placeId).length ? 
+                state.checkedPlaces.filter(val => val.placeId !== payload.placeId) :
+                [...state.checkedPlaces, payload]
+            }
+        },
+        toggleRatingModal: (
+          state: IMapScreenState,
+          payload?: boolean
+        ): IMapScreenState => {
+          return {
+            ...state,
+            ratingModalVisible: payload || !state.ratingModalVisible
+          }
+        },
+        changeRating: (
+          state: IMapScreenState,
+          payload: number
+        ): IMapScreenState => {
+          return {
+            ...state,
+            rating: payload
+          }
+        },
+        submitSuccess: (
+          state: IMapScreenState
+        ): IMapScreenState => {
+          return {
+            ...state,
+            checkedPlaces: [],
+            chosenPlaces: [],
+            rating: 0,
+            isBusy: false,
+            ratingModalVisible: false
+          }
         }
     },
     effects: {
@@ -162,6 +211,29 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 return val;
             })
             this.updateChosenPlaces({ results })
+        },
+        async submitPlacesAndRating(payload: any, state: IRootState): Promise<void> {
+          this.updateBusyState(true);
+          try {
+            firebase.firestore().collection('history').doc().set(
+              payload,
+              { merge: true }).then(() => {
+                this.submitSuccess();
+                return payload;
+              });
+          } catch (err) {
+            Alert.alert(
+              'Something went wrong! Please try again.',
+              "",
+              [
+                { text: 'Cancel', onPress: () => { }, style: 'cancel' },
+                { text: 'OK', onPress: () => { } },
+              ],
+              { cancelable: false }
+            );
+            console.log(err);
+            this.updateBusyState(false);
+          }
         }
     }
 });

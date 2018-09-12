@@ -59,7 +59,8 @@ const GoButton: ViewStyle = {
   height: 40,
   alignItems: 'center',
   justifyContent: 'center',
-  marginTop: 20
+  marginTop: 20,
+  flexDirection: 'row'
 }
 
 const EstimateTime: TextStyle = {
@@ -90,5 +91,5 @@ export default {
     EstimateTime,
     BigScrollViewContainer,
     EstimateNumber,
-    HeaderContainer
+    HeaderContainer,
 }

@@ -53,7 +53,13 @@ export interface IMapScreenState {
     chosenPlaces: IPlaceFromGoogle[],
     polylineCoords: ICoord[],
     isBusy: boolean,
-    currentLocation: ICoord
+    currentLocation: ICoord,
+    checkedPlaces : {
+      placeId: string,
+      placeName: string
+    }[],
+    ratingModalVisible: boolean,
+    rating: number
 }
 
 export interface IAddChosenPlacePayload {

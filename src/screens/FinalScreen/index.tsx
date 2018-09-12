@@ -17,12 +17,24 @@ import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../components/AppText';
 import config from '../../../config';
 import ProgressBar from 'react-native-progress/Bar';
+import StarRating from 'react-native-star-rating';
 
 interface IProps extends NavigationScreenProps {
   chosenPlaces: any;
   currentLocation: any;
   getEstimatedTime: any;
   polylineCoords: any;
+  addOrRemoveCheckedPlaces: any;
+  checkedPlaces: any;
+  ratingModalVisible: boolean;
+  toggleRatingModal: (arg?: boolean) => void;
+  changeRating: (arg: number) => void;
+  rating: number;
+  uid: string;
+  email: string;
+  displayName: string;
+  isBusy: boolean;
+  submitPlacesAndRating: (arg: any) => void;
 }
 
 interface IState {
@@ -52,9 +64,25 @@ class FinalScreen extends Component<IProps, IState> {
     };
   }
 
+  submitRating = async () => {
+    await this.props.submitPlacesAndRating({
+      user: {
+        uid: this.props.uid,
+        email: this.props.email,
+        name: this.props.displayName
+      },
+      places: this.props.checkedPlaces,
+      rating: this.props.rating,
+      createTime: Date.now()
+    });
+    this.props.navigation.navigate(ScreenNames.RestScreen);
+  }
+
   renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
     return <FinalCard
       place={item}
+      onChecked={this.props.addOrRemoveCheckedPlaces}
+      checkedPlaces={this.props.checkedPlaces}
     />
   }
 
@@ -140,10 +168,10 @@ class FinalScreen extends Component<IProps, IState> {
           </View>
           <View style={styles.SumsContainer}>
             <View style={{marginHorizontal : 20, marginBottom: 20, marginTop: 5}}>
-              <ProgressBar progress={0.5} width={null} height={10} color="rgba(105, 224, 31, 1)"></ProgressBar>
+              <ProgressBar progress={this.props.checkedPlaces.length / this.props.chosenPlaces.length} width={null} height={10} color="rgba(105, 224, 31, 1)"></ProgressBar>
             </View>
-            <AppText style={styles.EstimateTime}>Total time : {this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
-            <TouchableOpacity style={{marginBottom: 5}}>
+            <AppText style={styles.EstimateTime}>Total moving time : {this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
+            <TouchableOpacity style={{marginBottom: 5}} onPress={() => this.props.toggleRatingModal(true)}>
               <LinearGradient style={styles.GoButton} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
                 <View>
                   <AppText style={{ color: 'white' }}>Done</AppText>
@@ -152,6 +180,33 @@ class FinalScreen extends Component<IProps, IState> {
             </TouchableOpacity>
           </View>
         </LinearGradient>
+        <Modal 
+          isVisible={this.props.ratingModalVisible}
+          onBackdropPress={() => this.props.toggleRatingModal(false)}
+          onSwipe={() => this.props.toggleRatingModal(false)}
+          swipeDirection="left"
+        >
+          <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 5 }}>
+            <AppText style={{fontSize: 16, color: '#f55555', textAlign: 'center', marginBottom: 10}}>Enjoy your trip? Rate it!</AppText>
+            <StarRating
+              disabled={false}
+              maxStars={5}
+              fullStarColor="#ffaa00"
+              rating={this.props.rating}
+              emptyStar={'ios-star-outline'}
+              fullStar={'ios-star'} 
+              iconSet={'Ionicons'}
+              selectedStar={(rating: number) => this.props.changeRating(rating)}
+            />
+            <TouchableOpacity style={{marginBottom: 5}} onPress={this.submitRating}>
+              <LinearGradient style={styles.GoButton} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
+                <View>
+                  <AppText style={{ color: 'white' }}>Submit</AppText>
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </Layout >
     );
 
@@ -160,13 +215,15 @@ class FinalScreen extends Component<IProps, IState> {
 
 const mapState = (rootState: IRootState) => {
   return {
-    ...rootState.mapScreenModel
+    ...rootState.mapScreenModel,
+    ...rootState.profileModel
   };
 };
 
 const mapDispatch = (rootReducer: any) => {
   return {
-    ...rootReducer.mapScreenModel
+    ...rootReducer.mapScreenModel,
+    ...rootReducer.profileModel
   };
 };
 
