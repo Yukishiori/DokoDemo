@@ -44,6 +44,7 @@ const itemVisiblePercentThreshold = {
 
 class SearchScreen extends Component<IProps, IState> {
   map: MapView = null;
+  markers: Marker[] = [];
   constructor(props: any) {
     super(props);
     this.state = {
@@ -60,30 +61,53 @@ class SearchScreen extends Component<IProps, IState> {
     this.setState({
       text
     });
-    // placeService.getAutoComplete(text, this.props.currentLocation, 1500, this.state.sessionToken)
-    //   .then(predictions =>
-    //     this.setState({
-    //       predictions
-    //     }))
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
+    placeService.getAutoComplete(text, this.props.currentLocation, 1500, this.state.sessionToken)
+      .then(predictions =>
+        this.setState({
+          predictions
+        }))
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   componentDidMount() {
     DeviceEventEmitter.removeAllListeners('hardwareBackPress');
     DeviceEventEmitter.addListener('hardwareBackPress', () => {
-      this.props.chosenPlaces && this.props.chosenPlaces.length > 0
-        ? this.props.navigation.navigate(ScreenNames.MainMap)
-        : this.props.navigation.goBack();
+      this.goBack()
     });
   }
 
+  goBack = () => {
+    // if (!this.state.blur) {
+    //   this.setState({ blur: true })
+    // } else {
+    this.props.chosenPlaces && this.props.chosenPlaces.length > 0
+      ? this.props.navigation.navigate(ScreenNames.MainMap)
+      : this.props.navigation.goBack()
+    // }
+  }
+
+  renderPrediction = ({ item }: { item: string }) =>
+    <TouchableOpacity onPress={() => {
+      this.setState({
+        text: item
+      }, () => {
+        this.search()
+      })
+    }}>
+      <View style={styles.PredictionCard}>
+        <AppText>{item}</AppText>
+      </View>
+    </TouchableOpacity>
+
+
   search = () => {
     this.setState({
-      loading: true
+      loading: true,
+      blur: true
     })
-    placeService.getPlaceFromKeyword(this.props.currentLocation, this.state.text).then((res: IPlaceFromGoogle[]) => {
+    placeService.getPlaceFromKeyword(this.props.currentLocation, this.props.chosenPlaces.length, this.state.text).then((res: IPlaceFromGoogle[]) => {
       this.setState(
         {
           searchedLocations: res,
@@ -91,7 +115,6 @@ class SearchScreen extends Component<IProps, IState> {
         },
         () => {
           if (this.state.searchedLocations && this.state.searchedLocations.length > 0) {
-
             this.map.fitToCoordinates(this.state.searchedLocations.map(
               searchedLocation => ({
                 latitude: searchedLocation.geometry.location.lat,
@@ -101,17 +124,23 @@ class SearchScreen extends Component<IProps, IState> {
                 edgePadding: { top: 50, right: 30, bottom: 50, left: 30 }
               })
           } else {
-            // Toast.show({ text: "Find no place match this keyword", duration: 500 })
+            Toast.show({
+              text: "Find nothing match this place",
+              buttonText: "Okay",
+              duration: 3000,
+              type: "danger",
+              textStyle: { fontFamily: 'Comfortaa-Bold' }
+            })
           }
-
         }
       )
     })
   }
 
   renderMarker = () => {
-    return this.state.searchedLocations.map(searchedLocation => {
+    return this.state.searchedLocations.map((searchedLocation, index) => {
       return <Marker
+        ref={marker => { this.markers[index] = marker }}
         key={searchedLocation.place_id}
         title={searchedLocation.name}
         onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, {
@@ -142,6 +171,7 @@ class SearchScreen extends Component<IProps, IState> {
       if (viewableItems[0].index > -1) {
         const { lat, lng } = this.state.searchedLocations[viewableItems[0].index].geometry.location;
         this.map.animateToCoordinate({ latitude: lat, longitude: lng });
+        this.markers[viewableItems[0].index].showCallout()
       }
     } catch (err) {
       console.log(err)
@@ -175,25 +205,32 @@ class SearchScreen extends Component<IProps, IState> {
           viewabilityConfig={itemVisiblePercentThreshold}
         />
         <View style={styles.Header} >
-          <TouchableOpacity style={{ marginLeft: '3%' }}
-            onPress={() => this.props.chosenPlaces && this.props.chosenPlaces.length > 0
-              ? this.props.navigation.navigate(ScreenNames.MainMap)
-              : this.props.navigation.goBack()} >
-            <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: gradient[1], fontSize: 20 }} />
-          </TouchableOpacity>
-          <TextInput style={[styles.TextInput, { fontFamily: 'Comfortaa-Regular', color: gradient[1] }]}
-            onChangeText={this.onTextChange}
-            underlineColorAndroid="rgba(0,0,0,0)"
-            onSubmitEditing={this.search}
-            placeholder="Where to go..."
-            onBlur={() => { this.setState({ blur: true }) }}
-            onFocus={() => this.setState({ blur: false })}
-          />
-          {!this.state.loading
-            ? <TouchableOpacity style={{ width: '5%' }}>
-              <Icon name="ios-search" style={{ color: gradient[1], fontSize: 15 }} type="Ionicons" />
+          <View style={[styles.SearchBar, (this.state.predictions.length > 0 && !this.state.blur) ? { borderBottomColor: gradient[1], borderBottomWidth: 1.5 } : null]}>
+            <TouchableOpacity style={{ marginLeft: '3%' }}
+              onPress={() => { this.goBack() }} >
+              <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: gradient[1], fontSize: 20 }} />
             </TouchableOpacity>
-            : <ActivityIndicator color={gradient[1]} size="small" />}
+            <TextInput style={[styles.TextInput, { fontFamily: 'Comfortaa-Regular', color: gradient[1] }]}
+              onChangeText={this.onTextChange}
+              underlineColorAndroid="rgba(0,0,0,0)"
+              onSubmitEditing={this.search}
+              placeholder="Where to go..."
+              // onBlur={() => { this.setState({ blur: true }) }}
+              value={this.state.text}
+              onFocus={() => this.setState({ blur: false })}
+            />
+            {!this.state.loading
+              ? <TouchableOpacity style={{ width: '5%' }}>
+                <Icon name="ios-search" style={{ color: gradient[1], fontSize: 15 }} type="Ionicons" />
+              </TouchableOpacity>
+              : <ActivityIndicator color={gradient[1]} size="small" />}
+          </View>
+          {!this.state.blur
+            && <FlatList
+              data={this.state.predictions}
+              renderItem={this.renderPrediction}
+              keyExtractor={(item, index) => index.toString()} />
+          }
         </View>
 
       </Layout >

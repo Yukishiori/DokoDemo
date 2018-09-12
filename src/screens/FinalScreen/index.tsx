@@ -74,47 +74,48 @@ class FinalScreen extends Component<IProps, IState> {
   }
 
   render() {
-
     return (
-      <View style={styles.BigContainer}>
-        <Header style={styles.HeaderContainer}>
-          <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
-            <Left style={{ flex: 1, alignItems: 'flex-start' }}>
-              <Button transparent onPress={() =>
-                this.props.navigation.navigate(ScreenNames.MainMap)
-              } style={{ justifyContent: 'flex-start' }}>
-                <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />
-              </Button>
-            </Left>
-            <View style={{ flex: 1 }} />
-          </LinearGradient>
-        </Header>
-        <ScrollView contentContainerStyle={styles.BigScrollViewContainer}>
-          <LinearGradient style={styles.BigLinearGradient} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
-            <View>
+      <Layout>
+        <View style={styles.BigContainer}>
+          <Header style={styles.HeaderContainer}>
+            <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
+              <Left style={{ flex: 1, alignItems: 'flex-start' }}>
+                <Button transparent onPress={() =>
+                  this.props.navigation.navigate(ScreenNames.MainMap)
+                } style={{ justifyContent: 'flex-start' }}>
+                  <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />
+                </Button>
+              </Left>
+              <View style={{ flex: 1 }} />
+            </LinearGradient>
+          </Header>
+          <ScrollView contentContainerStyle={styles.BigScrollViewContainer}>
+            <LinearGradient style={styles.BigLinearGradient} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
               <View>
-                <FlatList
-                  data={this.props.chosenPlaces}
-                  renderItem={this.renderItem}
-                  keyExtractor={(_item, index) => index.toString()}
-                  showsHorizontalScrollIndicator={false}
-                />
+                <View>
+                  <FlatList
+                    data={this.props.chosenPlaces}
+                    renderItem={this.renderItem}
+                    keyExtractor={(_item, index) => index.toString()}
+                    showsHorizontalScrollIndicator={false}
+                  />
+                </View>
+                <View style={styles.SumsContainer}>
+                  <AppText style={styles.EstimateTime}>Total estimate moving time : </AppText>
+                  <AppText style={styles.EstimateNumber}>{this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
+                  <TouchableOpacity>
+                    <LinearGradient style={styles.GoButton} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
+                      <View>
+                        <AppText style={{ color: 'white' }}>Let's go</AppText>
+                      </View>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={styles.SumsContainer}>
-                <AppText style={styles.EstimateTime}>Total estimate moving time : </AppText>
-                <AppText style={styles.EstimateNumber}>{this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
-                <TouchableOpacity>
-                  <LinearGradient style={styles.GoButton} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
-                    <View>
-                      <AppText style={{ color: 'white' }}>Let's go</AppText>
-                    </View>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </LinearGradient>
-        </ScrollView >
-      </View >
+            </LinearGradient>
+          </ScrollView >
+        </View >
+      </Layout>
     );
 
   }

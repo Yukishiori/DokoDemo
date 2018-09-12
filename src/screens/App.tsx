@@ -18,18 +18,21 @@ import SearchScreen from './SearchScreen';
 import FinalScreen from './FinalScreen';
 import SideBar from '../components/SideBar';
 import ProfileScreen from './ProfileScreen';
+import { Root } from 'native-base';
 // import Discuss
 
 bootstrapFirebase();
 export default class App extends Component {
-  
-    render() {
-        return (
-            <Provider store={store}>
-                <SwitchNavigation />
-            </Provider>
-        );
-    }
+
+  render() {
+    return (
+      <Provider store={store}>
+        <Root>
+          <SwitchNavigation />
+        </Root>
+      </Provider>
+    );
+  }
 }
 
 

@@ -44,7 +44,7 @@ const itemVisiblePercentThreshold = {
 }
 class MainMapWithCardScreen extends Component<IProps, IState> {
     map: MapView = null;
-
+    markers: Marker[] = [];
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -58,22 +58,8 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     componentDidMount() {
-        // BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
         DeviceEventEmitter.removeAllListeners('hardwareBackPress');
         DeviceEventEmitter.addListener('hardwareBackPress', () => {
-            // Alert.alert(
-            //   'Warning',
-            //   'Do you want to close the app ? ',
-            //   [
-            //     { text: 'Cancel', style: 'cancel' },
-            //     {
-            //       text: 'OK', onPress: () => {
-            //         BackHandler.exitApp();
-            //       },
-            //     },
-            //   ],
-            //   { cancelable: false }
-            // );
             this.props.navigation.goBack();
         });
     }
@@ -81,6 +67,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     renderMarker = () => {
         return this.props.chosenPlaces.map((chosenPlace, index) =>
             <Marker
+                ref={marker => { this.markers[index] = marker }}
                 coordinate={{
                     longitude: chosenPlace.geometry.location.lng,
                     latitude: chosenPlace.geometry.location.lat
@@ -88,18 +75,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             />
         )
     }
-
-    // componentWillReceiveProps(nextProps: IProps) {
-    //     if (nextProps.isBusy === false && this.props.isBusy && this.map) {
-    //         this.map.fitToCoordinates(
-    //             this.props.chosenPlaces.map((chosenPlace, index) =>
-    //                 ({
-    //                     longitude: chosenPlace.geometry.location.lng,
-    //                     latitude: chosenPlace.geometry.location.lat
-    //                 })
-    //             ))
-    //     }
-    // }
 
     renderPolyline = () => {
         return this.props.polylineCoords
@@ -121,6 +96,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             if (viewableItems[0].index > -1) {
                 const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
                 this.map.animateToCoordinate({ latitude: lat, longitude: lng });
+                this.markers[viewableItems[0].index].showCallout()
             }
         } catch (err) {
             console.log(err)

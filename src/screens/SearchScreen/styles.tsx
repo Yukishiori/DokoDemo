@@ -15,19 +15,12 @@ const Panel: ViewStyle = {
 }
 
 
-const Header: ViewStyle = {
+const SearchBar: ViewStyle = {
   width: width * 0.9,
   flexDirection: 'row',
-  position: 'absolute',
   height: height * 0.07,
-  top: Platform.OS === 'ios' ? (height === 812 ? 60 : 50) : 30,
-  left: '5%',
-  borderRadius: 10,
-  borderWidth: 3,
-  borderColor: gradient[1],
-  backgroundColor: 'white',
   // justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
 };
 
 const SearchPanel: ViewStyle = {
@@ -52,26 +45,29 @@ const Bar: ViewStyle = {
   width: width * 0.8,
 }
 
-const SearchBar: ViewStyle = {
-  flexDirection: 'row',
-  justifyContent: 'space-between', alignItems: 'center',
-}
-
 const PredictionCard: ViewStyle = {
-  width: width * 0.8,
-  marginLeft: width * 0.1,
+  width: width * 0.9,
+  // marginLeft: width * 0.1,
   justifyContent: 'center',
   paddingVertical: height * 0.01,
-  backgroundColor: 'white',
   paddingHorizontal: width * 0.05,
-  borderWidth: 1,
-  borderColor: 'gray'
 }
 
 const PredictionList: ViewStyle = {
   position: 'absolute',
   top: height * 0.13,
 
+}
+
+const Header: ViewStyle = {
+  flex: 1,
+  top: Platform.OS === 'ios' ? (height === 812 ? 60 : 50) : 30,
+  left: '5%',
+  position: 'absolute',
+  borderColor: gradient[1],
+  backgroundColor: 'white',
+  borderRadius: 10,
+  borderWidth: 3,
 }
 
 export default {

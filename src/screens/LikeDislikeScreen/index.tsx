@@ -43,29 +43,15 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
 
         DeviceEventEmitter.removeAllListeners('hardwareBackPress');
         DeviceEventEmitter.addListener('hardwareBackPress', () => {
-            // Alert.alert(
-            //   'Warning',
-            //   'Do you want to close the app ? ',
-            //   [
-            //     { text: 'Cancel', style: 'cancel' },
-            //     {
-            //       text: 'OK', onPress: () => {
-            //         BackHandler.exitApp();
-            //       },
-            //     },
-            //   ],
-            //   { cancelable: false }
-            // );
             this.props.navigation.navigate(ScreenNames.MainMap);
         });
         placeService.getPlaceDetail(chosenPlace.place_id)
             .then(placeDetail => {
                 this.setState({
-                    placeDetail
-                })
-                this.setState({
+                    placeDetail,
                     isFavorite: placeDetail.favoriteBy[firebase.auth().currentUser.uid] ? true : false
                 })
+                console.log(placeDetail)
             })
             .catch(err => {
                 console.log(err)
@@ -125,7 +111,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                         <Icon name="location" type="Entypo" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Address: </AppText>
                                     </View>
-                                    <AppText style={styles.BigText}>{this.state.placeDetail.vicinity}</AppText>
+                                    <AppText style={styles.BigText}>{this.state.placeDetail.formatted_address}</AppText>
                                     <View style={styles.IconText}>
                                         <Icon name="address-book" type="FontAwesome" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Contact: </AppText>

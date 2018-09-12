@@ -49,7 +49,7 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
 
     renderComments = () => {
         const { placeDetail } = this.props.navigation.state.params as { placeDetail: IPlaceDetailResult };
-        const comments = [...placeDetail.reviews.filter(review => review.text), ...this.state.comments.filter(comment => comment.text)]
+        const comments = [...placeDetail.reviews ? placeDetail.reviews.filter(review => review.text) : [], ...this.state.comments.filter(comment => comment.text)]
         return comments.map((item, index) => {
             return <ReviewCard key={index} text={item.text} direction={index % 2 === 0 ? 'right' : 'left'} />
         })

@@ -1,7 +1,13 @@
 import { createModel, ModelConfig, getDispatch } from '@rematch/core';
 import { IMapScreenState, IPlaceFromGoogle, IAddChosenPlacePayload, IUpdatePolylineCoordsPayload } from './interface';
 import placeService from '../../../service/place.service';
-import placeCombo from '../../../combo';
+import {
+    drink,
+    entertain,
+    heavyFood,
+    desert,
+    quietPlace
+} from '../../../combo';
 import moment from 'moment';
 import { ICoord } from '../../../service/interface.service';
 import haversine from 'haversine';
@@ -93,21 +99,24 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     effects: {
         async getNearByPlaceUsingCombo(something, state): Promise<void> {
             const placeCombo = getCombo();
-            // const chosenPlacesArray = await Promise.all(placeCombo.map(async (currentValue) => {
-
-            //     return bestPlace
-            // }));
             this.updateBusyState(true);
-            await this.getAnotherPlaceFromThisPlace({ placeCombo, location: state.mapScreenModel.currentLocation, index: 0 });
+            await this.getAnotherPlaceFromThisPlace({ placeCombo, index: 0 });
             await this.getDirection()
         },
-        async getAnotherPlaceFromThisPlace({ placeCombo, location, index }): Promise<void> {
+        async getAnotherPlaceFromThisPlace({ placeCombo, index }, state): Promise<void> {
             try {
                 if (placeCombo[index]) {
-                    const resultPlaces = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.latitude},${location.longitude}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&rankby=distance&opennow=true&keyword=${encodeURIComponent(placeCombo[index])}&language=vi`)).results;
-                    const bestPlace = getNumberOfBestPlace(
-                        resultPlaces,
-                        location, 1);
+                    const prevPoint = state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1] as IPlaceFromGoogle
+                    const origin = index === 0
+                        ? `${state.mapScreenModel.currentLocation.latitude},${state.mapScreenModel.currentLocation.longitude}`
+                        : `${prevPoint.geometry.location.lat},${prevPoint.geometry.location.lng}`
+                    const search = placeCombo[index].split('_')[1] ? `types=${placeCombo[index]}` : `keyword=${placeCombo[index]}`
+                    const resultPlaces: IPlaceFromGoogle[] = (await placeService.betterFetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${origin}&key=AIzaSyBiBhfUvyVhrkvEtUbMavlUhmSO7DRCAKQ&open_now=true&rankby=distance&${search}&language=vi`)).results;
+                    const bestPlace = await getNumberOfBestPlace(
+                        resultPlaces.splice(0, 5),
+                        index === 0
+                            ? state.mapScreenModel.currentLocation
+                            : state.mapScreenModel.chosenPlaces[state.mapScreenModel.chosenPlaces.length - 1].place_id, 1);
                     if (bestPlace && bestPlace[0]) {
                         let firstImageUrl = '';
                         if (bestPlace[0].photos && bestPlace[0].photos[0]) {
@@ -123,7 +132,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                         })
                     } else {
                         await this.getAnotherPlaceFromThisPlace({
-                            placeCombo, location, index: index + 1
+                            placeCombo, index: index + 1
                         })
                     }
                 }
@@ -168,9 +177,9 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
 
 
 const parsePolyline = (response: any): ICoord[] => {
-    return _.flatten(response.routes[0].legs.map(leg => {
+    return _.flatten(response.routes[0].legs.map((leg: any) => {
         const route: ICoord[] = [];
-        leg.steps.forEach((step, index) => {
+        leg.steps.forEach((step: any, index: any) => {
             route.push({
                 latitude: step.start_location.lat,
                 longitude: step.start_location.lng
@@ -187,21 +196,42 @@ const parsePolyline = (response: any): ICoord[] => {
 }
 
 const getCombo = (): string[] => {
-    return placeCombo[Math.floor(Math.random() * (placeCombo.length - 1))];
+    let combo: string[] = []
+    const hour = moment().get('hour')
+    if (hour < 6) {
+        combo.push(getRandomItem(quietPlace));
+        combo.push(getRandomItem(drink));
+    } else if (hour < 12) {
+        combo.push(getRandomItem(drink));
+        combo.push(getRandomItem(heavyFood));
+        combo.push(getRandomItem(entertain));
+    } else if (hour < 20) {
+        combo.push(getRandomItem(heavyFood));
+        combo.push(getRandomItem(drink));
+        combo.push(getRandomItem(entertain));
+        combo.push(getRandomItem(desert));
+    } else {
+        combo.push(getRandomItem(drink));
+        combo.push(getRandomItem(quietPlace));
+    }
+    return combo
 }
 
-const getNumberOfBestPlace = (places: IPlaceFromGoogle[], currentLocation: ICoord, number = 1): IPlaceFromGoogle[] => {
+const getRandomItem = (array: any[]) => {
+    return array[Math.floor(Math.random() * (array.length))]
+}
+
+const getNumberOfBestPlace = async (places: IPlaceFromGoogle[], currentLocation: any, number = 1): Promise<IPlaceFromGoogle[]> => {
     const returnArray: IPlaceFromGoogle[] = [];
+    const placesDistance: number[] = await Promise.all(places.map(async (place) => {
+        return await placeService.getDistance(currentLocation, place.place_id)
+    }))
     for (let i = 0; i < number; i++) {
-        const placeScores: number[] = places.map(place =>
-            (1 / haversine({
-                latitude: place.geometry.location.lat,
-                longitude: place.geometry.location.lng
-            }, currentLocation, { unit: 'km' })) * (place.rating + 1)
+        const placeScores: number[] = places.map((place, index) =>
+            (Math.max(...placesDistance) / (placesDistance[index])) * (place.rating + 1)
         )
         returnArray.push(...places.splice(placeScores.indexOf(Math.max(...placeScores)), 1));
     }
-
     return returnArray;
 }
 
