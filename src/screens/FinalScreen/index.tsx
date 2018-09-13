@@ -167,7 +167,7 @@ class FinalScreen extends Component<IProps, IState> {
           </MapView>
         </View>
         <LinearGradient style={styles.BigLinearGradient} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
-          <View style={{ flex: 1.3 }}>
+          <View style={{ flex: 2 }}>
             <FlatList
               data={this.props.chosenPlaces}
               renderItem={this.renderItem}
@@ -177,7 +177,7 @@ class FinalScreen extends Component<IProps, IState> {
           </View>
           <View style={styles.SumsContainer}>
             <AppText style={styles.EstimateTime}>Total moving time : {this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
               <View style={{ flex: 2 }}>
                 <ProgressBar progress={this.props.checkedPlaces.length / this.props.chosenPlaces.length} width={null} height={10} color={gradient[1]} />
               </View>

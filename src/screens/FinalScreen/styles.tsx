@@ -19,7 +19,7 @@ const Header: ViewStyle = {
 const BigContainer: ViewStyle = {
   minHeight: '100%',
   marginTop: Platform.OS === 'ios' ? 20 : 0,
-  // marginBottom: -20
+  marginBottom: 20
 }
 
 const BigScrollViewContainer: ViewStyle = {
@@ -45,6 +45,7 @@ const ShowSchedule: ViewStyle = {
 }
 
 const SumsContainer: ViewStyle = {
+  flex: 1,
   paddingHorizontal: width * 0.05,
   width: width * 0.9,
   borderRadius: 15,
@@ -53,7 +54,8 @@ const SumsContainer: ViewStyle = {
   justifyContent: 'space-around',
   alignSelf: 'center',
   paddingVertical: height * 0.02,
-  marginVertical: height * 0.02
+  marginTop: height * 0.02,
+  marginBottom: height * 0.05
 }
 
 const GoButton: ViewStyle = {
