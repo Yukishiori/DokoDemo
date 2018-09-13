@@ -39,11 +39,11 @@ class FinalCard extends Component<IProps, IState> {
 
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
+      <View >
         <View style={{ alignItems: 'flex-start', paddingVertical: height * 0.01, marginVertical: height * 0.01, width: '100%', paddingHorizontal: 30 }}>
           {this.props.place.estimatedTime ? <AppText style={{ color: 'white', fontSize: 16 }}>{`${this.props.place.estimatedTime.text} moving`}</AppText> : <View></View>}
         </View>
-        <View style={styles.TextContainer}>
+        <TouchableOpacity style={styles.TextContainer} onPress={this.props.onPress}>
           <CheckBox checked={!!this.props.checkedPlaces.filter((val: any) => val.placeId === this.props.place.place_id).length} onPress={this.handlePress} color={gradient[1]}></CheckBox>
           <View style={{ flex: 1, alignItems: 'flex-start', marginLeft: 20 }}>
             <AppText style={styles.Text}>{this.props.place.name}</AppText>
@@ -51,8 +51,8 @@ class FinalCard extends Component<IProps, IState> {
           <View style={{ paddingHorizontal: 10, minWidth: 70 }}>
             {this.props.checkedPlaces.filter((val: any) => val.placeId === this.props.place.place_id).length ? <AppText>1h40m</AppText> : <View></View>}
           </View>
-        </View>
-      </TouchableOpacity >
+        </TouchableOpacity>
+      </View >
     );
   }
 }

@@ -24,7 +24,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         polylineCoords: [],
         isBusy: false,
         currentLocation: null,
-        checkedPlaces : [],
+        checkedPlaces: [],
         ratingModalVisible: false,
         rating: 0
     },
@@ -103,48 +103,48 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             }
         },
         addOrRemoveCheckedPlaces: (
-          state: IMapScreenState,
-          payload: {
-            placeId: string,
-            placeName: string
-          }
+            state: IMapScreenState,
+            payload: {
+                placeId: string,
+                placeName: string
+            }
         ): IMapScreenState => {
             return {
-              ...state,
-              checkedPlaces: state.checkedPlaces.filter(val => val.placeId === payload.placeId).length ? 
-                state.checkedPlaces.filter(val => val.placeId !== payload.placeId) :
-                [...state.checkedPlaces, payload]
+                ...state,
+                checkedPlaces: state.checkedPlaces.filter(val => val.placeId === payload.placeId).length ?
+                    state.checkedPlaces.filter(val => val.placeId !== payload.placeId) :
+                    [...state.checkedPlaces, payload]
             }
         },
         toggleRatingModal: (
-          state: IMapScreenState,
-          payload?: boolean
+            state: IMapScreenState,
+            payload?: boolean
         ): IMapScreenState => {
-          return {
-            ...state,
-            ratingModalVisible: payload || !state.ratingModalVisible
-          }
+            return {
+                ...state,
+                ratingModalVisible: payload || !state.ratingModalVisible
+            }
         },
         changeRating: (
-          state: IMapScreenState,
-          payload: number
+            state: IMapScreenState,
+            payload: number
         ): IMapScreenState => {
-          return {
-            ...state,
-            rating: payload
-          }
+            return {
+                ...state,
+                rating: payload
+            }
         },
         submitSuccess: (
-          state: IMapScreenState
+            state: IMapScreenState
         ): IMapScreenState => {
-          return {
-            ...state,
-            checkedPlaces: [],
-            chosenPlaces: [],
-            rating: 0,
-            isBusy: false,
-            ratingModalVisible: false
-          }
+            return {
+                ...state,
+                checkedPlaces: [],
+                chosenPlaces: [],
+                rating: 0,
+                isBusy: false,
+                ratingModalVisible: false
+            }
         }
     },
     effects: {
@@ -224,27 +224,27 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             this.updateChosenPlaces({ results })
         },
         async submitPlacesAndRating(payload: any, state: IRootState): Promise<void> {
-          this.updateBusyState(true);
-          try {
-            firebase.firestore().collection('history').doc().set(
-              payload,
-              { merge: true }).then(() => {
-                this.submitSuccess();
-                return payload;
-              });
-          } catch (err) {
-            Alert.alert(
-              'Something went wrong! Please try again.',
-              "",
-              [
-                { text: 'Cancel', onPress: () => { }, style: 'cancel' },
-                { text: 'OK', onPress: () => { } },
-              ],
-              { cancelable: false }
-            );
-            console.log(err);
-            this.updateBusyState(false);
-          }
+            this.updateBusyState(true);
+            try {
+                firebase.firestore().collection('history').doc().set(
+                    payload,
+                    { merge: true }).then(() => {
+                        this.submitSuccess();
+                        return payload;
+                    });
+            } catch (err) {
+                Alert.alert(
+                    'Something went wrong! Please try again.',
+                    "",
+                    [
+                        { text: 'Cancel', onPress: () => { }, style: 'cancel' },
+                        { text: 'OK', onPress: () => { } },
+                    ],
+                    { cancelable: false }
+                );
+                console.log(err);
+                this.updateBusyState(false);
+            }
         }
     }
 });
@@ -285,6 +285,7 @@ const getCombo = (): string[] => {
         combo.push(getRandomItem(entertain));
         combo.push(getRandomItem(desert));
     } else {
+        combo.push(getRandomItem(desert));
         combo.push(getRandomItem(drink));
         combo.push(getRandomItem(quietPlace));
     }

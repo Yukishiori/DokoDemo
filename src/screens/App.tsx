@@ -44,7 +44,8 @@ const AuthStack = FluidNavigator({
   Login: LoginScreen,
 });
 
-const MenuStack = createDrawerNavigator(
+
+const FluidStack = FluidNavigator(
   {
     Rest: RestScreen,
     Think: ThinkScreen,
@@ -54,11 +55,18 @@ const MenuStack = createDrawerNavigator(
     Discuss: DiscussAndDetailScreen,
     Search: SearchScreen,
     Final: FinalScreen
+  }
+)
+
+const MenuStack = createDrawerNavigator(
+  {
+    FluidStack: FluidStack
   },
   {
     contentComponent: props => <SideBar {...props} />
   }
 );
+
 
 const SwitchNavigation = createSwitchNavigator(
   {

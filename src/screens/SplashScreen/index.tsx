@@ -50,7 +50,7 @@ class SplashScreen extends Component<IProps> {
               { cancelable: false }
             )
           }
-          setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+          setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)
         })
       } else {
         setTimeout(() => this.props.navigation.navigate(ScreenNames.LoginScreen), 500)
