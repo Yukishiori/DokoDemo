@@ -26,6 +26,9 @@ interface IProps extends NavigationScreenProps {
     isBusy: boolean;
     currentLocation: ICoord;
     getDirection: () => void;
+    getEstimatedTime: any;
+    storeData: (arg: any) => void;
+    checkedPlaces: any;
 }
 
 interface IState {
@@ -149,8 +152,16 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                     &&
                     <TouchableOpacity
                         onPress={() => {
-
+                            this.props.getEstimatedTime({ chosenPlaces: this.props.chosenPlaces, currentLocation: this.props.currentLocation });
                             this.props.getDirection();
+                            this.props.storeData({
+                                key: 'chosen-places',
+                                value: this.props.chosenPlaces
+                            });
+                            this.props.storeData({
+                                key: 'checked-places',
+                                value: this.props.checkedPlaces
+                            });
                             this.props.navigation.navigate(ScreenNames.FinalScreen);
                         }}
                         style={{

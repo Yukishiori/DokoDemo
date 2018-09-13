@@ -93,6 +93,8 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 ...state,
                 chosenPlaces: [],
                 polylineCoords: [],
+                checkedPlaces: [],
+
             }
         },
         updateChosenPlaces: (

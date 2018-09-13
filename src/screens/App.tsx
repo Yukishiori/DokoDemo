@@ -35,7 +35,7 @@ export default class App extends Component {
   }
 }
 
-const FluidStack = createStackNavigator(
+const FluidStack = FluidNavigator(
   {
     Splash: SplashScreen,
     Login: LoginScreen,
@@ -51,6 +51,9 @@ const FluidStack = createStackNavigator(
   },
   {
     headerMode: 'none',
+    navigationOptions: {
+        gesturesEnabled: false,
+    },
   }
 )
 

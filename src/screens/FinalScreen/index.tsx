@@ -23,20 +23,19 @@ import { Transition } from 'react-navigation-fluid-transitions';
 interface IProps extends NavigationScreenProps {
   chosenPlaces: any;
   currentLocation: any;
-  getEstimatedTime: any;
   polylineCoords: any;
   addOrRemoveCheckedPlaces: any;
   checkedPlaces: any;
   ratingModalVisible: boolean;
   toggleRatingModal: (arg?: boolean) => void;
   changeRating: (arg: number) => void;
-  storeData: (arg: any) => void;
   rating: number;
   uid: string;
   email: string;
   displayName: string;
   isBusy: boolean;
   submitPlacesAndRating: (arg: any) => void;
+  storeData: any
 }
 
 interface IState {
@@ -122,18 +121,9 @@ class FinalScreen extends Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.props.getEstimatedTime({ chosenPlaces: this.props.chosenPlaces, currentLocation: this.props.currentLocation });
     DeviceEventEmitter.removeAllListeners('hardwareBackPress');
     DeviceEventEmitter.addListener('hardwareBackPress', () => {
       this.props.navigation.navigate(ScreenNames.MainMap)
-    });
-    this.props.storeData({
-      key: 'chosen-places',
-      value: this.props.chosenPlaces
-    });
-    this.props.storeData({
-      key: 'checked-places',
-      value: this.props.checkedPlaces
     });
   }
 
@@ -223,7 +213,7 @@ class FinalScreen extends Component<IProps, IState> {
             <AppText style={styles.EstimateTime}>Total moving time : {this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
               <View style={{ flex: 2 }}>
-                <ProgressBar progress={this.props.checkedPlaces.length / this.props.chosenPlaces.length} width={null} height={10} color={gradient[1]} />
+                {this.props.chosenPlaces.length > 0 && <ProgressBar progress={this.props.checkedPlaces.length / this.props.chosenPlaces.length} width={null} height={10} color={gradient[1]} />}
               </View>
               <TouchableOpacity style={{ flex: 1 }} onPress={() => this.props.toggleRatingModal(true)}>
                 <LinearGradient style={styles.GoButton} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} >
