@@ -31,7 +31,7 @@ interface IProps extends NavigationScreenProps {
 class SplashScreen extends Component<IProps> {
   componentDidMount() {
     // firebase.auth().signOut();
-    
+
     // this.props.getData('checked-places');
 
     firebase.auth().onAuthStateChanged(res => {
@@ -63,25 +63,25 @@ class SplashScreen extends Component<IProps> {
           this.props.getData('chosen-places').then((chosenPlaces) => {
             if (chosenPlaces) {
               this.props.getData('checked-places').then((checkedPlaces) => {
-                if(checkedPlaces) {
+                if (checkedPlaces) {
                   this.props.persistChosenPlaces(chosenPlaces);
                   this.props.persistCheckedPlaces(checkedPlaces);
                   navigator.geolocation.getCurrentPosition(
                     (position: Position) => {
-                      this.props.updateCurrentLocation(position.coords); 
+                      this.props.updateCurrentLocation(position.coords);
                       this.props.navigation.navigate(ScreenNames.FinalScreen);
                     }
                   );
                 } else {
-                  setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)        
+                  setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
                 }
               })
             } else {
-              setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)
+              setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
             }
           }).catch((_err) => {
             console.log(_err);
-            setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)
+            setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
           });
         })
       } else {

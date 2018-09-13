@@ -92,7 +92,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             return {
                 ...state,
                 chosenPlaces: [],
-                polylineCoords: []
+                polylineCoords: [],
             }
         },
         updateChosenPlaces: (
@@ -149,22 +149,22 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             }
         },
         persistChosenPlaces: (
-          state: IMapScreenState,
-          payload: any
+            state: IMapScreenState,
+            payload: any
         ): IMapScreenState => {
-          return {
-            ...state,
-            chosenPlaces: payload
-          }
+            return {
+                ...state,
+                chosenPlaces: payload
+            }
         },
         persistCheckedPlaces: (
-          state: IMapScreenState,
-          payload: any
+            state: IMapScreenState,
+            payload: any
         ): IMapScreenState => {
-          return {
-            ...state,
-            checkedPlaces: payload
-          }
+            return {
+                ...state,
+                checkedPlaces: payload
+            }
         }
     },
     effects: {
@@ -267,19 +267,19 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             }
         },
         async storeData(payload: IStoreDataPayload, state: IRootState): Promise<void> {
-          try {
-            await AsyncStorage.setItem(payload.key, JSON.stringify(payload.value));
-          } catch (error) {
-            console.log(error);
-          }
+            try {
+                await AsyncStorage.setItem(payload.key, JSON.stringify(payload.value));
+            } catch (error) {
+                console.log(error);
+            }
         },
         async getData(payload: string, state: IRootState): Promise<any> {
-          try {
-            const result = await AsyncStorage.getItem(payload);
-            return result ? JSON.parse(result) : null;
-          } catch (err) {
-            console.log(err);
-          }
+            try {
+                const result = await AsyncStorage.getItem(payload);
+                return result ? JSON.parse(result) : null;
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
 });

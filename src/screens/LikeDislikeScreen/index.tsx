@@ -51,7 +51,6 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                     placeDetail,
                     isFavorite: placeDetail.favoriteBy[firebase.auth().currentUser.uid] ? true : false
                 })
-                console.log(placeDetail)
             })
             .catch(err => {
                 console.log(err)

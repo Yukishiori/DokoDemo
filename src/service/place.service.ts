@@ -52,10 +52,7 @@ const getPlaceDetail = async (placeId: string): Promise<ICombinePlaceDetail> => 
 
 const getPlaceFromKeyword = async (location: ICoord, orderIndex: number, keyword: string): Promise<IPlaceFromGoogle[]> => {
     try {
-        console.log(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(keyword)}&inputtype=textquery&locationbias=circle:2000@${location.latitude},${location.longitude}&key=${config.apiKey}&language=vi&fields=photos,formatted_address,name,opening_hours,rating,geometry,place_id`)
         const res: IPlaceFromGoogle[] = (await betterFetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(keyword)}&inputtype=textquery&locationbias=circle:2000@${location.latitude},${location.longitude}&key=${config.apiKey}&language=vi&fields=photos,formatted_address,name,opening_hours,rating,geometry,place_id`)).candidates
-        // console.log('places', res)
-
         const placeWithImage = await Promise.all(res.splice(0, 5).map(async (place) => {
             if (place.photos) {
                 const firstImageUrl = (await getImageUris([place.photos[0].photo_reference]))[0];
@@ -108,7 +105,6 @@ const getPlaceFromKeyword = async (location: ICoord, orderIndex: number, keyword
 
 const getAutoComplete = async (input: string, location: ICoord, radius: number, sessionToken: number): Promise<string[]> => {
     const res = await betterFetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&location=${location.latitude},${location.longitude}&radius=${radius}&key=${config.apiKey}&session_token=${sessionToken}`)
-    console.log('prediction', res);
     return res.predictions.map((prediction: any) => prediction.description);
 }
 

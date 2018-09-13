@@ -60,7 +60,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     componentDidMount() {
         DeviceEventEmitter.removeAllListeners('hardwareBackPress');
         DeviceEventEmitter.addListener('hardwareBackPress', () => {
-            this.props.navigation.goBack();
+            this.props.navigation.navigate(ScreenNames.RestScreen);
         });
     }
 
@@ -86,7 +86,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
-
         return item
             ? <PlaceCard
                 place={item}
@@ -168,7 +167,9 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
                         <Left style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Button transparent onPress={() => this.props.navigation.goBack()} style={{ justifyContent: 'flex-start' }}>
+                            <Button transparent onPress={() =>
+                                this.props.navigation.navigate(ScreenNames.RestScreen)
+                            } style={{ justifyContent: 'flex-start' }}>
                                 <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />
                             </Button>
                         </Left>

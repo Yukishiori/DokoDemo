@@ -77,7 +77,7 @@ class FinalScreen extends Component<IProps, IState> {
         return {
           placeId: val.place_id,
           placeName: val.name,
-          isCompleted : this.props.checkedPlaces.filter((checkedPlace: any) => checkedPlace._id === val._id).length > 0
+          isCompleted: this.props.checkedPlaces.filter((checkedPlace: any) => checkedPlace.placeId === val.place_id).length > 0
         };
       }),
       rating: this.props.rating,
@@ -100,7 +100,7 @@ class FinalScreen extends Component<IProps, IState> {
       onChecked={this.addOrRemoveCheckedPlaces}
       checkedPlaces={this.props.checkedPlaces}
       onPress={() => {
-        this.markers[index].showCallout();
+        this.markers[index + 1].showCallout();
         this.map.animateToCoordinate({
           longitude: item.geometry.location.lng,
           latitude: item.geometry.location.lat
@@ -162,7 +162,7 @@ class FinalScreen extends Component<IProps, IState> {
           coordinate={{
             longitude: chosenPlace.longitude,
             latitude: chosenPlace.latitude
-          }} key={index} title='Your location'
+          }} key={index} title='Start'
         />
         : <Marker
           ref={marker => { this.markers[index] = marker }}
@@ -187,7 +187,7 @@ class FinalScreen extends Component<IProps, IState> {
     return (
       <Layout style={styles.BigContainer}>
         <Header style={styles.HeaderContainer}>
-          <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
+          <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
             <Left style={{ flex: 1, alignItems: 'flex-start' }}>
               <Button transparent onPress={() =>
                 this.props.navigation.navigate(ScreenNames.MainMap)

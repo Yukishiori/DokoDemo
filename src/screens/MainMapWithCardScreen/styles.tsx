@@ -30,7 +30,8 @@ const Add: ViewStyle = {
     height: width * 0.75 / 16 * 10,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginHorizontal: width * 0.03,
 }
 
 export default {

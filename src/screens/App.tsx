@@ -28,7 +28,7 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <Root>
-          <SwitchNavigation />
+          <MenuStack />
         </Root>
       </Provider>
     );
@@ -50,7 +50,7 @@ const FluidStack = createStackNavigator(
     Final: FinalScreen,
   },
   {
-    headerMode: 'none'
+    headerMode: 'none',
   }
 )
 
@@ -63,8 +63,3 @@ const MenuStack = createDrawerNavigator(
   }
 );
 
-
-const SwitchNavigation = createSwitchNavigator(
-  {
-    Menu: MenuStack
-  });
