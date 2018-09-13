@@ -192,3 +192,8 @@ export interface IUser {
     id: string;
     name: string;
 }
+
+export interface IStoreDataPayload {
+  key: string;
+  value: any;
+}

@@ -1,5 +1,5 @@
 import { createModel, ModelConfig, getDispatch } from '@rematch/core';
-import { IMapScreenState, IPlaceFromGoogle, IAddChosenPlacePayload, IUpdatePolylineCoordsPayload } from './interface';
+import { IMapScreenState, IPlaceFromGoogle, IAddChosenPlacePayload, IUpdatePolylineCoordsPayload, IStoreDataPayload } from './interface';
 import placeService from '../../../service/place.service';
 import {
     drink,
@@ -18,6 +18,7 @@ import config from '../../../../config';
 import firebase from 'firebase';
 import { Alert } from 'react-native';
 
+import { AsyncStorage } from 'react-native';
 const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     state: {
         chosenPlaces: [],
@@ -145,6 +146,24 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 isBusy: false,
                 ratingModalVisible: false
             }
+        },
+        persistChosenPlaces: (
+          state: IMapScreenState,
+          payload: any
+        ): IMapScreenState => {
+          return {
+            ...state,
+            chosenPlaces: payload
+          }
+        },
+        persistCheckedPlaces: (
+          state: IMapScreenState,
+          payload: any
+        ): IMapScreenState => {
+          return {
+            ...state,
+            checkedPlaces: payload
+          }
         }
     },
     effects: {
@@ -245,6 +264,21 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 console.log(err);
                 this.updateBusyState(false);
             }
+        },
+        async storeData(payload: IStoreDataPayload, state: IRootState): Promise<void> {
+          try {
+            await AsyncStorage.setItem(payload.key, JSON.stringify(payload.value));
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        async getData(payload: string, state: IRootState): Promise<any> {
+          try {
+            const result = await AsyncStorage.getItem(payload);
+            return result ? JSON.parse(result) : null;
+          } catch (err) {
+            console.log(err);
+          }
         }
     }
 });

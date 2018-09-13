@@ -29,6 +29,7 @@ interface IProps extends NavigationScreenProps {
   ratingModalVisible: boolean;
   toggleRatingModal: (arg?: boolean) => void;
   changeRating: (arg: number) => void;
+  storeData: (arg: any) => void;
   rating: number;
   uid: string;
   email: string;
@@ -71,17 +72,31 @@ class FinalScreen extends Component<IProps, IState> {
         email: this.props.email,
         name: this.props.displayName
       },
-      places: this.props.checkedPlaces,
+      places: this.props.chosenPlaces.map((val: any) => {
+        return {
+          placeId: val.place_id,
+          placeName: val.name,
+          isCompleted : this.props.checkedPlaces.filter((checkedPlace: any) => checkedPlace._id === val._id).length > 0
+        };
+      }),
       rating: this.props.rating,
-      createTime: Date.now()
+      createTime: Date.now(),
     });
+    await this.props.storeData({
+      key: 'checked-places',
+      value: null
+    })
+    await this.props.storeData({
+      key: 'chosen-places',
+      value: null
+    })
     this.props.navigation.navigate(ScreenNames.RestScreen);
   }
 
   renderItem = ({ item, index }: { item: IPlaceFromGoogle, index: number }) => {
     return <FinalCard
       place={item}
-      onChecked={this.props.addOrRemoveCheckedPlaces}
+      onChecked={this.addOrRemoveCheckedPlaces}
       checkedPlaces={this.props.checkedPlaces}
       onPress={() => {
         this.markers[index].showCallout();
@@ -94,11 +109,30 @@ class FinalScreen extends Component<IProps, IState> {
     />
   }
 
+  addOrRemoveCheckedPlaces = async (payload: {
+    placeId: string,
+    placeName: string
+  }) => {
+    await this.props.addOrRemoveCheckedPlaces(payload);
+    await this.props.storeData({
+      key: 'checked-places',
+      value: this.props.checkedPlaces
+    })
+  }
+
   componentDidMount() {
     this.props.getEstimatedTime({ chosenPlaces: this.props.chosenPlaces, currentLocation: this.props.currentLocation });
     DeviceEventEmitter.removeAllListeners('hardwareBackPress');
     DeviceEventEmitter.addListener('hardwareBackPress', () => {
       this.props.navigation.navigate(ScreenNames.MainMap)
+    });
+    this.props.storeData({
+      key: 'chosen-places',
+      value: this.props.chosenPlaces
+    });
+    this.props.storeData({
+      key: 'checked-places',
+      value: this.props.checkedPlaces
     });
   }
 

@@ -54,7 +54,10 @@ const FluidStack = FluidNavigator(
     LikeDisLikeScreen: LikeDisLikeScreen,
     Discuss: DiscussAndDetailScreen,
     Search: SearchScreen,
-    Final: FinalScreen
+    Final: FinalScreen,
+    Splash: SplashScreen,
+    SignUp: SignUpScreen,
+    Login: LoginScreen,
   }
 )
 
@@ -71,5 +74,5 @@ const MenuStack = createDrawerNavigator(
 const SwitchNavigation = createSwitchNavigator(
   {
     Auth: AuthStack,
-    Menu: MenuStack,
+    Menu: MenuStack
   });

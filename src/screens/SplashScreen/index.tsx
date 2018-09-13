@@ -12,6 +12,7 @@ import { gradient } from '../../commonStyle';
 import styles from './styles';
 import ScreenNames from '../ScreenNames';
 import { connect } from 'react-redux';
+import { ICoord } from '../../service/interface.service';
 
 interface IProps extends NavigationScreenProps {
   changeEmail: any;
@@ -21,11 +22,18 @@ interface IProps extends NavigationScreenProps {
   password: string;
   retriveDataSuccess: any;
   createOrUpdateFirebaseUser: any;
+  getData: (arg: string) => Promise<any>;
+  persistChosenPlaces: (arg: any) => void;
+  persistCheckedPlaces: (arg: any) => void;
+  updateCurrentLocation: (coord: ICoord) => void;
 }
 
 class SplashScreen extends Component<IProps> {
   componentDidMount() {
     // firebase.auth().signOut();
+    
+    // this.props.getData('checked-places');
+
     firebase.auth().onAuthStateChanged(res => {
       if (res) {
         if (res.providerData && res.providerData.length) {
@@ -50,7 +58,31 @@ class SplashScreen extends Component<IProps> {
               { cancelable: false }
             )
           }
-          setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)
+
+          // Get data from AsyncStorage
+          this.props.getData('chosen-places').then((chosenPlaces) => {
+            if (chosenPlaces) {
+              this.props.getData('checked-places').then((checkedPlaces) => {
+                if(checkedPlaces) {
+                  this.props.persistChosenPlaces(chosenPlaces);
+                  this.props.persistCheckedPlaces(checkedPlaces);
+                  navigator.geolocation.getCurrentPosition(
+                    (position: Position) => {
+                      this.props.updateCurrentLocation(position.coords); 
+                      this.props.navigation.navigate(ScreenNames.FinalScreen);
+                    }
+                  );
+                } else {
+                  setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)        
+                }
+              })
+            } else {
+              setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)
+            }
+          }).catch((_err) => {
+            console.log(_err);
+            setTimeout(() => this.props.navigation.navigate('FluidStack'), 500)
+          });
         })
       } else {
         setTimeout(() => this.props.navigation.navigate(ScreenNames.LoginScreen), 500)
@@ -73,13 +105,15 @@ class SplashScreen extends Component<IProps> {
 
 const mapState = (rootState: any) => {
   return {
-    ...rootState.profileModel
+    ...rootState.profileModel,
+    ...rootState.mapScreenModel
   };
 };
 
 const mapDispatch = (rootReducer: any) => {
   return {
     ...rootReducer.profileModel,
+    ...rootReducer.mapScreenModel
   };
 };
 
