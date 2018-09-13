@@ -125,6 +125,7 @@ class FinalScreen extends Component<IProps, IState> {
     DeviceEventEmitter.addListener('hardwareBackPress', () => {
       this.props.navigation.navigate(ScreenNames.MainMap)
     });
+
   }
 
   calculateTotalTime = (chosenPlaces: any) => {
@@ -174,6 +175,7 @@ class FinalScreen extends Component<IProps, IState> {
   }
 
   render() {
+    const chosenPlaces = [this.props.currentLocation, ...this.props.chosenPlaces];
     return (
       <Layout style={styles.BigContainer}>
         <Header style={styles.HeaderContainer}>
@@ -190,12 +192,32 @@ class FinalScreen extends Component<IProps, IState> {
         </Header>
         <View style={{ flex: 1 }}>
           <MapView
-            ref={map => { this.map = map; }}
+            ref={map => {
+              this.map = map;
+
+            }}
             style={styles.Map}
             showsUserLocation={true}
             provider="google"
             customMapStyle={config.mapStyle}
-            region={this.state.region}>
+            region={this.state.region}
+            onLayout={() => {
+              this.map.fitToCoordinates(chosenPlaces.map(
+                (chosenPlace: any, index: number) =>
+                  index === 0
+                    ? ({
+                      latitude: chosenPlace.latitude,
+                      longitude: chosenPlace.longitude
+                    })
+                    : ({
+                      latitude: chosenPlace.geometry.location.lat,
+                      longitude: chosenPlace.geometry.location.lng
+                    })
+              ), {
+                  edgePadding: { top: 50, right: 20, bottom: 20, left: 20 }
+                })
+            }}
+          >
             {this.renderMarker()}
             {this.renderPolyline()}
           </MapView>
