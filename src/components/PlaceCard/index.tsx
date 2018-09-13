@@ -63,7 +63,7 @@ class PlaceCard extends Component<IProps, IState> {
                 </LinearGradient>
                 {!this.props.cannotDelete && < TouchableOpacity style={styles.DeleteButton}
                     onPress={this.deleteItem}>
-                    <Icon name="x" type="Feather" style={{ color: "#565656" }} />
+                    <Icon name="x" type="Feather" style={{ color: "white" }} />
                 </TouchableOpacity>}
             </TouchableOpacity>
         );

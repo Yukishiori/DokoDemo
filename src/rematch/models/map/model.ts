@@ -90,7 +90,8 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         ): IMapScreenState => {
             return {
                 ...state,
-                chosenPlaces: []
+                chosenPlaces: [],
+                polylineCoords: []
             }
         },
         updateChosenPlaces: (
@@ -242,7 +243,7 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                     ],
                     { cancelable: false }
                 );
-                console.log(err);
+            } finally {
                 this.updateBusyState(false);
             }
         }

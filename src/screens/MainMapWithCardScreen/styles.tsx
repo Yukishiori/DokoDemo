@@ -24,8 +24,18 @@ const ShowSchedule: ViewStyle = {
     zIndex: 2
 }
 
+const Add: ViewStyle = {
+    backgroundColor: '#E8EAEC',
+    width: width * 0.75,
+    height: width * 0.75 / 16 * 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+}
+
 export default {
     Map,
     Header,
-    ShowSchedule
+    ShowSchedule,
+    Add
 }

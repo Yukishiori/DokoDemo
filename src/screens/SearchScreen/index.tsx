@@ -107,7 +107,7 @@ class SearchScreen extends Component<IProps, IState> {
       loading: true,
       blur: true
     })
-    placeService.getPlaceFromKeyword(this.props.currentLocation, this.props.chosenPlaces.length, this.state.text).then((res: IPlaceFromGoogle[]) => {
+    placeService.getPlaceFromKeyword(this.props.currentLocation, this.props.chosenPlaces.length ? this.props.chosenPlaces.length : 0, this.state.text).then((res: IPlaceFromGoogle[]) => {
       this.setState(
         {
           searchedLocations: res,

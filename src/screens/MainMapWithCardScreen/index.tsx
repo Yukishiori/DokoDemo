@@ -77,21 +77,26 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     renderPolyline = () => {
-        if (!this.state.editing) {
-            return this.props.polylineCoords
-                && <Polyline
-                    coordinates={this.props.polylineCoords}
-                    strokeWidth={6}
-                    strokeColor={gradient[1]}
-                />
-        }
+        return this.props.polylineCoords
+            && <Polyline
+                coordinates={this.props.polylineCoords}
+                strokeWidth={6}
+                strokeColor={gradient[1]}
+            />
     }
 
     renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
-        return <PlaceCard
-            place={item}
-            onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
-        />
+
+        return item
+            ? <PlaceCard
+                place={item}
+                onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
+            />
+            : <TouchableOpacity style={styles.Add}
+                onPress={() => this.props.navigation.navigate(ScreenNames.SearchScreen)}>
+                <Icon name="image" type="EvilIcons" style={{ fontSize: 80, color: 'black' }} />
+                <AppText style={{ color: 'black', fontSize: 16, fontWeight: 'bold' }}>ADD PLACE</AppText>
+            </TouchableOpacity>
     }
     onViewableItemsChanged = ({ viewableItems, changed }: any) => {
         try {
@@ -106,12 +111,14 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
 
+
     render() {
         if (this.props.isBusy) {
             return <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color={gradient[1]} />
             </View>
         }
+
 
         return (
             <Layout>
@@ -127,7 +134,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         {this.renderPolyline()}
                     </MapView>
                     <FlatList
-                        data={this.props.isBusy ? [] : this.props.chosenPlaces}
+                        data={[...this.props.chosenPlaces, null]}
                         renderItem={this.renderItem}
                         keyExtractor={(item, index) => index.toString()}
                         horizontal
@@ -167,11 +174,6 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         </Left>
                         <View style={{ flex: 1 }} />
                         <Right style={{ flex: 1 }}>
-                            <TouchableOpacity style={{ justifyContent: 'flex-start', alignItems: 'center' }}
-                                onPress={() => this.props.navigation.navigate(ScreenNames.SearchScreen)}
-                            >
-                                <Icon name="ios-search" style={{ color: 'white', fontSize: 30 }} type="Ionicons" />
-                            </TouchableOpacity>
                         </Right>
                     </LinearGradient>
                 </Header>

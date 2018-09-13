@@ -18,6 +18,7 @@ import AppText from '../../components/AppText';
 import config from '../../../config';
 import ProgressBar from 'react-native-progress/Bar';
 import StarRating from 'react-native-star-rating';
+import { Transition } from 'react-navigation-fluid-transitions';
 
 interface IProps extends NavigationScreenProps {
   chosenPlaces: any;
@@ -119,14 +120,23 @@ class FinalScreen extends Component<IProps, IState> {
   }
 
   renderMarker = () => {
-    return this.props.chosenPlaces.map((chosenPlace: any, index: number) =>
-      <Marker
-        ref={marker => { this.markers[index] = marker }}
-        coordinate={{
-          longitude: chosenPlace.geometry.location.lng,
-          latitude: chosenPlace.geometry.location.lat
-        }} key={index} title={chosenPlace.name}
-      />
+    const chosenPlaces = [this.props.currentLocation, ...this.props.chosenPlaces];
+    return chosenPlaces.map((chosenPlace: any, index: number) =>
+      index === 0
+        ? <Marker
+          ref={marker => { this.markers[index] = marker }}
+          coordinate={{
+            longitude: chosenPlace.longitude,
+            latitude: chosenPlace.latitude
+          }} key={index} title='Your location'
+        />
+        : <Marker
+          ref={marker => { this.markers[index] = marker }}
+          coordinate={{
+            longitude: chosenPlace.geometry.location.lng,
+            latitude: chosenPlace.geometry.location.lat
+          }} key={index} title={chosenPlace.name}
+        />
     )
   }
 

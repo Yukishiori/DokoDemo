@@ -39,7 +39,7 @@ class RestScreen extends Component<IProps> {
 
     toThink = () => {
         this.props.clearChosenPlaces();
-        this.props.navigation.navigate(ScreenNames.SearchScreen);
+        this.props.navigation.navigate(ScreenNames.MainMap);
     }
 
     toRest = () => {

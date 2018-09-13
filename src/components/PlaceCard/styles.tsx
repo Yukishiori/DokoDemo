@@ -35,15 +35,15 @@ const Text: TextStyle = {
     fontSize: 14,
     color: 'white',
     fontWeight: 'bold',
-    
+
 }
 
 const DeleteButton: ViewStyle = {
-    height: width * 0.1, 
+    height: width * 0.1,
     width: width * 0.1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: gradient[1],
     position: 'absolute',
     top: 5,
     right: 5,

@@ -45,7 +45,7 @@ const AuthStack = FluidNavigator({
 });
 
 
-const FluidStack = FluidNavigator(
+const FluidStack = createStackNavigator(
   {
     Rest: RestScreen,
     Think: ThinkScreen,
@@ -55,6 +55,9 @@ const FluidStack = FluidNavigator(
     Discuss: DiscussAndDetailScreen,
     Search: SearchScreen,
     Final: FinalScreen
+  },
+  {
+    headerMode: 'none'
   }
 )
 
