@@ -35,18 +35,11 @@ export default class App extends Component {
   }
 }
 
-
-
-const AuthStack = FluidNavigator({
-  // Profile: ProfileScreen,
-  Splash: SplashScreen,
-  SignUp: SignUpScreen,
-  Login: LoginScreen,
-});
-
-
 const FluidStack = FluidNavigator(
   {
+    Splash: SplashScreen,
+    Login: LoginScreen,
+    SignUp: SignUpScreen,
     Rest: RestScreen,
     Think: ThinkScreen,
     Profile: ProfileScreen,
@@ -55,9 +48,6 @@ const FluidStack = FluidNavigator(
     Discuss: DiscussAndDetailScreen,
     Search: SearchScreen,
     Final: FinalScreen,
-    Splash: SplashScreen,
-    SignUp: SignUpScreen,
-    Login: LoginScreen,
   }
 )
 
@@ -73,6 +63,5 @@ const MenuStack = createDrawerNavigator(
 
 const SwitchNavigation = createSwitchNavigator(
   {
-    Auth: AuthStack,
     Menu: MenuStack
   });
