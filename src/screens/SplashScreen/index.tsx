@@ -23,8 +23,11 @@ interface IProps extends NavigationScreenProps {
   retriveDataSuccess: any;
   createOrUpdateFirebaseUser: any;
   getData: (arg: string) => Promise<any>;
+  storeData: (arg: any) => Promise<void>;
   persistChosenPlaces: (arg: any) => void;
   persistCheckedPlaces: (arg: any) => void;
+  persistPolylines: (arg: any) => void;
+  persistStartTime: (arg: number) => void;
   updateCurrentLocation: (coord: ICoord) => void;
 }
 
@@ -60,12 +63,19 @@ class SplashScreen extends Component<IProps> {
           }
 
           // Get data from AsyncStorage
-          this.props.getData('chosen-places').then((chosenPlaces) => {
+          this.props.getData('chosen-places').then(async (chosenPlaces) => {
             if (chosenPlaces) {
-              this.props.getData('checked-places').then((checkedPlaces) => {
-                if (checkedPlaces) {
+              const checkedPlaces = await this.props.getData('checked-places');
+              const polylines = await this.props.getData('polylines');
+              const startTime = await this.props.getData('start-time');
+              if (Date.now() - startTime > 12*60*60*1000) {
+                this.resetState(ScreenNames.RestScreen);
+              } else {
+                if (checkedPlaces && polylines && startTime) {
                   this.props.persistChosenPlaces(chosenPlaces);
                   this.props.persistCheckedPlaces(checkedPlaces);
+                  this.props.persistPolylines(polylines);
+                  this.props.persistStartTime(startTime);
                   navigator.geolocation.getCurrentPosition(
                     (position: Position) => {
                       this.props.updateCurrentLocation(position.coords);
@@ -73,22 +83,38 @@ class SplashScreen extends Component<IProps> {
                     }
                   );
                 } else {
-                  setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+                  this.resetState(ScreenNames.RestScreen);
                 }
-              })
+              }
             } else {
-              setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+              this.resetState(ScreenNames.RestScreen);
             }
           }).catch((_err) => {
             console.log(_err);
-            setTimeout(() => this.props.navigation.navigate(ScreenNames.RestScreen), 500)
+            this.resetState(ScreenNames.RestScreen);
           });
         })
       } else {
-        setTimeout(() => this.props.navigation.navigate(ScreenNames.LoginScreen), 500)
+        this.resetState(ScreenNames.LoginScreen)
       }
     })
   };
+
+  resetState = async (screen: string) => {
+    await this.props.storeData({
+      key: 'checked-places',
+      value: null
+    })
+    await this.props.storeData({
+      key: 'chosen-places',
+      value: null
+    })
+    await this.props.storeData({
+      key: 'polylines',
+      value: null
+    })
+    setTimeout(() => this.props.navigation.navigate(screen), 500);
+  }
 
   render() {
     return (

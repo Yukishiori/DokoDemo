@@ -56,10 +56,13 @@ export interface IMapScreenState {
     currentLocation: ICoord,
     checkedPlaces : {
       placeId: string,
-      placeName: string
+      placeName: string,
+      endTime: number,
+      movingTime: number
     }[],
     ratingModalVisible: boolean,
-    rating: number
+    rating: number,
+    startTime: number
 }
 
 export interface IAddChosenPlacePayload {
