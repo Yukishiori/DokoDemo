@@ -95,6 +95,10 @@ class FinalScreen extends Component<IProps, IState> {
       key: 'start-time',
       value: null
     })
+    await this.props.storeData({
+      key: 'polylines',
+      value: null
+    })
     this.props.navigation.navigate(ScreenNames.RestScreen);
   }
 

@@ -22,6 +22,7 @@ interface IProps extends NavigationScreenProps {
     getNearByPlaceUsingCombo: () => void;
     displayName?: string;
     submitSuccess: any;
+    storeData: (arg: any) => Promise<void>;
 }
 class RestScreen extends Component<IProps> {
     flatList: FlatList<any> = null;

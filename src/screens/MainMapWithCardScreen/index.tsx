@@ -13,7 +13,7 @@ import { gradient, width, height } from '../../commonStyle';
 import PlaceCard from '../../components/PlaceCard';
 import ScreenNames from '../ScreenNames';
 import Layout from '../../components/Layout';
-import { Header, Left, Icon, Right, Button } from 'native-base';
+import { Header, Left, Icon, Right, Button, Toast } from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import AppText from '../../components/AppText';
 import 'core-js/es6/map'
@@ -103,6 +103,11 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
             ? <PlaceCard
                 place={item}
                 onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
+                onDelete={() => Toast.show({
+                  text: 'Delete successfully!',
+                  buttonText: 'Okay',
+                  type: 'success'
+                })}
             />
             : <TouchableOpacity style={styles.Add}
                 onPress={() => this.props.navigation.navigate(ScreenNames.SearchScreen)}>
@@ -221,8 +226,26 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
                         <Left style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Button transparent onPress={() =>
-                                this.props.navigation.navigate(ScreenNames.RestScreen)
+                            <Button transparent onPress={ async () => {
+                              // Clear cached data
+                              await this.props.storeData({
+                                key: 'checked-places',
+                                value: null
+                              });
+                              await this.props.storeData({
+                                key: 'chosen-places',
+                                value: null
+                              })
+                              await this.props.storeData({
+                                key: 'start-time',
+                                value: null
+                              })
+                              await this.props.storeData({
+                                key: 'polylines',
+                                value: null
+                              })
+                              this.props.navigation.navigate(ScreenNames.RestScreen)
+                            }
                             } style={{ justifyContent: 'flex-start' }}>
                                 <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />
                             </Button>
