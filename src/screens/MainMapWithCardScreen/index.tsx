@@ -29,6 +29,7 @@ interface IProps extends NavigationScreenProps {
     getEstimatedTime: any;
     storeData: (arg: any) => void;
     checkedPlaces: any;
+    persistStartTime: (arg: number) => void;
 }
 
 interface IState {
@@ -184,17 +185,26 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 {this.props.chosenPlaces.length > 0
                     &&
                     <TouchableOpacity
-                        onPress={() => {
-                            this.props.getEstimatedTime({ chosenPlaces: this.props.chosenPlaces, currentLocation: this.props.currentLocation });
-                            this.props.getDirection();
-                            this.props.storeData({
+                        onPress={async () => {
+                            await this.props.getEstimatedTime({ chosenPlaces: this.props.chosenPlaces, currentLocation: this.props.currentLocation });
+                            await this.props.getDirection();
+                            await this.props.storeData({
                                 key: 'chosen-places',
                                 value: this.props.chosenPlaces
                             });
-                            this.props.storeData({
+                            await this.props.storeData({
                                 key: 'checked-places',
                                 value: this.props.checkedPlaces
                             });
+                            await this.props.storeData({
+                              key: 'polylines',
+                              value: this.props.polylineCoords
+                            })
+                            await this.props.storeData({
+                              key: 'start-time',
+                              value: Date.now()
+                            })
+                            await this.props.persistStartTime(Date.now());
                             this.props.navigation.navigate(ScreenNames.FinalScreen);
                         }}
                         style={{

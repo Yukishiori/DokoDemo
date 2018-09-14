@@ -27,7 +27,8 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
         currentLocation: null,
         checkedPlaces: [],
         ratingModalVisible: false,
-        rating: 0
+        rating: 0,
+        startTime: 0
     },
     reducers: {
         addChosenPlace: (
@@ -110,7 +111,9 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             state: IMapScreenState,
             payload: {
                 placeId: string,
-                placeName: string
+                placeName: string,
+                endTime: number,
+                movingTime: number
             }
         ): IMapScreenState => {
             return {
@@ -167,6 +170,24 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
             return {
                 ...state,
                 checkedPlaces: payload
+            }
+        },
+        persistPolylines: (
+            state: IMapScreenState,
+            payload: any
+        ): IMapScreenState => {
+            return {
+                ...state,
+                polylineCoords: payload
+            }
+        },
+        persistStartTime: (
+            state: IMapScreenState,
+            payload: any
+        ): IMapScreenState => {
+            return {
+                ...state,
+                startTime: payload
             }
         }
     },

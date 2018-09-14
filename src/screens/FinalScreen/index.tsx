@@ -35,7 +35,8 @@ interface IProps extends NavigationScreenProps {
   displayName: string;
   isBusy: boolean;
   submitPlacesAndRating: (arg: any) => void;
-  storeData: any
+  storeData: any;
+  startTime: number;
 }
 
 interface IState {
@@ -90,12 +91,17 @@ class FinalScreen extends Component<IProps, IState> {
       key: 'chosen-places',
       value: null
     })
+    await this.props.storeData({
+      key: 'start-time',
+      value: null
+    })
     this.props.navigation.navigate(ScreenNames.RestScreen);
   }
 
   renderItem = ({ item, index }: { item: IPlaceFromGoogle, index: number }) => {
     return <FinalCard
       place={item}
+      startTime={this.props.startTime}
       onChecked={this.addOrRemoveCheckedPlaces}
       checkedPlaces={this.props.checkedPlaces}
       onPress={() => {
@@ -111,7 +117,9 @@ class FinalScreen extends Component<IProps, IState> {
 
   addOrRemoveCheckedPlaces = async (payload: {
     placeId: string,
-    placeName: string
+    placeName: string,
+    endTime: number,
+    movingTime: number
   }) => {
     await this.props.addOrRemoveCheckedPlaces(payload);
     await this.props.storeData({
@@ -129,19 +137,23 @@ class FinalScreen extends Component<IProps, IState> {
   }
 
   calculateTotalTime = (chosenPlaces: any) => {
-    return chosenPlaces.reduce((sums: number, val: any) => {
-      return sums += val.estimatedTime ? val.estimatedTime.value : 0
-    }, 0);
+    return chosenPlaces.length ? Math.floor((chosenPlaces[chosenPlaces.length - 1].endTime - this.props.startTime)/1000) : 0;
   }
 
   secondsToHms = (d: number) => {
     d = Number(d);
+    var day = Math.floor(d / (3600 * 24));
     var h = Math.floor(d / 3600);
     var m = Math.floor(d % 3600 / 60);
 
+    var dDisplay = day > 0 ? day + (day == 1 ? " day" : " days") : "";
     var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
     var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes ") : "";
-    return hDisplay + mDisplay;
+    if (!day && !h && !m) {
+      var sDisplay = Math.floor(d) > 0 ? Math.floor(d) + (Math.floor(d) == 1 ? " second" : " seconds") : "";
+      return sDisplay;
+    }
+    return dDisplay + hDisplay + mDisplay;
   }
 
   renderMarker = () => {
@@ -232,7 +244,7 @@ class FinalScreen extends Component<IProps, IState> {
             />
           </View>
           <View style={styles.SumsContainer}>
-            <AppText style={styles.EstimateTime}>Total moving time : {this.secondsToHms(this.calculateTotalTime(this.props.chosenPlaces))}</AppText>
+            <AppText style={styles.EstimateTime}>Total time : {this.secondsToHms(this.calculateTotalTime(this.props.checkedPlaces))}</AppText>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
               <View style={{ flex: 2 }}>
                 {this.props.chosenPlaces.length > 0 && <ProgressBar progress={this.props.checkedPlaces.length / this.props.chosenPlaces.length} width={null} height={10} color={gradient[1]} />}
