@@ -21,12 +21,12 @@ interface IProps extends NavigationScreenProps {
     clearChosenPlaces: () => void;
     getNearByPlaceUsingCombo: () => void;
     displayName?: string;
+    submitSuccess: any;
 }
 class RestScreen extends Component<IProps> {
     flatList: FlatList<any> = null;
     componentDidMount() {
         try {
-            this.props.clearChosenPlaces();
             navigator.geolocation.getCurrentPosition(
                 (position: Position) => {
                     this.props.updateCurrentLocation(position.coords);
@@ -38,10 +38,12 @@ class RestScreen extends Component<IProps> {
     }
 
     toThink = () => {
+        this.props.submitSuccess()
         this.props.navigation.navigate(ScreenNames.MainMap);
     }
 
     toRest = () => {
+        this.props.submitSuccess()
         this.props.getNearByPlaceUsingCombo();
         this.props.navigation.navigate(ScreenNames.MainMap);
     }

@@ -107,52 +107,92 @@ class SearchScreen extends Component<IProps, IState> {
       loading: true,
       blur: true
     })
-    placeService.getPlaceFromKeyword(this.props.currentLocation, this.props.chosenPlaces.length ? this.props.chosenPlaces.length : 0, this.state.text).then((res: IPlaceFromGoogle[]) => {
-      this.setState(
-        {
-          searchedLocations: res,
-          loading: false
-        },
-        () => {
-          if (this.state.searchedLocations && this.state.searchedLocations.length > 0) {
-            this.map.fitToCoordinates(this.state.searchedLocations.map(
-              searchedLocation => ({
-                latitude: searchedLocation.geometry.location.lat,
-                longitude: searchedLocation.geometry.location.lng
-              })
-            ), {
-                edgePadding: { top: 50, right: 30, bottom: 50, left: 30 }
-              })
-          } else {
-            Toast.show({
-              text: "Find nothing match this place",
-              buttonText: "Okay",
-              duration: 3000,
-              type: "danger",
-              textStyle: { fontFamily: 'Comfortaa-Bold' }
-            })
-          }
-        }
-      )
-    })
+    placeService.getPlaceFromKeyword(
+      this.props.chosenPlaces.length > 0
+        ? {
+          latitude: this.props.chosenPlaces[this.props.chosenPlaces.length - 1].geometry.location.lat,
+          longitude: this.props.chosenPlaces[this.props.chosenPlaces.length - 1].geometry.location.lng
+        } : this.props.currentLocation, this.props.chosenPlaces.length ? this.props.chosenPlaces.length : 0, this.state.text).then((res: IPlaceFromGoogle[]) => {
+          this.setState(
+            {
+              searchedLocations: res,
+              loading: false
+            },
+            () => {
+              if (this.state.searchedLocations && this.state.searchedLocations.length > 0) {
+                this.map.fitToCoordinates([{
+                  geometry: {
+                    location: {
+                      lat: this.props.currentLocation.latitude,
+                      lng: this.props.currentLocation.longitude
+                    }
+                  }
+                }, ...this.state.searchedLocations, ...this.props.chosenPlaces].map(
+                  searchedLocation => ({
+                    latitude: searchedLocation.geometry.location.lat,
+                    longitude: searchedLocation.geometry.location.lng
+                  })
+                ), {
+                    edgePadding: { top: 50, right: 30, bottom: 50, left: 30 }
+                  })
+              } else {
+                Toast.show({
+                  text: "Find nothing match this place",
+                  buttonText: "Okay",
+                  duration: 3000,
+                  type: "danger",
+                  textStyle: { fontFamily: 'Comfortaa-Bold' }
+                })
+              }
+            }
+          )
+        })
   }
 
   renderMarker = () => {
-    return this.state.searchedLocations.map((searchedLocation, index) => {
-      return <Marker
-        ref={marker => { this.markers[index] = marker }}
-        key={searchedLocation.place_id}
-        title={searchedLocation.name}
-        onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, {
-          chosenPlace: searchedLocation,
-          fromSearch: true
-        })
+    if (this.state.searchedLocations && this.state.searchedLocations.length > 0) {
+      return this.state.searchedLocations.map((searchedLocation, index) => {
+        return <Marker
+          ref={marker => { this.markers[index] = marker }}
+          key={searchedLocation.place_id}
+          title={searchedLocation.name}
+          onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, {
+            chosenPlace: searchedLocation,
+            fromSearch: true
+          })
+          }
+          coordinate={{
+            latitude: searchedLocation.geometry.location.lat,
+            longitude: searchedLocation.geometry.location.lng
+          }}
+          pinColor="gold"
+        />
+      })
+    }
+  }
+
+  renderChosenPlaceMarker = () => {
+    return [
+      {
+        place_id: 'user',
+        name: 'Start',
+        geometry: {
+          location: {
+            lat: this.props.currentLocation.latitude,
+            lng: this.props.currentLocation.longitude
+          }
         }
-        coordinate={{
-          latitude: searchedLocation.geometry.location.lat,
-          longitude: searchedLocation.geometry.location.lng
-        }} />
-    })
+      }
+      , ...this.props.chosenPlaces].map((chosenPlace, index) =>
+        <Marker
+          key={chosenPlace.place_id}
+          title={chosenPlace.name}
+          coordinate={{
+            latitude: chosenPlace.geometry.location.lat,
+            longitude: chosenPlace.geometry.location.lng
+          }} />
+
+      )
   }
 
   renderItem = ({ item }: { item: IPlaceFromGoogle, index: number }) => {
@@ -168,6 +208,7 @@ class SearchScreen extends Component<IProps, IState> {
 
   onViewableItemsChanged = ({ viewableItems, changed }: any) => {
     try {
+      this.markers[0].showCallout();
       if (viewableItems[0].index > -1) {
         const { lat, lng } = this.state.searchedLocations[viewableItems[0].index].geometry.location;
         this.map.animateToCoordinate({ latitude: lat, longitude: lng });
@@ -179,19 +220,32 @@ class SearchScreen extends Component<IProps, IState> {
   }
 
   render() {
+    const chosenPlaces = [this.props.currentLocation, ...this.props.chosenPlaces];
     return (
       <Layout>
         <MapView style={styles.MapView}
           ref={map => { this.map = map; }}
-          initialRegion={{
-            ...this.props.currentLocation,
-            latitudeDelta: 0.00070,
-            longitudeDelta: 0.0070,
+          onLayout={() => {
+            this.map.fitToCoordinates(chosenPlaces.map(
+              (chosenPlace: any, index: number) =>
+                index === 0
+                  ? ({
+                    latitude: chosenPlace.latitude,
+                    longitude: chosenPlace.longitude
+                  })
+                  : ({
+                    latitude: chosenPlace.geometry.location.lat,
+                    longitude: chosenPlace.geometry.location.lng
+                  })
+            ), {
+                edgePadding: { top: 50, right: 20, bottom: 20, left: 20 }
+              });
           }}
           customMapStyle={config.mapStyle}
           provider="google"
         >
           {this.renderMarker()}
+          {this.renderChosenPlaceMarker()}
         </MapView>
         <FlatList
           data={this.state.searchedLocations}

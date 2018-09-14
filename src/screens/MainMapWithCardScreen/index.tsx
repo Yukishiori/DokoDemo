@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { IPlaceFromGoogle } from '../../rematch/models/map/interface';
 import { IRootState } from '../../rematch/interface';
 import { ICoord } from '../../service/interface.service';
-import { gradient } from '../../commonStyle';
+import { gradient, width, height } from '../../commonStyle';
 import PlaceCard from '../../components/PlaceCard';
 import ScreenNames from '../ScreenNames';
 import Layout from '../../components/Layout';
@@ -68,14 +68,23 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
     }
 
     renderMarker = () => {
-        return this.props.chosenPlaces.map((chosenPlace, index) =>
-            <Marker
-                ref={marker => { this.markers[index] = marker }}
-                coordinate={{
-                    longitude: chosenPlace.geometry.location.lng,
-                    latitude: chosenPlace.geometry.location.lat
-                }} key={index} title={chosenPlace.name}
-            />
+        const chosenPlaces = [this.props.currentLocation, ...this.props.chosenPlaces];
+        return chosenPlaces.map((chosenPlace: any, index: number) =>
+            index === 0
+                ? <Marker
+                    ref={marker => { this.markers[index] = marker }}
+                    coordinate={{
+                        longitude: chosenPlace.longitude,
+                        latitude: chosenPlace.latitude
+                    }} key={index} title='Start'
+                />
+                : <Marker
+                    ref={marker => { this.markers[index] = marker }}
+                    coordinate={{
+                        longitude: chosenPlace.geometry.location.lng,
+                        latitude: chosenPlace.geometry.location.lat
+                    }} key={index} title={chosenPlace.name}
+                />
         )
     }
 
@@ -104,8 +113,8 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
         try {
             if (viewableItems[0].index > -1) {
                 const { lat, lng } = this.props.chosenPlaces[viewableItems[0].index].geometry.location;
+                this.markers[viewableItems[0].index + 1].showCallout()
                 this.map.animateToCoordinate({ latitude: lat, longitude: lng });
-                this.markers[viewableItems[0].index].showCallout()
             }
         } catch (err) {
             console.log(err)
@@ -115,6 +124,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
 
 
     render() {
+        const chosenPlaces = [this.props.currentLocation, ...this.props.chosenPlaces];
         if (this.props.isBusy) {
             return <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color={gradient[1]} />
@@ -131,6 +141,22 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         showsUserLocation={true}
                         provider="google"
                         customMapStyle={config.mapStyle}
+                        onLayout={() => {
+                            this.map.fitToCoordinates(chosenPlaces.map(
+                                (chosenPlace: any, index: number) =>
+                                    index === 0
+                                        ? ({
+                                            latitude: chosenPlace.latitude,
+                                            longitude: chosenPlace.longitude
+                                        })
+                                        : ({
+                                            latitude: chosenPlace.geometry.location.lat,
+                                            longitude: chosenPlace.geometry.location.lng
+                                        })
+                            ), {
+                                    edgePadding: { top: 50, right: 20, bottom: height * 0.3, left: 20 },
+                                })
+                        }}
                         region={this.state.region}>
                         {this.renderMarker()}
                         {this.renderPolyline()}

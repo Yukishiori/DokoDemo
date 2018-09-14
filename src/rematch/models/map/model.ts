@@ -147,7 +147,8 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
                 chosenPlaces: [],
                 rating: 0,
                 isBusy: false,
-                ratingModalVisible: false
+                ratingModalVisible: false,
+                polylineCoords: []
             }
         },
         persistChosenPlaces: (

@@ -52,7 +52,7 @@ const getPlaceDetail = async (placeId: string): Promise<ICombinePlaceDetail> => 
 
 const getPlaceFromKeyword = async (location: ICoord, orderIndex: number, keyword: string): Promise<IPlaceFromGoogle[]> => {
     try {
-        const res: IPlaceFromGoogle[] = (await betterFetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(keyword)}&inputtype=textquery&locationbias=circle:2000@${location.latitude},${location.longitude}&key=${config.apiKey}&language=vi&fields=photos,formatted_address,name,opening_hours,rating,geometry,place_id`)).candidates
+        const res: IPlaceFromGoogle[] = (await betterFetch(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(keyword)}&inputtype=textquery&locationbias=circle:1000@${location.latitude},${location.longitude}&key=${config.apiKey}&language=vi&fields=photos,formatted_address,name,opening_hours,rating,geometry,place_id`)).candidates
         const placeWithImage = await Promise.all(res.splice(0, 5).map(async (place) => {
             if (place.photos) {
                 const firstImageUrl = (await getImageUris([place.photos[0].photo_reference]))[0];

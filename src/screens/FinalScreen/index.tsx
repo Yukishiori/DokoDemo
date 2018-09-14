@@ -194,13 +194,11 @@ class FinalScreen extends Component<IProps, IState> {
           <MapView
             ref={map => {
               this.map = map;
-
             }}
             style={styles.Map}
             showsUserLocation={true}
             provider="google"
             customMapStyle={config.mapStyle}
-            region={this.state.region}
             onLayout={() => {
               this.map.fitToCoordinates(chosenPlaces.map(
                 (chosenPlace: any, index: number) =>
@@ -215,8 +213,10 @@ class FinalScreen extends Component<IProps, IState> {
                     })
               ), {
                   edgePadding: { top: 50, right: 20, bottom: 20, left: 20 }
-                })
-            }}
+                });
+            }
+
+            }
           >
             {this.renderMarker()}
             {this.renderPolyline()}
