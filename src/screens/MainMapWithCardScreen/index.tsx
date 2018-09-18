@@ -106,7 +106,8 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 onDelete={() => Toast.show({
                   text: 'Delete successfully!',
                   buttonText: 'Okay',
-                  type: 'success'
+                  type: 'danger',
+                  textStyle: { fontFamily: 'Comfortaa-Bold' }
                 })}
             />
             : <TouchableOpacity style={styles.Add}
