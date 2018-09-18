@@ -37,7 +37,7 @@ const FirstText: TextStyle = {
 
 const Text2: TextStyle = {
     marginTop: Platform.OS === 'ios' ? 0 : '-5%',
-    fontSize: 60,
+    fontSize: 55,
     color: 'white'
 };
 

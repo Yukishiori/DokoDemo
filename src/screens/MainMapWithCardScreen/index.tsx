@@ -104,9 +104,9 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 place={item}
                 onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
                 onDelete={() => Toast.show({
-                  text: 'Delete successfully!',
-                  buttonText: 'Okay',
-                  type: 'success'
+                    text: 'Delete successfully!',
+                    buttonText: 'Okay',
+                    type: 'success'
                 })}
             />
             : <TouchableOpacity style={styles.Add}
@@ -195,12 +195,12 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                                 value: this.props.checkedPlaces
                             });
                             await this.props.storeData({
-                              key: 'polylines',
-                              value: this.props.polylineCoords
+                                key: 'polylines',
+                                value: this.props.polylineCoords
                             })
                             await this.props.storeData({
-                              key: 'start-time',
-                              value: Date.now()
+                                key: 'start-time',
+                                value: Date.now()
                             })
                             await this.props.persistStartTime(Date.now());
                             this.props.navigation.navigate(ScreenNames.FinalScreen);
@@ -219,25 +219,25 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 <Header style={{ padding: 0 }}>
                     <LinearGradient style={styles.Header} colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}  >
                         <Left style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Button transparent onPress={ async () => {
-                              // Clear cached data
-                              await this.props.storeData({
-                                key: 'checked-places',
-                                value: null
-                              });
-                              await this.props.storeData({
-                                key: 'chosen-places',
-                                value: null
-                              })
-                              await this.props.storeData({
-                                key: 'start-time',
-                                value: null
-                              })
-                              await this.props.storeData({
-                                key: 'polylines',
-                                value: null
-                              })
-                              this.props.navigation.navigate(ScreenNames.RestScreen)
+                            <Button transparent onPress={async () => {
+                                // Clear cached data
+                                await this.props.storeData({
+                                    key: 'checked-places',
+                                    value: null
+                                });
+                                await this.props.storeData({
+                                    key: 'chosen-places',
+                                    value: null
+                                })
+                                await this.props.storeData({
+                                    key: 'start-time',
+                                    value: null
+                                })
+                                await this.props.storeData({
+                                    key: 'polylines',
+                                    value: null
+                                })
+                                this.props.navigation.navigate(ScreenNames.RestScreen)
                             }
                             } style={{ justifyContent: 'flex-start' }}>
                                 <Icon name="arrow-left" type="SimpleLineIcons" style={{ color: 'white', fontSize: 20 }} />

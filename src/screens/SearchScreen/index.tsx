@@ -225,6 +225,7 @@ class SearchScreen extends Component<IProps, IState> {
       <Layout>
         <MapView style={styles.MapView}
           ref={map => { this.map = map; }}
+          showsUserLocation={true}
           onLayout={() => {
             this.map.fitToCoordinates(chosenPlaces.map(
               (chosenPlace: any, index: number) =>

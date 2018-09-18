@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, BackHandler, DeviceEventEmitter, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, BackHandler, DeviceEventEmitter, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { NavigationScreenProps, NavigationActions } from 'react-navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
@@ -65,7 +65,10 @@ class SignUpScreen extends Component<IProps> {
           <View style={styles.LogoContainer}>
 
           </View>
-          <View style={styles.ContentContainer}>
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -200}
+            behavior="padding"
+            style={styles.ContentContainer}>
             <AppText style={styles.SignUpText}>Fill Your Information:</AppText>
             <View style={styles.LoginInputContainer}>
               <TextInput
@@ -113,7 +116,7 @@ class SignUpScreen extends Component<IProps> {
               <AppText style={styles.SignUpText}>Sign Up</AppText>
               {this.props.isLoading && <ActivityIndicator size="small" style={{ marginLeft: 10 }}></ActivityIndicator>}
             </TouchableOpacity>
-          </View>
+          </KeyboardAvoidingView>
           <View style={styles.SignUpContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
               <AppText style={{ textDecorationLine: 'underline', fontSize: 16 }}>Already have an account? Login now.</AppText>

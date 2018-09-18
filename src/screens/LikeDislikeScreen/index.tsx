@@ -110,7 +110,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                         <Icon name="location" type="Entypo" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Address: </AppText>
                                     </View>
-                                    <AppText style={styles.BigText}>{this.state.placeDetail.formatted_address}</AppText>
+                                    <AppText style={styles.BigText}>{this.state.placeDetail.formatted_address ? this.state.placeDetail.formatted_address : 'This place have no address'}</AppText>
                                     <View style={styles.IconText}>
                                         <Icon name="address-book" type="FontAwesome" style={{ fontSize: 18 }} />
                                         <AppText style={styles.SmallText}>Contact: </AppText>
@@ -119,7 +119,7 @@ class LikeDisLikeScreen extends Component<IProps, IState> {
                                         <TouchableOpacity
                                             onPress={() => phonecall(this.state.placeDetail.formatted_phone_number, true)}
                                         >
-                                            <AppText style={styles.BigText}>{this.state.placeDetail.formatted_phone_number}</AppText>
+                                            <AppText style={styles.BigText}>{this.state.placeDetail.formatted_phone_number ? this.state.placeDetail.formatted_phone_number : 'No contact'}</AppText>
                                         </TouchableOpacity>
                                         <View style={styles.Action}>
                                             <TouchableOpacity style={styles.Star} onPress={this.onFavorite}>

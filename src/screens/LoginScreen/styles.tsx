@@ -70,9 +70,9 @@ const LoginInputContainer: ViewStyle = {
 
 const LoginWithFBText: TextStyle = {
   color: '#eee',
-  fontSize: 17,
+  fontSize: 16,
   flex: 1,
-  textAlign: 'center'
+  textAlign: 'center',
 }
 
 const LoginWithFBIcon: TextStyle = {
@@ -85,7 +85,7 @@ const LoginWithFBButton: ViewStyle = {
 }
 
 const SignUpContainer: ViewStyle = {
-  marginBottom: 20
+  marginVertical: 20
 }
 
 const WhiteText: TextStyle = {
