@@ -81,7 +81,7 @@ class DiscussAndDetailScreen extends Component<IProps, IState> {
                         }
                     ],
                     text: '',
-                }, () => { setInterval(() => { if (this.scrollView) this.scrollView.scrollToEnd() }, 500) })
+                }, () => { setTimeout(() => { if (this.scrollView) this.scrollView.scrollToEnd() }, 500) })
             }).catch(err => console.log(err));
         }
     }

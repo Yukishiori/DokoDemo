@@ -19,6 +19,7 @@ import firebase from 'firebase';
 import { Alert } from 'react-native';
 
 import { AsyncStorage } from 'react-native';
+import { Toast } from 'native-base';
 const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
     state: {
         chosenPlaces: [],
@@ -310,22 +311,32 @@ const mapScreenModel: ModelConfig<IMapScreenState> = createModel({
 
 
 const parsePolyline = (response: any): ICoord[] => {
-    return _.flatten(response.routes[0].legs.map((leg: any) => {
-        const route: ICoord[] = [];
-        leg.steps.forEach((step: any, index: any) => {
-            route.push({
-                latitude: step.start_location.lat,
-                longitude: step.start_location.lng
-            });
-            if (index === leg.steps.length - 1) {
+    try {
+
+        return _.flatten(response.routes[0].legs.map((leg: any) => {
+            const route: ICoord[] = [];
+            leg.steps.forEach((step: any, index: any) => {
                 route.push({
-                    latitude: step.end_location.lat,
-                    longitude: step.end_location.lng
+                    latitude: step.start_location.lat,
+                    longitude: step.start_location.lng
                 });
-            }
+                if (index === leg.steps.length - 1) {
+                    route.push({
+                        latitude: step.end_location.lat,
+                        longitude: step.end_location.lng
+                    });
+                }
+            })
+            return route;
+        }));
+    } catch (err) {
+        Toast.show({
+            text: 'We cannot find route for this plan',
+            textStyle: { fontFamily: 'Comfortaa-Regular', color: 'white' }, type: 'danger'
         })
-        return route;
-    }));
+        return [];
+    }
+
 }
 
 const getCombo = (): string[] => {

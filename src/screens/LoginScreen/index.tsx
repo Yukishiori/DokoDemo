@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Transition } from 'react-navigation-fluid-transitions';
 import LinearGradient from 'react-native-linear-gradient';
@@ -36,16 +36,22 @@ class LoginScreen extends Component<IProps> {
 
   render() {
     return (
+
       <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
         <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.BackgroundGradient}>
           <View style={styles.LogoContainer}>
             <AppText style={{ fontSize: 30 }}>Dokodemo</AppText>
           </View>
-          <View style={styles.ContentContainer}>
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -200}
+            behavior="padding"
+            style={styles.ContentContainer}
+          >
             <View style={styles.LoginInputContainer}>
               <View style={styles.IconContainer}>
                 <Icon name="user" type="FontAwesome" style={styles.Icon}></Icon>
               </View>
+
               <TextInput
                 placeholder="Email"
                 autoCapitalize="none"
@@ -78,7 +84,8 @@ class LoginScreen extends Component<IProps> {
               <Icon name='facebook' type="Entypo" style={styles.LoginWithFBIcon} />
               <AppText style={styles.LoginWithFBText}>Login with Facebook</AppText>
             </Button>
-          </View>
+          </KeyboardAvoidingView>
+
           <View style={styles.SignUpContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
               <AppText style={{ textDecorationLine: 'underline', fontSize: 16 }}>Dont' have an account? Sign up now.</AppText>
