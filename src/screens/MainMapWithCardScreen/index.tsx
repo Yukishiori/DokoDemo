@@ -104,9 +104,10 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                 place={item}
                 onPress={() => this.props.navigation.navigate(ScreenNames.LikeDisLikeScreen, { chosenPlace: item })}
                 onDelete={() => Toast.show({
-                    text: 'Delete successfully!',
-                    buttonText: 'Okay',
-                    type: 'success'
+                  text: 'Delete successfully!',
+                  buttonText: 'Okay',
+                  type: 'danger',
+                  textStyle: { fontFamily: 'Comfortaa-Bold' }
                 })}
             />
             : <TouchableOpacity style={styles.Add}
@@ -130,7 +131,7 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
 
 
     render() {
-        const chosenPlaces = [this.props.currentLocation, ...this.props.chosenPlaces];
+        const chosenPlaces: any[] = [this.props.currentLocation, ...this.props.chosenPlaces];
         if (this.props.isBusy) {
             return <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color={gradient[1]} />
@@ -148,19 +149,26 @@ class MainMapWithCardScreen extends Component<IProps, IState> {
                         provider="google"
                         customMapStyle={config.mapStyle}
                         onLayout={() => {
-                            this.map.fitToCoordinates(chosenPlaces.map(
-                                (chosenPlace: any, index: number) =>
-                                    index === 0
-                                        ? ({
-                                            latitude: chosenPlace.latitude,
-                                            longitude: chosenPlace.longitude
-                                        })
-                                        : ({
-                                            latitude: chosenPlace.geometry.location.lat,
-                                            longitude: chosenPlace.geometry.location.lng
-                                        })
-                            ), {
-                                    edgePadding: { top: 50, right: 20, bottom: height * 0.3, left: 20 },
+                            chosenPlaces.length > 1
+                                ? this.map.fitToCoordinates(chosenPlaces.map(
+                                    (chosenPlace: any, index: number) =>
+                                        index === 0
+                                            ? ({
+                                                latitude: chosenPlace.latitude,
+                                                longitude: chosenPlace.longitude
+                                            })
+                                            : ({
+                                                latitude: chosenPlace.geometry.location.lat,
+                                                longitude: chosenPlace.geometry.location.lng
+                                            })
+                                ), {
+                                        edgePadding: { top: 50, right: 20, bottom: 20, left: 20 }
+                                    })
+                                : this.map.animateToRegion({
+                                    latitude: chosenPlaces[0].latitude,
+                                    longitude: chosenPlaces[0].longitude,
+                                    latitudeDelta: 0.045,
+                                    longitudeDelta: 0.045
                                 })
                         }}
                         region={this.state.region}>

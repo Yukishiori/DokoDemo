@@ -65,13 +65,21 @@ class RestScreen extends Component<IProps, any> {
                             { enableHighAccuracy: false, timeout: 1000, maximumAge: 3600000 }
                         );
                     }).catch((error: any) => {
-                        Toast.show({ text: 'Dokodemo need your permission to get location for better service', textStyle: { fontFamily: 'Comfortaa-Regular' } })
+                        Toast.show({
+                            text: 'Dokodemo need your permission to get location for better service',
+                            textStyle: { fontFamily: 'Comfortaa-Regular', color: '#FFF' },
+                            type: 'danger'
+                        })
                         console.log(error.message); // error.message => "disabled"
                         this.requestLocation();
                     });
 
                 } else {
-                    Toast.show({ text: 'Dokodemo need your permission to get location for better service', textStyle: { fontFamily: 'Comfortaa-Regular' } })
+                    Toast.show({
+                        text: 'Dokodemo need your permission to get location for better service',
+                        textStyle: { fontFamily: 'Comfortaa-Regular', color: '#FFF' },
+                        type: 'danger'
+                    })
                     this.requestLocation();
                 }
             } else if (Platform.OS === 'ios') {

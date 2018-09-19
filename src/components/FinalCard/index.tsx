@@ -71,7 +71,7 @@ class FinalCard extends Component<IProps, IState> {
             <AppText style={styles.Text}>{this.props.place.name}</AppText>
           </View>
           <View style={{ paddingHorizontal: 10, minWidth: 70 }}>
-            {checkedPlace.length ? <AppText>{moment(checkedPlace[0].endTime).format('hh:mm')}</AppText> : <View></View>}
+            {checkedPlace.length ? <AppText>{moment(checkedPlace[0].endTime).format('HH:mm')}</AppText> : <View></View>}
           </View>
         </TouchableOpacity>
       </View >
