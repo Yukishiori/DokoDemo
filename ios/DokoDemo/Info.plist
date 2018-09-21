@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationUsageDescription</key>
+	<string>&quot;Location services used for finding places nearby and customized experience&quot;</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>&quot;Location services used for finding places nearby and customized experience&quot;</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>&quot;Location services used for finding places nearby and customized experience&quot;</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -50,7 +56,7 @@
 		<dict/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>&quot;Location services used for finding places nearby and customized experience&quot;</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Comfortaa-Bold.ttf</string>
